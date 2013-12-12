@@ -21,8 +21,8 @@ describe("Manager", function(){
     it("when ok", function(){
       subject = new slik.Manager();
 
-      expect(subject.$contexts).toEqual([]);
-      expect(subject.$executionUnits).toEqual({});
+      expect(subject.$$contexts).toEqual([]);
+      expect(subject.$$executionUnits).toEqual({});
     });
   });
 
@@ -35,53 +35,32 @@ describe("Manager", function(){
       }).toThrow("execution unit is missing");
     });
 
-    it("should register the new context", function(){
-      var template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+    it("should register the new execution unit", function(){
       var controller    = "ItemCtrl"
       var action        = "detail"
       var executionUnit = function(){};
 
       spyOn(subject, "$storeExecutionUnit");
-      spyOn(subject, "$findTemplate").andReturn([template]);
-      spyOn(subject, "$storeContext");
 
       subject.register(controller, action, executionUnit);
 
       expect(
         subject.$storeExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit)
-
-      expect(
-        subject.$findTemplate
-      ).toHaveBeenCalledWith(controller, action);
-
-      expect(
-        subject.$storeContext.calls.length
-      ).toEqual(1);
     });
 
     it("should register the new context for multiple templates", function(){
-      var template1    = '<div id="item-1" data-controller="ItemCtrl" data-action="detail"></div>';
-      var template2    = '<div id="item-2" data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller  = "ItemCtrl"
-      var action      = "detail"
+      var controller    = "ItemCtrl"
+      var action        = "detail"
+      var executionUnit = function(){};
 
-      spyOn(subject, "$findTemplate").andReturn([template1, template2]);
-      spyOn(subject, "$storeContext");
+      spyOn(subject, "$storeExecutionUnit");
 
-      subject.register(controller, action, function(){});
+      subject.register(controller, action, executionUnit);
 
       expect(
-        subject.$storeContext.calls.length
-      ).toEqual(2);
-
-      expect(
-        subject.$storeContext
-      ).toHaveBeenCalledWith(controller, action, template1);
-
-      expect(
-        subject.$storeContext
-      ).toHaveBeenCalledWith(controller, action, template2);
+        subject.$storeExecutionUnit
+      ).toHaveBeenCalledWith(controller, action, executionUnit);
     });
   });
 
@@ -93,9 +72,9 @@ describe("Manager", function(){
 
       subject.$storeExecutionUnit(controller, action, executionUnit);
 
-      expect(subject.$executionUnits[controller]).toBeDefined();
-      expect(subject.$executionUnits[controller][action]).toBeDefined();
-      expect(subject.$executionUnits[controller][action]).toBe(executionUnit);
+      expect(subject.$$executionUnits[controller]).toBeDefined();
+      expect(subject.$$executionUnits[controller][action]).toBeDefined();
+      expect(subject.$$executionUnits[controller][action]).toBe(executionUnit);
     });
   });
 
@@ -113,7 +92,7 @@ describe("Manager", function(){
         subject.$createContext
       ).toHaveBeenCalledWith(controller, action, template);
 
-      expect(subject.$contexts.length).toBe(1);
+      expect(subject.$$contexts.length).toBe(1);
     });
   });
 
@@ -133,6 +112,114 @@ describe("Manager", function(){
       );
 
       expect(result).toEqual([1,2,3]);
+    });
+  });
+
+  describe("#$buildContexts", function(){
+    it("should not address any context if there is now execution unit available", function(){
+      expect(function(){
+        subject.$buildContexts();
+      }).toThrow("no execution units available");
+    });
+
+    it("should address the binding of one context", function(){
+      var controller    = "ItemCtrl";
+      var action        = "detail";
+      var executionUnit = function(){};
+
+      subject.$storeExecutionUnit(controller, action, executionUnit);
+
+      spyOn(subject, "$bindExecutionUnit");
+
+      subject.$buildContexts();
+
+      expect(
+        subject.$bindExecutionUnit
+      ).toHaveBeenCalledWith(controller, action, executionUnit);
+    });
+
+    it("should address the binding of multiple contexts", function(){
+      var controller    = "ItemCtrl";
+      var detail        = "detail";
+      var creation      = "creation";
+      var update        = "update";
+      var executionUnit = function(){};
+
+      subject.$storeExecutionUnit(controller, detail, executionUnit);
+      subject.$storeExecutionUnit(controller, creation, executionUnit);
+      subject.$storeExecutionUnit(controller, update, executionUnit);
+
+      spyOn(subject, "$bindExecutionUnit");
+
+      subject.$buildContexts();
+
+      expect(
+        subject.$bindExecutionUnit.calls.length
+      ).toEqual(3);
+
+      expect(
+        subject.$bindExecutionUnit
+      ).toHaveBeenCalledWith(controller, detail, executionUnit);
+
+      expect(
+        subject.$bindExecutionUnit
+      ).toHaveBeenCalledWith(controller, creation, executionUnit);
+
+      expect(
+        subject.$bindExecutionUnit
+      ).toHaveBeenCalledWith(controller, update, executionUnit);
+    });
+  });
+
+  describe("#$bindExecutionUnit", function(){
+    it("should create and store the new context", function(){
+      var template   = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      var controller = "ItemCtrl";
+      var action     = "detail";
+
+      contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
+
+      spyOn(subject, "$findTemplate").andReturn([template]);
+      spyOn(subject, "$createContext").andReturn(contextDouble);
+
+      subject.$bindExecutionUnit(controller, action);
+
+      expect(
+        subject.$findTemplate
+      ).toHaveBeenCalledWith(controller, action);
+
+      expect(
+        subject.$createContext
+      ).toHaveBeenCalledWith(controller, action, template);
+
+      expect(subject.$$contexts.length).toEqual(1);
+
+      expect(contextDouble.$load).toHaveBeenCalled();
+    });
+
+    it("should create and store contexts for multiple templates", function(){
+      var template1  = '<div id="item-1" data-controller="ItemCtrl" data-action="detail"></div>';
+      var template2  = '<div id="item-2" data-controller="ItemCtrl" data-action="detail"></div>';
+      var controller = "ItemCtrl";
+      var action     = "detail";
+
+      contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
+
+
+      spyOn(subject, "$findTemplate").andReturn([template1, template2]);
+      spyOn(subject, "$createContext").andReturn(contextDouble);
+
+      subject.$bindExecutionUnit(controller, action);
+
+      expect(
+        subject.$createContext
+      ).toHaveBeenCalledWith(controller, action, template1);
+
+      expect(
+        subject.$createContext
+      ).toHaveBeenCalledWith(controller, action, template2);
+
+      expect(subject.$$contexts.length).toEqual(2);
     });
   });
 });
