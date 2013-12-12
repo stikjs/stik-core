@@ -1,4 +1,4 @@
 stik
 ====
 
-A JS lib to wire you javascript execution to your html
+A JS lib to wire you JavaScript execution to your HTML template

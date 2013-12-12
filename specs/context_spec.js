@@ -1,6 +1,6 @@
 var subject, elmDouble;
 
-function setupElmDouble () {
+function setupElmDouble(){
   elmDouble = {
     getAttribute: function(){},
   };
