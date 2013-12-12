@@ -16,7 +16,7 @@ A JS lib to wire you JavaScript execution to your HTML template
 ```javascript
 stik.register("CharactersCtrl", "List", function($teardown, $template){
   // use your favorite DOM library to attach events
-  elm = $(template);
+  elm = $($template);
 
   herosList = elm.find("ul");
 
