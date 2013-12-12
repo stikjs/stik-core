@@ -71,11 +71,12 @@ describe("Context", function(){
         }
       );
 
-      new slik.Context('AppCtrl', 'list', template, executionUnitDouble).$load();
+      subject = new slik.Context('AppCtrl', 'list', template, executionUnitDouble);
+      subject.$load();
 
       expect(
         executionUnitDouble
-      ).toHaveBeenCalledWith(jasmine.any(Function), template);
+      ).toHaveBeenCalledWith(subject.$teardown, template);
 
       expect(executed).toBeTruthy();
     });
