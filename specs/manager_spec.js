@@ -80,17 +80,18 @@ describe("Manager", function(){
 
   describe("#$storeContext", function(){
     it("should store the new context", function(){
-      var template    = '<div data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller  = "ItemCtrl"
-      var action      = "detail"
+      var template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      var controller    = "ItemCtrl"
+      var action        = "detail"
+      var executionUnit = function(){};
 
       spyOn(subject, "$createContext").andReturn(1);
 
-      subject.$storeContext(controller, action, template);
+      subject.$storeContext(controller, action, template, executionUnit);
 
       expect(
         subject.$createContext
-      ).toHaveBeenCalledWith(controller, action, template);
+      ).toHaveBeenCalledWith(controller, action, template, executionUnit);
 
       expect(subject.$$contexts.length).toBe(1);
     });
@@ -173,16 +174,17 @@ describe("Manager", function(){
 
   describe("#$bindExecutionUnit", function(){
     it("should create and store the new context", function(){
-      var template   = '<div data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller = "ItemCtrl";
-      var action     = "detail";
+      var template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      var controller    = "ItemCtrl";
+      var action        = "detail";
+      var executionUnit = function(){};
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
       spyOn(subject, "$findTemplate").andReturn([template]);
       spyOn(subject, "$createContext").andReturn(contextDouble);
 
-      subject.$bindExecutionUnit(controller, action);
+      subject.$bindExecutionUnit(controller, action, executionUnit);
 
       expect(
         subject.$findTemplate
@@ -190,7 +192,7 @@ describe("Manager", function(){
 
       expect(
         subject.$createContext
-      ).toHaveBeenCalledWith(controller, action, template);
+      ).toHaveBeenCalledWith(controller, action, template, executionUnit);
 
       expect(subject.$$contexts.length).toEqual(1);
 
@@ -202,6 +204,7 @@ describe("Manager", function(){
       var template2  = '<div id="item-2" data-controller="ItemCtrl" data-action="detail"></div>';
       var controller = "ItemCtrl";
       var action     = "detail";
+      var executionUnit = function(){};
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
@@ -209,15 +212,15 @@ describe("Manager", function(){
       spyOn(subject, "$findTemplate").andReturn([template1, template2]);
       spyOn(subject, "$createContext").andReturn(contextDouble);
 
-      subject.$bindExecutionUnit(controller, action);
+      subject.$bindExecutionUnit(controller, action, executionUnit);
 
       expect(
         subject.$createContext
-      ).toHaveBeenCalledWith(controller, action, template1);
+      ).toHaveBeenCalledWith(controller, action, template1, executionUnit);
 
       expect(
         subject.$createContext
-      ).toHaveBeenCalledWith(controller, action, template2);
+      ).toHaveBeenCalledWith(controller, action, template2, executionUnit);
 
       expect(subject.$$contexts.length).toEqual(2);
     });

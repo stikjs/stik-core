@@ -18,14 +18,14 @@ window.stik || (window.stik = {});
     this.$$executionUnits[controller][action] = executionUnit;
   };
 
-  Manager.prototype.$storeContext = function(controller, action, template){
-    newContext = this.$createContext(controller, action, template);
+  Manager.prototype.$storeContext = function(controller, action, template, executionUnit){
+    newContext = this.$createContext(controller, action, template, executionUnit);
     this.$$contexts.push(newContext);
     return newContext;
   };
 
-  Manager.prototype.$createContext = function(controller, action, template){
-    return new stik.Context(controller, action, template);
+  Manager.prototype.$createContext = function(controller, action, template, executionUnit){
+    return new stik.Context(controller, action, template, executionUnit);
   };
 
   Manager.prototype.$findTemplate = function(controller, action, DOMInjection){
@@ -51,11 +51,11 @@ window.stik || (window.stik = {});
     };
   };
 
-  Manager.prototype.$bindExecutionUnit = function(controller, action){
+  Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
     var templates = this.$findTemplate(controller, action);
 
     for (var i = 0; i < templates.length; i++) {
-      this.$storeContext(controller, action, templates[i]).$load();
+      this.$storeContext(controller, action, templates[i], executionUnit).$load();
     };
   };
 
