@@ -24,10 +24,11 @@ describe("Context", function(){
 
       subject = new stik.Context('AppCtrl', 'list', elmDouble, executionUnitDouble);
 
-      expect(subject.$$controller).toBe('AppCtrl');
-      expect(subject.$$action).toBe('list');
+      expect(subject.$$controller).toEqual('AppCtrl');
+      expect(subject.$$action).toEqual('list');
       expect(subject.$$template).toBe(elmDouble);
       expect(subject.$$executionUnit).toBe(executionUnitDouble);
+      expect(subject.$$disposable).toEqual(false);
     });
 
     it("should throw if controller is missing", function(){
@@ -66,7 +67,7 @@ describe("Context", function(){
       var template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
 
       var executionUnitDouble = jasmine.createSpy('executionUnitDouble').andCallFake(
-        function($teardown, $template){
+        function($context, $template){
           executed = true;
         }
       );
@@ -76,7 +77,7 @@ describe("Context", function(){
 
       expect(
         executionUnitDouble
-      ).toHaveBeenCalledWith(subject.$teardown, template);
+      ).toHaveBeenCalledWith(subject, template);
 
       expect(executed).toBeTruthy();
     });

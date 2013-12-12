@@ -24,14 +24,11 @@ window.stik || (window.stik = {});
     this.$$action = action;
     this.$$template = template;
     this.$$executionUnit = executionUnit;
+    this.$$disposable = false;
   };
 
   Context.prototype.$load = function(){
-    this.$$executionUnit(this.$teardown, this.$$template);
-  };
-
-  Context.prototype.$teardown = function(){
-
+    this.$$executionUnit(this, this.$$template);
   };
 
   stik.Context = Context;

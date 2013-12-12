@@ -208,7 +208,6 @@ describe("Manager", function(){
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
-
       spyOn(subject, "$findTemplate").andReturn([template1, template2]);
       spyOn(subject, "$createContext").andReturn(contextDouble);
 

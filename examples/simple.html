@@ -14,15 +14,25 @@
     <button>Unbind</button>
   </div>
 
+  <div id="vilains-list" data-controller="VilainsCtrl" data-action="List">
+    <ul>
+      <li class="hero">Bowser</li>
+      <li class="hero">Ganondorlf</li>
+      <li class="hero">Metroid</li>
+    </ul>
+
+    <button>Unbind</button>
+  </div>
+
   <script src="../stik.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-    stik.register("HerosCtrl", "List", function($teardown, $template){
+    stik.register("HerosCtrl", "List", function($context, $template){
       var heros = $template.getElementsByClassName('hero');
       var unbindBtn = $template.getElementsByTagName('button')[0];
 
       function clickHandler(event){
         alert("It's me, " + event.target.textContent + "!!");
-      }
+      };
 
       for (var i = 0; i < heros.length; i++) {
         heros[i].addEventListener('click', clickHandler);
@@ -30,14 +40,11 @@
 
       function disableClicks(){
         for (var i = 0; i < heros.length; i++) {
-          console.log(heros[i]);
           heros[i].removeEventListener('click', clickHandler);
         };
       };
 
-      // API in work
       unbindBtn.addEventListener('click', disableClicks);
-      // $teardown(disableClicks);
     });
 
     stik.init();
