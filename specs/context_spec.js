@@ -1,14 +1,18 @@
 var subject, elmDouble;
 
 function setupElmDouble(){
-  elmDouble = {
+  return {
     getAttribute: function(){},
   };
 };
 
 describe("Context", function(){
   beforeEach(function(){
-    setupElmDouble();
+    elmDouble = setupElmDouble();
+  });
+
+  afterEach(function(){
+    elmDouble = null;
   });
 
   describe("#initialize", function(){
@@ -62,7 +66,7 @@ describe("Context", function(){
       spyOn(elmDouble, 'getAttribute').andCallFake(function(selector){
         if (selector == "controller") {
           return "AppCtrl";
-        } else{
+        } else {
           return null;
         };
       });
@@ -76,7 +80,7 @@ describe("Context", function(){
       spyOn(elmDouble, 'getAttribute').andCallFake(function(selector){
         if (selector === "controller") {
           return "AppCtrl";
-        } else{
+        } else {
           return "list";
         };
       });

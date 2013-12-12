@@ -7,6 +7,16 @@ function DOMDouble(){
 };
 
 describe("Manager", function(){
+  var count = 0;
+
+  beforeEach(function(){
+    subject = new slik.Manager();
+  });
+
+  afterEach(function(){
+    subject = null;
+  });
+
   describe("#initialize", function(){
     it("when ok", function(){
       subject = new slik.Manager();
@@ -16,14 +26,6 @@ describe("Manager", function(){
   });
 
   describe("#register", function(){
-    beforeEach(function(){
-      subject = new slik.Manager();
-    });
-
-    afterEach(function(){
-      subject = null;
-    });
-
     it("should throw if execution unit is missing", function(){
       spyOn(subject, "$findTemplate").andReturn([]);
 
@@ -77,14 +79,6 @@ describe("Manager", function(){
   });
 
   describe("#$storeContext", function(){
-    beforeEach(function(){
-      subject = new slik.Manager();
-    });
-
-    afterEach(function(){
-      subject = null;
-    });
-
     it("should store the new context", function(){
       var template    = '<div data-controller="ItemCtrl" data-action="detail"></div>';
       var controller  = "ItemCtrl"
@@ -103,14 +97,6 @@ describe("Manager", function(){
   });
 
   describe("#$findTemplate", function(){
-    beforeEach(function(){
-      subject = new slik.Manager();
-    });
-
-    afterEach(function(){
-      subject = null;
-    });
-
     it("should look for templates in the DOM based on the controller and action", function(){
       DOM = DOMDouble();
 
