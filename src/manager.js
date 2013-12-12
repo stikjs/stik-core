@@ -1,4 +1,4 @@
-window.slik || (window.slik = {});
+window.stik || (window.stik = {});
 
 (function(){
   function Manager(){
@@ -25,7 +25,7 @@ window.slik || (window.slik = {});
   };
 
   Manager.prototype.$createContext = function(controller, action, template){
-    return new slik.Context(controller, action, template);
+    return new stik.Context(controller, action, template);
   };
 
   Manager.prototype.$findTemplate = function(controller, action, DOMInjection){
@@ -59,5 +59,5 @@ window.slik || (window.slik = {});
     };
   };
 
-  slik.Manager = Manager;
+  stik.Manager = Manager;
 })();

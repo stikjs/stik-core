@@ -22,7 +22,7 @@ describe("Context", function(){
 
       var executionUnitDouble = function(){};
 
-      subject = new slik.Context('AppCtrl', 'list', elmDouble, executionUnitDouble);
+      subject = new stik.Context('AppCtrl', 'list', elmDouble, executionUnitDouble);
 
       expect(subject.$$controller).toBe('AppCtrl');
       expect(subject.$$action).toBe('list');
@@ -32,25 +32,25 @@ describe("Context", function(){
 
     it("should throw if controller is missing", function(){
       expect(function(){
-        new slik.Context(null, 'application');
+        new stik.Context(null, 'application');
       }).toThrow("controller is missing");
     });
 
     it("should throw if action is missing", function(){
       expect(function(){
-        new slik.Context('AppCtrl');
+        new stik.Context('AppCtrl');
       }).toThrow("action is missing");
     });
 
     it("should throw if template is missing", function(){
       expect(function(){
-        new slik.Context('AppCtrl', 'list');
+        new stik.Context('AppCtrl', 'list');
       }).toThrow("template is missing");
     });
 
     it("should throw if execution unit is missing", function(){
       expect(function(){
-        new slik.Context('AppCtrl', 'list', '<br>');
+        new stik.Context('AppCtrl', 'list', '<br>');
       }).toThrow("execution unit is missing");
     });
   });
@@ -71,7 +71,7 @@ describe("Context", function(){
         }
       );
 
-      subject = new slik.Context('AppCtrl', 'list', template, executionUnitDouble);
+      subject = new stik.Context('AppCtrl', 'list', template, executionUnitDouble);
       subject.$load();
 
       expect(

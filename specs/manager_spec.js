@@ -10,7 +10,7 @@ describe("Manager", function(){
   var count = 0;
 
   beforeEach(function(){
-    subject = new slik.Manager();
+    subject = new stik.Manager();
   });
 
   afterEach(function(){
@@ -19,7 +19,7 @@ describe("Manager", function(){
 
   describe("#initialize", function(){
     it("when ok", function(){
-      subject = new slik.Manager();
+      subject = new stik.Manager();
 
       expect(subject.$$contexts).toEqual([]);
       expect(subject.$$executionUnits).toEqual({});

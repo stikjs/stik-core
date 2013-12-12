@@ -1,4 +1,4 @@
-window.slik || (window.slik = {});
+window.stik || (window.stik = {});
 
 (function(){
   function Context(controller, action, template, executionUnit){
@@ -25,5 +25,5 @@ window.slik || (window.slik = {});
 
   };
 
-  slik.Context = Context;
+  stik.Context = Context;
 })();
