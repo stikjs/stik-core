@@ -1,6 +1,6 @@
 #Stik.js
 
-An opinionated JS lib that wires your JavaScript execution to your HTML templates by creating pseudo closures of execution and scoping. Allowing you to manage, in a more consistant way, your events `binding/unbind` and your DOM scope manipulation.
+An opinionated JS library that wires your JavaScript execution to your HTML templates by creating pseudo closures of execution and scoping. Allowing you to manage, in a more consistant way, your events `binding/unbind` and your DOM scope manipulation.
 
 By splitting your logic into small specialized responsible actions, Stik.js will help you avoid both the gigantism and namespace hell on your JavaScripts.
 
@@ -26,7 +26,7 @@ stik.register("CharactersCtrl", "List", function($context, $template){
   herosList = elm.find("ul");
 
   herosList.on('click', 'li', function(event){
-    alert("It's me Mario!!");
+    alert("It's me, " + event.text() + "!!");
   });
 });
 ```
