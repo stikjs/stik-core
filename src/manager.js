@@ -2,12 +2,15 @@ window.slik || (window.slik = {});
 
 (function(){
   function Manager(){
-    this.contexts = [];
+    this.$contexts = [];
+    this.$executionUnits = {};
   };
 
-  Manager.prototype.register = function(controller, action, execution){
-    if (!execution)
+  Manager.prototype.register = function(controller, action, executionUnit){
+    if (!executionUnit)
       throw "execution unit is missing";
+
+    this.$storeExecutionUnit(controller, action, executionUnit);
 
     var templates = this.$findTemplate(controller, action);
 
@@ -16,8 +19,13 @@ window.slik || (window.slik = {});
     };
   };
 
+  Manager.prototype.$storeExecutionUnit = function(controller, action, executionUnit){
+    this.$executionUnits[controller] || (this.$executionUnits[controller] = {});
+    this.$executionUnits[controller][action] = executionUnit;
+  };
+
   Manager.prototype.$storeContext = function(controller, action, template){
-    this.contexts.push(
+    this.$contexts.push(
       this.$createContext(controller, action, template)
     );
   };

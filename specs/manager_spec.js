@@ -21,7 +21,8 @@ describe("Manager", function(){
     it("when ok", function(){
       subject = new slik.Manager();
 
-      expect(subject.contexts).toEqual([]);
+      expect(subject.$contexts).toEqual([]);
+      expect(subject.$executionUnits).toEqual({});
     });
   });
 
@@ -35,14 +36,20 @@ describe("Manager", function(){
     });
 
     it("should register the new context", function(){
-      var template    = '<div data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller  = "ItemCtrl"
-      var action      = "detail"
+      var template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      var controller    = "ItemCtrl"
+      var action        = "detail"
+      var executionUnit = function(){};
 
+      spyOn(subject, "$storeExecutionUnit");
       spyOn(subject, "$findTemplate").andReturn([template]);
       spyOn(subject, "$storeContext");
 
-      subject.register(controller, action, function(){});
+      subject.register(controller, action, executionUnit);
+
+      expect(
+        subject.$storeExecutionUnit
+      ).toHaveBeenCalledWith(controller, action, executionUnit)
 
       expect(
         subject.$findTemplate
@@ -78,6 +85,20 @@ describe("Manager", function(){
     });
   });
 
+  describe("#$storeExecutionUnit", function(){
+    it("should store the execution unit in its own namespace", function(){
+      var controller    = "ItemCtrl";
+      var action        = "detail";
+      var executionUnit = function(){};
+
+      subject.$storeExecutionUnit(controller, action, executionUnit);
+
+      expect(subject.$executionUnits[controller]).toBeDefined();
+      expect(subject.$executionUnits[controller][action]).toBeDefined();
+      expect(subject.$executionUnits[controller][action]).toBe(executionUnit);
+    });
+  });
+
   describe("#$storeContext", function(){
     it("should store the new context", function(){
       var template    = '<div data-controller="ItemCtrl" data-action="detail"></div>';
@@ -92,7 +113,7 @@ describe("Manager", function(){
         subject.$createContext
       ).toHaveBeenCalledWith(controller, action, template);
 
-      expect(subject.contexts.length).toBe(1);
+      expect(subject.$contexts.length).toBe(1);
     });
   });
 
