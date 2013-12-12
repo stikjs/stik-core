@@ -1,7 +1,6 @@
-stik
-====
+#Stik.js
 
-A JS lib to wire you JavaScript execution to your HTML template
+An opinionated JS lib that wires your JavaScript execution to your HTML templates by creating pseudo closures of execution and scoping. Allowing you to manage, in a more consistant way, your events `binding/unbind` and your DOM scope manipulation.
 
 ```HTML
 <div id="characters-list" data-controller="CharactersCtrl" data-action="List">
@@ -29,4 +28,15 @@ stik.register("CharactersCtrl", "List", function($teardown, $template){
     herosList.unbind('click');
   });
 });
+```
+
+#Development
+##Testing
+```shell
+$ grunt test
+```
+
+##Packing
+```shell
+$ grunt pack
 ```
