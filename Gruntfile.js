@@ -12,9 +12,9 @@ module.exports = function(grunt){
         // the banner is inserted at the top of the output
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
       },
-      my_target: {
+      stik: {
         files: {
-         'slik.min.js': ['src/slik.js']
+         'stik.min.js': ['src/stik.js']
         }
       }
     }
