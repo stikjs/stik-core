@@ -1,0 +1,6 @@
+tmp/
+.grunt/
+
+node_modules/
+
+.DS_Store
