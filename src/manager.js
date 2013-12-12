@@ -19,9 +19,9 @@ window.stik || (window.stik = {});
   };
 
   Manager.prototype.$storeContext = function(controller, action, template){
-    newContext = this.$createContext(controller, action, template)
+    newContext = this.$createContext(controller, action, template);
     this.$$contexts.push(newContext);
-    return newContext
+    return newContext;
   };
 
   Manager.prototype.$createContext = function(controller, action, template){
