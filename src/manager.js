@@ -60,7 +60,6 @@ window.stik || (window.stik = {});
     var templates = this.$findTemplate(controller, action);
 
     for (var i = 0; i < templates.length; i++) {
-      boundAny = true;
       this.$markAsBound(templates[i]);
       this.$storeContext(controller, action, templates[i], executionUnit).$load();
     };
