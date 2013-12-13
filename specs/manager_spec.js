@@ -183,12 +183,17 @@ describe("Manager", function(){
 
       spyOn(subject, "$findTemplate").andReturn([template]);
       spyOn(subject, "$createContext").andReturn(contextDouble);
+      spyOn(subject, "$markAsBound");
 
       subject.$bindExecutionUnit(controller, action, executionUnit);
 
       expect(
         subject.$findTemplate
       ).toHaveBeenCalledWith(controller, action);
+
+      expect(
+        subject.$markAsBound
+      ).toHaveBeenCalledWith(template);
 
       expect(
         subject.$createContext
@@ -210,6 +215,7 @@ describe("Manager", function(){
 
       spyOn(subject, "$findTemplate").andReturn([template1, template2]);
       spyOn(subject, "$createContext").andReturn(contextDouble);
+      spyOn(subject, "$markAsBound");
 
       subject.$bindExecutionUnit(controller, action, executionUnit);
 
@@ -222,6 +228,24 @@ describe("Manager", function(){
       ).toHaveBeenCalledWith(controller, action, template2, executionUnit);
 
       expect(subject.$$contexts.length).toEqual(2);
+    });
+
+    describe("$markAsBound", function(){
+      it("should flag it as bound", function(){
+        var templateDouble = {className: ''};
+
+        subject.$markAsBound(templateDouble);
+
+        expect(templateDouble.className).toEqual(' stik-bound');
+      });
+
+      it("should not messup current classes", function(){
+        var templateDouble = {className: 'wierd-class'};
+
+        subject.$markAsBound(templateDouble);
+
+        expect(templateDouble.className).toEqual('wierd-class stik-bound');
+      });
     });
   });
 });
