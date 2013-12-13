@@ -48,7 +48,7 @@ The `register` function accepts three arguments:
 The `closure` function takes 2 arguments:
 
 * `$context` (Object) -> This object contains information about the execution context (e.g. controller and template);
-* `$template` -> Contains the HTMLElement that corresponds to the template associated with this controller. Every DOM manipulation should belong to its tree, maintining the component isolation.
+* `$template` (HTMLElement) -> Contains the HTMLElement that corresponds to the template associated with this controller. Every DOM manipulation should belong to its tree, maintining the component isolation.
 
 You can even have multiple templates using the same controller and action.
 
