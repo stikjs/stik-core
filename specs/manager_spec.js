@@ -26,12 +26,12 @@ describe("Manager", function(){
     });
   });
 
-  describe("#register", function(){
+  describe("#$register", function(){
     it("should throw if execution unit is missing", function(){
       spyOn(subject, "$findTemplate").andReturn([]);
 
       expect(function(){
-        subject.register("ItemCtrl", "detail");
+        subject.$register("ItemCtrl", "detail");
       }).toThrow("execution unit is missing");
     });
 
@@ -42,7 +42,7 @@ describe("Manager", function(){
 
       spyOn(subject, "$storeExecutionUnit");
 
-      subject.register(controller, action, executionUnit);
+      subject.$register(controller, action, executionUnit);
 
       expect(
         subject.$storeExecutionUnit
@@ -56,7 +56,7 @@ describe("Manager", function(){
 
       spyOn(subject, "$storeExecutionUnit");
 
-      subject.register(controller, action, executionUnit);
+      subject.$register(controller, action, executionUnit);
 
       expect(
         subject.$storeExecutionUnit

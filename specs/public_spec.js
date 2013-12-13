@@ -6,12 +6,12 @@ describe("Main", function(){
     var action     = "Login";
     var closure    = function(){};
 
-    spyOn(stik.$$manager, "register");
+    spyOn(stik.$$manager, "$register");
 
     stik.register(controller, action, closure);
 
     expect(
-      stik.$$manager.register
+      stik.$$manager.$register
     ).toHaveBeenCalledWith(controller, action, closure);
   });
 
