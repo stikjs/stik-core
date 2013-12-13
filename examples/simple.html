@@ -2,49 +2,74 @@
 <html>
 <head>
   <title>Stik.js - Simple example</title>
+
+  <style type="text/css" media="screen">
+    .wrapper {
+      width:800px;
+      margin:0 auto;
+    }
+  </style>
 </head>
 <body>
-  <div id="heros-list" data-controller="HerosCtrl" data-action="List">
-    <ul>
-      <li class="hero">Mario</li>
-      <li class="hero">Zelda</li>
-      <li class="hero">Samus</li>
-    </ul>
+  <div class="wrapper">
+    <h2>Binding one template to one controller</h2>
 
-    <button>Unbind</button>
-  </div>
+    <div id="characters-list" data-controller="CharactesCtrl" data-action="List">
+      <h3>Sub Characters</h3>
+      <ul>
+        <li class="character" hero="Mario">Luigi</li>
+        <li class="character" hero="Link">Zelda</li>
+        <li class="character" hero="Samus">Baby Metroid</li>
+      </ul>
+    </div>
 
-  <div id="vilains-list" data-controller="VilainsCtrl" data-action="List">
-    <ul>
-      <li class="hero">Bowser</li>
-      <li class="hero">Ganondorlf</li>
-      <li class="hero">Metroid</li>
-    </ul>
+    <h2>Binding two templates to the same controller</h2>
+    <div id="heroes-list" data-controller="BattleCtrl" data-action="List">
+      <h3>Heroes</h3>
+      <ul>
+        <li class="hero">Mario</li>
+        <li class="hero">Link</li>
+        <li class="hero">Samus</li>
+      </ul>
+    </div>
 
-    <button>Unbind</button>
+    <div id="villains-list" data-controller="BattleCtrl" data-action="List">
+      <h3>Villains</h3>
+      <ul>
+        <li class="hero">Bowser</li>
+        <li class="hero">Ganondorlf</li>
+        <li class="hero">Metroid</li>
+      </ul>
+    </div>
   </div>
 
   <script src="../stik.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-    stik.register("HerosCtrl", "List", function($context, $template){
-      var heros = $template.getElementsByClassName('hero');
-      var unbindBtn = $template.getElementsByTagName('button')[0];
+    stik.register("CharactesCtrl", "List", function($context, $template){
+      var supported, character;
+
+      character = $template.getElementsByClassName('character');
 
       function clickHandler(event){
-        alert("It's me, " + event.target.textContent + "!!");
+        supported = event.target.getAttribute('hero');
+        alert("I'll support " + supported + "!!");
       };
 
-      for (var i = 0; i < heros.length; i++) {
-        heros[i].addEventListener('click', clickHandler);
+      for (var i = 0; i < character.length; i++) {
+        character[i].addEventListener('click', clickHandler);
+      };
+    });
+
+    stik.register("BattleCtrl", "List", function($context, $template){
+      var heroes = $template.getElementsByClassName('hero');
+
+      function clickHandler(event){
+        alert("It's me, " + event.target.textContent + "!! And I'm ready to fight!");
       };
 
-      function disableClicks(){
-        for (var i = 0; i < heros.length; i++) {
-          heros[i].removeEventListener('click', clickHandler);
-        };
+      for (var i = 0; i < heroes.length; i++) {
+        heroes[i].addEventListener('click', clickHandler);
       };
-
-      unbindBtn.addEventListener('click', disableClicks);
     });
 
     stik.init();

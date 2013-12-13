@@ -6,12 +6,14 @@ By splitting your logic into small specialized responsible actions, Stik.js will
 
 #Wire up
 With Stik.js you can define in your HTML which templates should be bound to a specific controller and action.
+
 ```html
-<div id="characters-list" data-controller="CharactersCtrl" data-action="List">
+<div id="characters-list" data-controller="CharactesCtrl" data-action="List">
+  <h3>Sub Characters</h3>
   <ul>
-    <li>Mario</li>
-    <li>Samus</li>
-    <li>Link</li>
+    <li class="character" hero="Mario">Luigi</li>
+    <li class="character" hero="Link">Zelda</li>
+    <li class="character" hero="Samus">Baby Metroid</li>
   </ul>
 </div>
 ```
@@ -19,15 +21,19 @@ With Stik.js you can define in your HTML which templates should be bound to a sp
 And then in your JavaScript you would describe your template behaviors using the `register` function provided by Stick.js.
 
 ```javascript
-stik.register("CharactersCtrl", "List", function($context, $template){
-  // use your favorite DOM library to attach events
-  elm = $($template);
+stik.register("CharactesCtrl", "List", function($context, $template){
+  var supported, character;
 
-  herosList = elm.find("ul");
+  character = $template.getElementsByClassName('character');
 
-  herosList.on('click', 'li', function(event){
-    alert("It's me, " + event.text() + "!!");
-  });
+  function clickHandler(event){
+    supported = event.target.getAttribute('hero');
+    alert("I'll support " + supported + "!!");
+  };
+
+  for (var i = 0; i < character.length; i++) {
+    character[i].addEventListener('click', clickHandler);
+  };
 });
 ```
 
@@ -43,10 +49,52 @@ The `closure` function takes 2 arguments:
 * `$template` -> Contains the HTMLElement that corresponds to the template associated with this controller. Every DOM manipulation should belong to its tree, maintining the component isolation.
 
 You can even have multiple templates using the same controller and action.
+
 ```html
+<div id="heroes-list" data-controller="CharactersCtrl" data-action="List">
+  <ul>
+    <li>Mario</li>
+    <li>Samus</li>
+    <li>Link</li>
+  </ul>
+</div>
+
+<div id="villains-list" data-controller="CharactersCtrl" data-action="List">
+  <ul>
+    <li>Bowser</li>
+    <li>Metroid</li>
+    <li>Ganondorf</li>
+  </ul>
+</div>
 ```
 
 ```javascript
+stik.register("CharactesCtrl", "List", function($context, $template){
+  var supported, character;
+
+  character = $template.getElementsByClassName('character');
+
+  function clickHandler(event){
+    supported = event.target.getAttribute('hero');
+    alert("I'll support , " + supported + "!!");
+  };
+
+  for (var i = 0; i < character.length; i++) {
+    character[i].addEventListener('click', clickHandler);
+  };
+});
+
+stik.register("BattleCtrl", "List", function($context, $template){
+  var heroes = $template.getElementsByClassName('hero');
+
+  function clickHandler(event){
+    alert("It's me, " + event.target.textContent + "!! And I'm ready to fight!");
+  };
+
+  for (var i = 0; i < heroes.length; i++) {
+    heroes[i].addEventListener('click', clickHandler);
+  };
+});
 ```
 
 #Development
