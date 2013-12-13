@@ -54,7 +54,7 @@ window.stik || (window.stik = {});
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
     var templates = this.$findTemplate(controller, action);
 
-    for (var i in templates) {
+    for (var i = 0; i < templates.length; i++) {
       this.$markAsBound(templates[i]);
       this.$storeContext(controller, action, templates[i], executionUnit).$load();
     };
