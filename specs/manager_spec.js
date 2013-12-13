@@ -229,23 +229,23 @@ describe("Manager", function(){
 
       expect(subject.$$contexts.length).toEqual(2);
     });
+  });
 
-    describe("$markAsBound", function(){
-      it("should flag it as bound", function(){
-        var templateDouble = {className: ''};
+  describe("$markAsBound", function(){
+    it("should flag it as bound", function(){
+      var templateDouble = {className: ''};
 
-        subject.$markAsBound(templateDouble);
+      subject.$markAsBound(templateDouble);
 
-        expect(templateDouble.className).toEqual(' stik-bound');
-      });
+      expect(templateDouble.className).toEqual(' stik-bound');
+    });
 
-      it("should not messup current classes", function(){
-        var templateDouble = {className: 'wierd-class'};
+    it("should not messup current classes", function(){
+      var templateDouble = {className: 'wierd-class'};
 
-        subject.$markAsBound(templateDouble);
+      subject.$markAsBound(templateDouble);
 
-        expect(templateDouble.className).toEqual('wierd-class stik-bound');
-      });
+      expect(templateDouble.className).toEqual('wierd-class stik-bound');
     });
   });
 });
