@@ -123,6 +123,14 @@ describe("Manager", function(){
       }).toThrow("no execution units available");
     });
 
+    it("should throw if no templates were bound", function(){
+      subject.$storeExecutionUnit("ItemCtrl", "detail", function(){});
+
+      expect(function(){
+        subject.$buildContexts("AppCtrl", "List", function(){});
+      }).toThrow("no templates were bound");
+    });
+
     it("should address the binding of one context", function(){
       var controller    = "ItemCtrl";
       var action        = "detail";
@@ -130,7 +138,7 @@ describe("Manager", function(){
 
       subject.$storeExecutionUnit(controller, action, executionUnit);
 
-      spyOn(subject, "$bindExecutionUnit");
+      spyOn(subject, "$bindExecutionUnit").andReturn(true);
 
       subject.$buildContexts();
 
@@ -150,7 +158,7 @@ describe("Manager", function(){
       subject.$storeExecutionUnit(controller, creation, executionUnit);
       subject.$storeExecutionUnit(controller, update, executionUnit);
 
-      spyOn(subject, "$bindExecutionUnit");
+      spyOn(subject, "$bindExecutionUnit").andReturn(true);
 
       subject.$buildContexts();
 
@@ -230,28 +238,30 @@ describe("Manager", function(){
       expect(subject.$$contexts.length).toEqual(2);
     });
 
-    it("should throw if no templates were bound", function(){
-      expect(function(){
-        subject.$bindExecutionUnit('AppCtrl', 'List', function(){});
-      }).toThrow("no templates were bound");
+    it("should return false if no templates were bound", function(){
+      spyOn(subject, "$findTemplate").andReturn([]);
+
+      expect(
+        subject.$bindExecutionUnit("AppCtrl", "List", function(){})
+      ).toBeFalsy();
     });
   });
 
   describe("$markAsBound", function(){
     it("should flag it as bound", function(){
-      var templateDouble = {className: ''};
+      var templateDouble = {className: ""};
 
       subject.$markAsBound(templateDouble);
 
-      expect(templateDouble.className).toEqual(' stik-bound');
+      expect(templateDouble.className).toEqual(" stik-bound");
     });
 
     it("should not messup current classes", function(){
-      var templateDouble = {className: 'wierd-class'};
+      var templateDouble = {className: "wierd-class"};
 
       subject.$markAsBound(templateDouble);
 
-      expect(templateDouble.className).toEqual('wierd-class stik-bound');
+      expect(templateDouble.className).toEqual("wierd-class stik-bound");
     });
   });
 });

@@ -75,6 +75,7 @@ window.stik || (window.stik = {});
 
   Manager.prototype.$buildContexts = function(){
     var controller, action, executionUnit;
+    var boundAny;
 
     if (Object.keys(this.$$executionUnits).length === 0)
       throw "no execution units available";
@@ -82,15 +83,17 @@ window.stik || (window.stik = {});
     for (controller in this.$$executionUnits) {
       for (action in this.$$executionUnits[controller]) {
         executionUnit = this.$$executionUnits[controller][action];
-        this.$bindExecutionUnit(controller, action, executionUnit);
+        if (this.$bindExecutionUnit(controller, action, executionUnit))
+          boundAny = true;
       };
     };
+
+    if (!boundAny)
+      throw "no templates were bound";
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
     var templates = this.$findTemplate(controller, action);
-
-    var boundAny = false;
 
     for (var i = 0; i < templates.length; i++) {
       boundAny = true;
@@ -98,8 +101,7 @@ window.stik || (window.stik = {});
       this.$storeContext(controller, action, templates[i], executionUnit).$load();
     };
 
-    if (!boundAny)
-      throw "no templates were bound"
+    return templates.length > 0;
   };
 
   Manager.prototype.$markAsBound = function(template){
