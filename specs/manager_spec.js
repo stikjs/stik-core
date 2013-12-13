@@ -229,6 +229,12 @@ describe("Manager", function(){
 
       expect(subject.$$contexts.length).toEqual(2);
     });
+
+    it("should throw if no templates were bound", function(){
+      expect(function(){
+        subject.$bindExecutionUnit('AppCtrl', 'List', function(){});
+      }).toThrow("no templates were bound");
+    });
   });
 
   describe("$markAsBound", function(){

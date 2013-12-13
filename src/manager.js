@@ -54,10 +54,16 @@ window.stik || (window.stik = {});
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
     var templates = this.$findTemplate(controller, action);
 
+    var boundAny = false;
+
     for (var i = 0; i < templates.length; i++) {
+      boundAny = true;
       this.$markAsBound(templates[i]);
       this.$storeContext(controller, action, templates[i], executionUnit).$load();
     };
+
+    if (!boundAny)
+      throw "no templates were bound"
   };
 
   Manager.prototype.$markAsBound = function(template){
