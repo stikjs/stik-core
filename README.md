@@ -51,7 +51,7 @@ The `closure` function takes 2 arguments:
 You can even have multiple templates using the same controller and action.
 
 ```html
-<div id="heroes-list" data-controller="CharactersCtrl" data-action="List">
+<div id="heroes-list" data-controller="BattleCtrl" data-action="List">
   <ul>
     <li>Mario</li>
     <li>Samus</li>
@@ -59,7 +59,7 @@ You can even have multiple templates using the same controller and action.
   </ul>
 </div>
 
-<div id="villains-list" data-controller="CharactersCtrl" data-action="List">
+<div id="villains-list" data-controller="BattleCtrl" data-action="List">
   <ul>
     <li>Bowser</li>
     <li>Metroid</li>
@@ -69,21 +69,6 @@ You can even have multiple templates using the same controller and action.
 ```
 
 ```javascript
-stik.register("CharactesCtrl", "List", function($context, $template){
-  var supported, character;
-
-  character = $template.getElementsByClassName('character');
-
-  function clickHandler(event){
-    supported = event.target.getAttribute('hero');
-    alert("I'll support , " + supported + "!!");
-  };
-
-  for (var i = 0; i < character.length; i++) {
-    character[i].addEventListener('click', clickHandler);
-  };
-});
-
 stik.register("BattleCtrl", "List", function($context, $template){
   var heroes = $template.getElementsByClassName('hero');
 
