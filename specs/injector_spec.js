@@ -8,6 +8,19 @@ describe("Injector", function(){
   };
 
   describe("#$resolveDependencies", function(){
+    it("without params", function(){
+      var subject, contextDouble, modules;
+
+      contextDouble = function(){};
+      modules = modulesDouble();
+
+      subject = new stik.Injector(contextDouble, modules);
+
+      expect(
+        subject.$resolveDependencies()
+      ).toEqual([]);
+    });
+
     it("with a single param", function(){
       var subject, contextDouble, modules;
 
@@ -40,7 +53,7 @@ describe("Injector", function(){
     it("with three params", function(){
       var subject, contextDouble, modules;
 
-      contextDouble = function($template, $messaging, $context){};
+      contextDouble = function($template, $messaging, $viewBag){};
       modules = modulesDouble();
 
       subject = new stik.Injector(contextDouble, modules);
@@ -50,7 +63,7 @@ describe("Injector", function(){
       ).toEqual([
         modules.$template,
         modules.$messaging,
-        modules.$context
+        modules.$viewBag
       ]);
     });
   });

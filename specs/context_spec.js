@@ -1,12 +1,20 @@
-var subject, elmDouble;
-
-function setupElmDouble(){
-  return {
-    getAttribute: function(){},
-  };
-};
-
 describe("Context", function(){
+  var subject, elmDouble;
+
+  function setupElmDouble(){
+    return {
+      getAttribute: function(){},
+    };
+  };
+
+  function modulesDouble(){
+    return {
+      $template: function(){},
+      $messaging: function(){},
+      $viewBag: function(){}
+    };
+  };
+
   beforeEach(function(){
     elmDouble = setupElmDouble();
   });
@@ -57,29 +65,49 @@ describe("Context", function(){
   });
 
   describe("$load", function(){
-    var executed = false;
+    var injectedTemplate = false;
 
     afterEach(function(){
-      executed = false;
+      injectedTemplate = false;
     });
 
     it("should run the execution unit it is bound to", function(){
-      var template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      var template, modules, executionUnitDouble;
 
-      var executionUnitDouble = jasmine.createSpy('executionUnitDouble').andCallFake(
-        function($context, $template){
-          executed = true;
-        }
-      );
+      template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+
+      executionUnitDouble = function($template){
+        injectedTemplate = $template;
+      };
 
       subject = new stik.Context('AppCtrl', 'list', template, executionUnitDouble);
-      subject.$load();
+      subject.$load(modulesDouble());
+
+      expect(injectedTemplate).toEqual(template);
+    });
+  });
+
+  describe("#$mergeModules", function(){
+    it("should attach the context and template", function(){
+      var template, modules, expectedModules = {};
+
+      template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+
+      modules = modulesDouble();
+
+      subject = new stik.Context('AppCtrl', 'list', template, function(){});
+
+      expectedModules.$template  = modules.$template,
+      expectedModules.$messaging = modules.$messaging,
+      expectedModules.$viewBag   = modules.$viewBag,
+      expectedModules.$context   = subject;
+      expectedModules.$template  = template;
 
       expect(
-        executionUnitDouble
-      ).toHaveBeenCalledWith(subject, template);
-
-      expect(executed).toBeTruthy();
+        subject.$mergeModules(modules)
+      ).toEqual(
+        expectedModules
+      );
     });
   });
 });
