@@ -91,7 +91,35 @@ The available modules are:
 * `$context` (Object) -> This object contains information about the execution context (e.g. controller and template);
 * `$template` (HTMLElement) -> Contains the HTMLElement that corresponds to the template associated with this controller. Every DOM manipulation should belong to its tree, maintining the component isolation.
 
-Theses can be required in any other you want.
+Theses can be required in any other you want:
+
+```javascript
+// just one
+
+stik.register("BattleCtrl", "List", function($template){
+  // ...
+});
+
+stik.register("BattleCtrl", "List", function($context){
+  // ...
+});
+
+// or two
+
+stik.register("BattleCtrl", "List", function($context, $template){
+  // ...
+});
+
+stik.register("BattleCtrl", "List", function($template, $context){
+  // ...
+});
+
+// or nothing at all
+
+stik.register("BattleCtrl", "List", function(){
+  // ...
+});
+```
 
 #Development
 ##Testing
