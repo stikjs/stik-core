@@ -1,27 +1,29 @@
 {
   "name": "stik.js",
   "version": "0.2.0",
-  "description": "A JS lib to wire you JavaScript execution to your HTML template",
+  "description": "A JS library to wire you JavaScript execution to your HTML template",
   "main": "stik.js",
   "scripts": {
     "test": "spec"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/lukelex/stik.git"
+    "url": "git@github.com:lukelex/stik.js.git"
   },
   "keywords": [
     "scope",
     "management",
+    "Dependency Injection",
+    "DI",
     "Single Responsibility Principle",
     "SRP"
   ],
   "author": "Lukas Alexandre",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lukelex/stik/issues"
+    "url": "https://github.com/lukelex/stik.js/issues"
   },
-  "homepage": "https://github.com/lukelex/stik",
+  "homepage": "https://github.com/lukelex/stik.js",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-uglify": "~0.2.7",

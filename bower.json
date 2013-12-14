@@ -1,0 +1,24 @@
+{
+  "name": "stik.js",
+  "main": "stik.js",
+  "version": "0.2.0",
+  "homepage": "https://github.com/lukelex/stik.js",
+  "authors": [
+    "Lukas Alexandre <lukas@codelogic.me>"
+  ],
+  "description": "A JS library to wire you JavaScript execution to your HTML template",
+  "keywords": [
+    "scope",
+    "management",
+    "dependency-injection",
+    "single-responsibility-principle"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
