@@ -1,9 +1,10 @@
 window.stik || (window.stik = {});
 
 (function(){
-  function Manager(){
+  function Manager(modules){
     this.$$contexts = [];
     this.$$executionUnits = {};
+    this.$$modules = modules;
   };
 
   Manager.prototype.$register = function(controller, action, executionUnit){
@@ -57,11 +58,14 @@ window.stik || (window.stik = {});
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
-    var templates = this.$findTemplate(controller, action);
+    var context, templates;
+
+    templates = this.$findTemplate(controller, action);
 
     for (var i = 0; i < templates.length; i++) {
       this.$markAsBound(templates[i]);
-      this.$storeContext(controller, action, templates[i], executionUnit).$load();
+      context = this.$storeContext(controller, action, templates[i], executionUnit);
+      context.$load(this.$$modules);
     };
 
     return templates.length > 0;

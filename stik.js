@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.1.0 | From: 13-12-2013
+// Version: 0.1.0 | From: 14-12-2013
 
 window.stik || (window.stik = {});
 
@@ -27,8 +27,28 @@ window.stik || (window.stik = {});
     this.$$disposable = false;
   };
 
-  Context.prototype.$load = function(){
-    this.$$executionUnit(this, this.$$template);
+  Context.prototype.$load = function(modules){
+    var dependencies = this.$resolveDependencies(
+      this.$mergeModules(modules)
+    );
+
+    this.$$executionUnit.apply(
+      new function(){},
+      dependencies
+    );
+  };
+
+  Context.prototype.$mergeModules = function(modules){
+    modules.$context = this;
+    modules.$template = this.$$template;
+
+    return modules;
+  };
+
+  Context.prototype.$resolveDependencies = function(modules){
+    var injector = new stik.Injector(this.$$executionUnit, modules);
+
+    return injector.$resolveDependencies();
   };
 
   stik.Context = Context;
@@ -37,9 +57,60 @@ window.stik || (window.stik = {});
 window.stik || (window.stik = {});
 
 (function(){
-  function Manager(){
+  function Injector(executionUnit, modules){
+    this.$$executionUnit = executionUnit;
+    this.$$modules = modules;
+  };
+
+  Injector.prototype.$resolveDependencies = function(){
+    var args = this.$extractArguments();
+
+    return this.$grabModules(args);
+  };
+
+  Injector.prototype.$extractArguments = function(){
+    var argsPattern, funcString, args;
+
+    argsPattern = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
+
+    funcString = this.$$executionUnit.toString();
+
+    args = funcString.match(argsPattern)[1].split(',');
+
+    return this.$trimmedArgs(args);
+  };
+
+  Injector.prototype.$grabModules = function(args){
+    var dependencies = [];
+
+    if (args.length === 1 && args[0] === '')
+      return [];
+
+    for (var i = 0; i < args.length; i++) {
+      dependencies.push(this.$$modules[args[i]]);
+    };
+
+    return dependencies;
+  };
+
+  Injector.prototype.$trimmedArgs = function(args){
+    var result = [];
+    args.forEach(function(arg){
+      result.push(arg.trim());
+    });
+    return result;
+  };
+
+  stik.Injector = Injector;
+})();
+
+window.stik || (window.stik = {});
+
+(function(){
+  function Manager(modules){
     this.$$contexts = [];
     this.$$executionUnits = {};
+    this.$$modules = modules;
   };
 
   Manager.prototype.$register = function(controller, action, executionUnit){
@@ -93,12 +164,14 @@ window.stik || (window.stik = {});
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
-    var templates = this.$findTemplate(controller, action);
+    var context, templates;
+
+    templates = this.$findTemplate(controller, action);
 
     for (var i = 0; i < templates.length; i++) {
-      boundAny = true;
       this.$markAsBound(templates[i]);
-      this.$storeContext(controller, action, templates[i], executionUnit).$load();
+      context = this.$storeContext(controller, action, templates[i], executionUnit);
+      context.$load(this.$$modules);
     };
 
     return templates.length > 0;
@@ -114,7 +187,7 @@ window.stik || (window.stik = {});
 window.stik || (window.stik = {});
 
 (function() {
-  stik.$$manager = new stik.Manager();
+  stik.$$manager = new stik.Manager({});
 
   stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);

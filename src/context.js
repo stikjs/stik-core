@@ -18,8 +18,28 @@ window.stik || (window.stik = {});
     this.$$disposable = false;
   };
 
-  Context.prototype.$load = function(){
-    this.$$executionUnit(this, this.$$template);
+  Context.prototype.$load = function(modules){
+    var dependencies = this.$resolveDependencies(
+      this.$mergeModules(modules)
+    );
+
+    this.$$executionUnit.apply(
+      new function(){},
+      dependencies
+    );
+  };
+
+  Context.prototype.$mergeModules = function(modules){
+    modules.$context = this;
+    modules.$template = this.$$template;
+
+    return modules;
+  };
+
+  Context.prototype.$resolveDependencies = function(modules){
+    var injector = new stik.Injector(this.$$executionUnit, modules);
+
+    return injector.$resolveDependencies();
   };
 
   stik.Context = Context;
