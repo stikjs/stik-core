@@ -18,7 +18,8 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "specs",
+    "src",
+    "examples"
   ]
 }
