@@ -14,4 +14,12 @@ describe("Main", function(){
       stik.$$manager.$register
     ).toHaveBeenCalledWith(controller, action, executionUnit);
   });
+
+  it(".bindLazy", function(){
+    spyOn(stik.$$manager, "$buildContexts");
+
+    stik.binddLazy();
+
+    expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
+  });
 });

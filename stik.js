@@ -193,4 +193,8 @@ window.stik || (window.stik = {});
   stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);
   };
+
+  stik.binddLazy = function(){
+    this.$$manager.$buildContexts();
+  };
 })();
