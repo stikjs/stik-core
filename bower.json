@@ -21,6 +21,6 @@
     "specs",
     "src",
     "examples",
-    "Gruntfile"
+    "Gruntfile.js"
   ]
 }
