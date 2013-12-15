@@ -116,15 +116,15 @@ stik.register("BattleCtrl", "List", function(){
 Stik.js comes with a couple modules to help you organize your code, by separating their responsibilities. These modules can be injected in each controller, as needed.
 
 ##$template
-Contains the HTML template (HTMLElement) that was bound to the current controller. This shall be used as the scope to **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action need to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
+Contains the HTML template (HTMLElement) that was bound to the current controller. This shall be used as the scope of **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action needs to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
 
 ###Using it
 ```javascript
-slik.register("YourCtrl", "YourAction", function($template){
-  // you can plain JS to access the DOM
+stik.register("YourCtrl", "YourAction", function($template){
+  // you can use plain JS to access the DOM
   $template.getElementsByClass("my-elm");
 
-  // or use any DOM lib to help you out
+  // or any DOM lib to help you out
   $($template).getElement(".my-elm"); // MooTools
   $($template).find(".my-elm"); // Zepto.js or jQuery
 
@@ -138,15 +138,15 @@ Enables a controller to send and receive messages from another controller.
 
 ###Using it
 ```javascript
-slik.register("MessageCtrl", "Sender", function($courier){
+stik.register("MessageCtrl", "Sender", function($courier){
   // delegate a new message to the controller responsible for it
   // can be either a String or a JS Object (POJO)
   $courier.$send("new-message", {
-  your: "delegation"
+    your: "delegation"
   });
 });
 
-slik.register("MessageCtrl", "Receiver", function($courier){
+stik.register("MessageCtrl", "Receiver", function($courier){
   // specify what messages this controller should expect
   $courier.$receive("new-message", function(msg){
     // do something with the message
@@ -161,7 +161,7 @@ slik.register("MessageCtrl", "Receiver", function($courier){
 Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stick.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
 
 ```javascript
-slik.register("YourCtrl", "YourAction", function($context){
+stik.register("YourCtrl", "YourAction", function($context){
   ...
 });
 ```
