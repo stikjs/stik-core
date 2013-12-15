@@ -48,15 +48,15 @@
     stik.register("CharactesCtrl", "List", function($template){
       var supported, character;
 
-      character = $template.getElementsByClassName('character');
+      character = $template.getElementsByClassName("character");
 
       function clickHandler(event){
-        supported = event.target.getAttribute('hero');
+        supported = event.target.getAttribute("hero");
         alert("I'll support " + supported + "!!");
       };
 
       for (var i = 0; i < character.length; i++) {
-        character[i].addEventListener('click', clickHandler);
+        character[i].addEventListener("click", clickHandler);
       };
     });
 
@@ -68,7 +68,7 @@
       };
 
       for (var i = 0; i < heroes.length; i++) {
-        heroes[i].addEventListener('click', clickHandler);
+        heroes[i].addEventListener("click", clickHandler);
       };
     });
   </script>

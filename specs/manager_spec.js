@@ -1,12 +1,12 @@
-var subject;
-
-function DOMDouble(){
-  return {
-    querySelectorAll: function(){}
-  };
-};
-
 describe("Manager", function(){
+  var subject;
+
+  function DOMDouble(){
+    return {
+      querySelectorAll: function(){}
+    };
+  };
+
   beforeEach(function(){
     subject = new stik.Manager();
   });
