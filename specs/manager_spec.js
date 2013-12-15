@@ -7,8 +7,6 @@ function DOMDouble(){
 };
 
 describe("Manager", function(){
-  var count = 0;
-
   beforeEach(function(){
     subject = new stik.Manager();
   });
@@ -36,9 +34,11 @@ describe("Manager", function(){
     });
 
     it("should register the new execution unit", function(){
-      var controller    = "ItemCtrl"
-      var action        = "detail"
-      var executionUnit = function(){};
+      var controller, action, executionUnit;
+
+      controller    = "ItemCtrl"
+      action        = "detail"
+      executionUnit = function(){};
 
       spyOn(subject, "$storeExecutionUnit");
 
@@ -50,9 +50,11 @@ describe("Manager", function(){
     });
 
     it("should register the new context for multiple templates", function(){
-      var controller    = "ItemCtrl"
-      var action        = "detail"
-      var executionUnit = function(){};
+      var controller, action, executionUnit;
+
+      controller    = "ItemCtrl";
+      action        = "detail";
+      executionUnit = function(){};
 
       spyOn(subject, "$storeExecutionUnit");
 
@@ -66,9 +68,11 @@ describe("Manager", function(){
 
   describe("#$storeExecutionUnit", function(){
     it("should store the execution unit in its own namespace", function(){
-      var controller    = "ItemCtrl";
-      var action        = "detail";
-      var executionUnit = function(){};
+      var controller, action, executionUnit;
+
+      controller    = "ItemCtrl";
+      action        = "detail";
+      executionUnit = function(){};
 
       subject.$storeExecutionUnit(controller, action, executionUnit);
 
@@ -80,10 +84,12 @@ describe("Manager", function(){
 
   describe("#$storeContext", function(){
     it("should store the new context", function(){
-      var template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller    = "ItemCtrl"
-      var action        = "detail"
-      var executionUnit = function(){};
+      var template, controller, action, executionUnit;
+
+      template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      controller    = "ItemCtrl"
+      action        = "detail"
+      executionUnit = function(){};
 
       spyOn(subject, "$createContext").andReturn(1);
 
@@ -99,10 +105,12 @@ describe("Manager", function(){
 
   describe("#$findTemplate", function(){
     it("should look for templates in the DOM based on the controller and action", function(){
+      var DOM, controller, action;
+
       DOM = DOMDouble();
 
-      var controller  = "ItemCtrl";
-      var action      = "detail";
+      controller = "ItemCtrl";
+      action     = "detail";
 
       spyOn(DOM, "querySelectorAll").andReturn([1,2,3]);
 
@@ -132,9 +140,11 @@ describe("Manager", function(){
     });
 
     it("should address the binding of one context", function(){
-      var controller    = "ItemCtrl";
-      var action        = "detail";
-      var executionUnit = function(){};
+      var controller, action, executionUnit;
+
+      controller    = "ItemCtrl";
+      action        = "detail";
+      executionUnit = function(){};
 
       subject.$storeExecutionUnit(controller, action, executionUnit);
 
@@ -148,11 +158,13 @@ describe("Manager", function(){
     });
 
     it("should address the binding of multiple contexts", function(){
-      var controller    = "ItemCtrl";
-      var detail        = "detail";
-      var creation      = "creation";
-      var update        = "update";
-      var executionUnit = function(){};
+      var controller, detail, creation, update, executionUnit;
+
+      controller    = "ItemCtrl";
+      detail        = "detail";
+      creation      = "creation";
+      update        = "update";
+      executionUnit = function(){};
 
       subject.$storeExecutionUnit(controller, detail, executionUnit);
       subject.$storeExecutionUnit(controller, creation, executionUnit);
@@ -182,10 +194,12 @@ describe("Manager", function(){
 
   describe("#$bindExecutionUnit", function(){
     it("should create and store the new context", function(){
-      var template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller    = "ItemCtrl";
-      var action        = "detail";
-      var executionUnit = function(){};
+      var template, controller, action, executionUnit, contextDouble;
+
+      template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      controller    = "ItemCtrl";
+      action        = "detail";
+      executionUnit = function(){};
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
@@ -213,11 +227,13 @@ describe("Manager", function(){
     });
 
     it("should create and store contexts for multiple templates", function(){
-      var template1  = '<div id="item-1" data-controller="ItemCtrl" data-action="detail"></div>';
-      var template2  = '<div id="item-2" data-controller="ItemCtrl" data-action="detail"></div>';
-      var controller = "ItemCtrl";
-      var action     = "detail";
-      var executionUnit = function(){};
+      var template1, template2, controller, action, executionUnit, contextDouble;
+
+      template1  = '<div id="item-1" data-controller="ItemCtrl" data-action="detail"></div>';
+      template2  = '<div id="item-2" data-controller="ItemCtrl" data-action="detail"></div>';
+      controller = "ItemCtrl";
+      action     = "detail";
+      executionUnit = function(){};
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
