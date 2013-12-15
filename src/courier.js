@@ -3,7 +3,7 @@ window.stik || (window.stik = {});
 (function(){
   function Courier(){
     this.$$receivers = {};
-  };
+  }
 
   Courier.prototype.$receive = function(box, opener){
     this.$$receivers[box] || (this.$$receivers[box] = []);
@@ -15,7 +15,7 @@ window.stik || (window.stik = {});
 
     for (var i = 0; i < openers.length; i++) {
       openers[i](message);
-    };
+    }
   };
 
   stik.Courier = Courier;

@@ -4,7 +4,7 @@ window.stik || (window.stik = {});
   function Injector(executionUnit, modules){
     this.$$executionUnit = executionUnit;
     this.$$modules = modules;
-  };
+  }
 
   Injector.prototype.$resolveDependencies = function(){
     var args = this.$extractArguments();
@@ -27,12 +27,11 @@ window.stik || (window.stik = {});
   Injector.prototype.$grabModules = function(args){
     var dependencies = [];
 
-    if (args.length === 1 && args[0] === '')
-      return [];
+    if (args.length === 1 && args[0] === '') { return []; }
 
     for (var i = 0; i < args.length; i++) {
       dependencies.push(this.$$modules[args[i]]);
-    };
+    }
 
     return dependencies;
   };
