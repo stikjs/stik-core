@@ -121,7 +121,7 @@ Contains the HTML template that was bound to the current controller.
 ###Using it
 `$template` is an HTMLElement that shall be used as the scope to **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action need to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
 
-```
+```javascript
 slik.register("YourCtrl", "YourAction", function($template){
   // you can plain JS to access the DOM
   $template.getElementsByClass("my-elm");
@@ -139,7 +139,7 @@ slik.register("YourCtrl", "YourAction", function($template){
 Enables a controller to send and receive messages from another controller.
 
 ###Using it
-```
+```javascript
 slik.register("MessageCtrl", "Sender", function($courier){
   // delegate a new message to the controller responsible for it
   // can be either a String or a JS Object (POJO)
@@ -162,7 +162,7 @@ slik.register("MessageCtrl", "Receiver", function($courier){
 ##$context
 Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stick.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
 
-```
+```javascript
 slik.register("YourCtrl", "YourAction", function($context){
   ...
 });
