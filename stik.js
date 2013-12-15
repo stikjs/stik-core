@@ -5,37 +5,30 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.3.0 | From: 15-12-2013
+// Version: 0.4.0 | From: 15-12-2013
 
 window.stik || (window.stik = {});
 
 (function(){
   function Context(controller, action, template, executionUnit){
-    if (!controller)
-      throw "controller is missing";
-    if (!action)
-      throw "action is missing";
-    if (!template)
-      throw "template is missing";
-    if (!executionUnit)
-      throw "execution unit is missing";
+    if (!controller)    { throw "controller is missing"; }
+    if (!action)        { throw "action is missing"; }
+    if (!template)      { throw "template is missing"; }
+    if (!executionUnit) { throw "execution unit is missing"; }
 
     this.$$controller = controller;
     this.$$action = action;
     this.$$template = template;
     this.$$executionUnit = executionUnit;
     this.$$disposable = false;
-  };
+  }
 
   Context.prototype.$load = function(modules){
     var dependencies = this.$resolveDependencies(
       this.$mergeModules(modules)
     );
 
-    this.$$executionUnit.apply(
-      new function(){},
-      dependencies
-    );
+    this.$$executionUnit.apply({}, dependencies);
   };
 
   Context.prototype.$mergeModules = function(modules){
@@ -59,7 +52,7 @@ window.stik || (window.stik = {});
 (function(){
   function Courier(){
     this.$$receivers = {};
-  };
+  }
 
   Courier.prototype.$receive = function(box, opener){
     this.$$receivers[box] || (this.$$receivers[box] = []);
@@ -71,7 +64,7 @@ window.stik || (window.stik = {});
 
     for (var i = 0; i < openers.length; i++) {
       openers[i](message);
-    };
+    }
   };
 
   stik.Courier = Courier;
@@ -83,7 +76,7 @@ window.stik || (window.stik = {});
   function Injector(executionUnit, modules){
     this.$$executionUnit = executionUnit;
     this.$$modules = modules;
-  };
+  }
 
   Injector.prototype.$resolveDependencies = function(){
     var args = this.$extractArguments();
@@ -106,12 +99,11 @@ window.stik || (window.stik = {});
   Injector.prototype.$grabModules = function(args){
     var dependencies = [];
 
-    if (args.length === 1 && args[0] === '')
-      return [];
+    if (args.length === 1 && args[0] === '') { return []; }
 
     for (var i = 0; i < args.length; i++) {
       dependencies.push(this.$$modules[args[i]]);
-    };
+    }
 
     return dependencies;
   };
@@ -134,7 +126,7 @@ window.stik || (window.stik = {});
     this.$$contexts = [];
     this.$$executionUnits = {};
     this.$$modules = modules;
-  };
+  }
 
   Manager.prototype.$register = function(controller, action, executionUnit){
     if (!executionUnit)
@@ -147,14 +139,15 @@ window.stik || (window.stik = {});
   Manager.prototype.$storeExecutionUnit = function(controller, action, executionUnit){
     this.$$executionUnits[controller] || (this.$$executionUnits[controller] = {});
 
-    if (this.$$executionUnits[controller][action])
+    if (this.$$executionUnits[controller][action]){
       throw "Controller and Action already exist!";
+    }
 
     this.$$executionUnits[controller][action] = executionUnit;
   };
 
   Manager.prototype.$storeContext = function(controller, action, template, executionUnit){
-    newContext = this.$createContext(controller, action, template, executionUnit);
+    var newContext = this.$createContext(controller, action, template, executionUnit);
     this.$$contexts.push(newContext);
     return newContext;
   };
@@ -165,8 +158,7 @@ window.stik || (window.stik = {});
 
   Manager.prototype.$findTemplate = function(controller, action, DOMInjection){
     var DOMHandler = document;
-    if (DOMInjection)
-      DOMHandler = DOMInjection;
+    if (DOMInjection) { DOMHandler = DOMInjection; }
 
     var selector = "[data-controller=" + controller + "][data-action=" + action + "]";
     return DOMHandler.querySelectorAll(selector);
@@ -176,19 +168,20 @@ window.stik || (window.stik = {});
     var controller, action, executionUnit;
     var boundAny;
 
-    if (Object.keys(this.$$executionUnits).length === 0)
+    if (Object.keys(this.$$executionUnits).length === 0){
       throw "no execution units available";
+    }
 
     for (controller in this.$$executionUnits) {
       for (action in this.$$executionUnits[controller]) {
         executionUnit = this.$$executionUnits[controller][action];
-        if (this.$bindExecutionUnit(controller, action, executionUnit))
+        if (this.$bindExecutionUnit(controller, action, executionUnit)){
           boundAny = true;
-      };
-    };
+        }
+      }
+    }
 
-    if (!boundAny)
-      throw "no templates were bound";
+    if (!boundAny) { throw "no templates were bound"; }
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
@@ -200,7 +193,7 @@ window.stik || (window.stik = {});
       this.$markAsBound(templates[i]);
       context = this.$storeContext(controller, action, templates[i], executionUnit);
       context.$load(this.$$modules);
-    };
+    }
 
     return templates.length > 0;
   };
