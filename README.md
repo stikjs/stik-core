@@ -116,11 +116,9 @@ stik.register("BattleCtrl", "List", function(){
 Stik.js comes with a couple modules to help you organize your code, by separating their responsibilities. These modules can be injected in each controller, as needed.
 
 ##$template
-Contains the HTML template that was bound to the current controller.
+Contains the HTML template (HTMLElement) that was bound to the current controller. This shall be used as the scope to **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action need to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
 
 ###Using it
-`$template` is an HTMLElement that shall be used as the scope to **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action need to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
-
 ```javascript
 slik.register("YourCtrl", "YourAction", function($template){
   // you can plain JS to access the DOM
