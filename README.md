@@ -7,6 +7,12 @@ By splitting your logic into small specialized responsible actions, Stik.js will
 #Wire up
 With Stik.js you can define in your HTML which templates should be bound to a specific controller and action.
 
+The `register` function accepts three arguments:
+
+* `ControllerName` (String) -> Could be either the name of the page or the section in which the template will reside;
+* `ActionName` (String) -> The component name. Usually maps to the component's responsibility;
+* `ExecutionUnit` (Function) -> The script where your component behavior shall live;
+
 ```html
 <div id="characters-list" data-controller="CharactesCtrl" data-action="List">
   <h3>Sub Characters</h3>
@@ -36,12 +42,6 @@ stik.register("CharactesCtrl", "List", function($template){
   };
 });
 ```
-
-The `register` function accepts three arguments:
-
-* `ControllerName` (String) -> Could be either the name of the page or the section in which the template will reside;
-* `ActionName` (String) -> The actual name of the template;
-* `closure` (Function) -> The closure where your template behavior shall live;
 
 You can even have multiple templates using the same controller and action.
 
@@ -116,6 +116,63 @@ stik.register("BattleCtrl", "List", function(){
   // ...
 });
 ```
+
+#Modules
+Stik.js comes with a couple modules to help you organize your code, by separating their responsibilities. These modules can be injected in each controller, as needed.
+
+##$template
+Contains the HTML template that was bound to the current controller.
+
+###Using it
+`$template` is an HTMLElement that shall be used as the scope to **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action need to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
+
+```
+slik.register("YourCtrl", "YourAction", function($template){
+  // you can plain JS to access the DOM
+  $template.getElementsByClass("my-elm");
+
+  // or use any DOM lib to help you out
+  $($template).getElement(".my-elm"); // MooTools
+  $($template).find(".my-elm"); // Zepto.js or jQuery
+
+  // and do your stuff
+  ...
+});
+```
+
+##$courier
+Enables a controller to send and receive messages from another controller.
+
+###Using it
+```
+slik.register("MessageCtrl", "Sender", function($courier){
+  // delegate a new message to the controller responsible for it
+  // can be either a String or a JS Object (POJO)
+  $courier.$send("new-message", {
+  your: "delegation"
+  });
+});
+
+slik.register("MessageCtrl", "Receiver", function($courier){
+  // specify what messages this controller should expect
+  $courier.$receive("new-message", function(msg){
+    // do something with the message
+    ...
+  });
+  // a message can be delivered to any number of controllers that
+  // defines an expectation for it
+});
+```
+
+##$context
+Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stick.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
+
+```
+slik.register("YourCtrl", "YourAction", function($context){
+  ...
+});
+```
+
 #Helping Stik.js
 ##I found a bug!
 If you found a repeatable bug then file an issue on [issues page](https://github.com/lukelex/stik.js/issues), preferably with a working example or repo.

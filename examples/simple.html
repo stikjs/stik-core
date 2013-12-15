@@ -41,6 +41,14 @@
         <li class="hero">Metroid</li>
       </ul>
     </div>
+
+    <h2>Controllers talking to each other</h2>
+    <div class="mail-man" data-controller="MailCtrl" data-action="Sender">
+      <input class="mail-input" type="text" placeholder="place your message here">
+      <button class="mail-button">Send Message</button>
+    </div>
+
+    <div class="mail-man" data-controller="MailCtrl" data-action="Receiver"></div>
   </div>
 
   <script src="../stik.js" type="text/javascript" charset="utf-8"></script>
@@ -70,6 +78,25 @@
       for (var i = 0; i < heroes.length; i++) {
         heroes[i].addEventListener("click", clickHandler);
       };
+    });
+
+    stik.register("MailCtrl", "Sender", function($template, $courier){
+      var mailInput, mailButton;
+
+      mailInput = $template.getElementsByClassName("mail-input")[0];
+      mailButton = $template.getElementsByClassName("mail-button")[0];
+
+      mailButton.addEventListener("click", function(){
+        $courier.$send("new-mail", mailInput.value);
+        mailInput.value = "";
+      });
+    });
+
+    stik.register("MailCtrl", "Receiver", function($courier){
+      var qwe = "qwe";
+      $courier.$receive("new-mail", function(message){
+        alert("This message was received by the controller responsible: \"" + message + "\"");
+      });
     });
   </script>
 </body>

@@ -4,7 +4,7 @@ window.stik || (window.stik = {});
   if (stik.$$manager)
     throw "Stik.js is already loaded. Check your requires ;)";
 
-  stik.$$manager = new stik.Manager({});
+  stik.$$manager = new stik.Manager({$courier: new stik.Courier});
 
   stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);
