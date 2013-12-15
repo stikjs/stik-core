@@ -80,14 +80,9 @@ stik.register("BattleCtrl", "List", function($template){
 #Dependency Injection
 With Dependency Injection (DI), your dependencies are given to your object instead of your object creating or explicitly referencing them. This means the dependency injector can provide a different dependency based on the context of the situation. For example, in your tests it might pass a fake version of your services API that doesn't make requests but returns static objects instead, while in production it provides the actual services API.
 
-Stik.js comes with a built-in DI module that allows you to specify which modules you code cares about.
+Stik.js comes with a built-in DI engine that allows you to specify which modules your code cares about.
 
-The available modules are:
-
-* `$context` (Object) -> This object contains information about the execution context (e.g. controller and template);
-* `$template` (HTMLElement) -> Contains the HTMLElement that corresponds to the template associated with this controller. Every DOM manipulation should belong to its tree, maintining the component isolation.
-
-Theses can be required in any other you want:
+These modules can be required in any other you want:
 
 ```javascript
 // just one
