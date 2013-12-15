@@ -12,6 +12,7 @@ window.stik || (window.stik = {});
       throw "execution unit is missing";
 
     this.$storeExecutionUnit(controller, action, executionUnit);
+    this.$bindExecutionUnit(controller, action, executionUnit);
   };
 
   Manager.prototype.$storeExecutionUnit = function(controller, action, executionUnit){

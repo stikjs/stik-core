@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.2.0 | From: 14-12-2013
+// Version: 0.2.0 | From: 15-12-2013
 
 window.stik || (window.stik = {});
 
@@ -118,6 +118,7 @@ window.stik || (window.stik = {});
       throw "execution unit is missing";
 
     this.$storeExecutionUnit(controller, action, executionUnit);
+    this.$bindExecutionUnit(controller, action, executionUnit);
   };
 
   Manager.prototype.$storeExecutionUnit = function(controller, action, executionUnit){
@@ -191,9 +192,5 @@ window.stik || (window.stik = {});
 
   stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);
-  };
-
-  stik.init = function(){
-    this.$$manager.$buildContexts();
   };
 })();

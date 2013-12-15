@@ -33,35 +33,24 @@ describe("Manager", function(){
       }).toThrow("execution unit is missing");
     });
 
-    it("should register the new execution unit", function(){
+    it("should register and bind the new execution unit", function(){
       var controller, action, executionUnit;
 
       controller    = "ItemCtrl"
       action        = "detail"
       executionUnit = function(){};
 
-      spyOn(subject, "$storeExecutionUnit");
+      spyOn(subject, "$storeExecutionUnit").andCallThrough();
+      spyOn(subject, "$bindExecutionUnit");
 
       subject.$register(controller, action, executionUnit);
 
       expect(
         subject.$storeExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit)
-    });
-
-    it("should register the new context for multiple templates", function(){
-      var controller, action, executionUnit;
-
-      controller    = "ItemCtrl";
-      action        = "detail";
-      executionUnit = function(){};
-
-      spyOn(subject, "$storeExecutionUnit");
-
-      subject.$register(controller, action, executionUnit);
 
       expect(
-        subject.$storeExecutionUnit
+        subject.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit);
     });
   });

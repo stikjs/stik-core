@@ -14,14 +14,4 @@ describe("Main", function(){
       stik.$$manager.$register
     ).toHaveBeenCalledWith(controller, action, executionUnit);
   });
-
-  describe(".init", function(){
-    it("should", function(){
-      spyOn(stik.$$manager, "$buildContexts");
-
-      stik.init();
-
-      expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
-    });
-  });
 });

@@ -35,8 +35,6 @@ stik.register("CharactesCtrl", "List", function($template){
     character[i].addEventListener('click', clickHandler);
   };
 });
-
-stik.init();
 ```
 
 The `register` function accepts three arguments:
@@ -77,8 +75,6 @@ stik.register("BattleCtrl", "List", function($template){
     heroes[i].addEventListener('click', clickHandler);
   };
 });
-
-stik.init();
 ```
 
 #Dependency Injection
