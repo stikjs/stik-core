@@ -11,6 +11,7 @@ describe("Context", function(){
     return {
       $template: function(){},
       $messaging: function(){},
+      $courier: function(){},
       $viewBag: function(){}
     };
   };
@@ -99,6 +100,7 @@ describe("Context", function(){
 
       expectedModules.$template  = modules.$template,
       expectedModules.$messaging = modules.$messaging,
+      expectedModules.$courier   = modules.$courier,
       expectedModules.$viewBag   = modules.$viewBag,
       expectedModules.$context   = subject;
       expectedModules.$template  = template;

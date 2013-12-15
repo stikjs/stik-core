@@ -54,6 +54,28 @@ window.stik || (window.stik = {});
   stik.Context = Context;
 })();
 
+window.stik || (window.stik = {});
+
+(function(){
+  function Courier(){
+    this.$$receivers = {};
+  };
+
+  Courier.prototype.$receive = function(box, opener){
+    this.$$receivers[box] || (this.$$receivers[box] = []);
+    this.$$receivers[box].push(opener);
+  };
+
+  Courier.prototype.$send = function(box, message){
+    var openers = this.$$receivers[box];
+
+    for (var i = 0; i < openers.length; i++) {
+      openers[i](message);
+    };
+  };
+
+  stik.Courier = Courier;
+})();
 
 window.stik || (window.stik = {});
 
@@ -196,7 +218,7 @@ window.stik || (window.stik = {});
   if (stik.$$manager)
     throw "Stik.js is already loaded. Check your requires ;)";
 
-  stik.$$manager = new stik.Manager({});
+  stik.$$manager = new stik.Manager({$courier: new stik.Courier});
 
   stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);
