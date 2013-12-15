@@ -1,6 +1,6 @@
 #Stik.js
 
-[![Build Status](https://travis-ci.org/lukelex/stik.js.png?branch=master)](https://travis-ci.org/lukelex/stik.js)
+[![Build Status](https://travis-ci.org/lukelex/stik.js.png?branch=master)](https://travis-ci.org/lukelex/stik.js)[![Code Climate](https://codeclimate.com/github/lukelex/stik.js.png)](https://codeclimate.com/github/lukelex/stik.js)
 
 An opinionated JS library that wires your JavaScript execution to your HTML templates by creating pseudo closures of execution and scoping. Allowing you to manage, in a more consistant way, your events `binding/unbind` and your DOM scope manipulation.
 
