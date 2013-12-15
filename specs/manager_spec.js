@@ -69,6 +69,20 @@ describe("Manager", function(){
       expect(subject.$$executionUnits[controller][action]).toBeDefined();
       expect(subject.$$executionUnits[controller][action]).toBe(executionUnit);
     });
+
+    it("should throw if trying to store a controller and action twice", function(){
+      var controller, action, executionUnit;
+
+      controller    = "ItemCtrl"
+      action        = "detail"
+      executionUnit = function(){};
+
+      subject.$storeExecutionUnit(controller, action, executionUnit);
+
+      expect(function(){
+        subject.$storeExecutionUnit(controller, action, executionUnit);
+      }).toThrow("Controller and Action already exist!");
+    });
   });
 
   describe("#$storeContext", function(){

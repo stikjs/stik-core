@@ -17,6 +17,10 @@ window.stik || (window.stik = {});
 
   Manager.prototype.$storeExecutionUnit = function(controller, action, executionUnit){
     this.$$executionUnits[controller] || (this.$$executionUnits[controller] = {});
+
+    if (this.$$executionUnits[controller][action])
+      throw "Controller and Action already exist!";
+
     this.$$executionUnits[controller][action] = executionUnit;
   };
 
