@@ -82,7 +82,7 @@ With Dependency Injection (DI), your dependencies are given to your object inste
 
 Stik.js comes with a built-in DI engine that allows you to specify which modules your code cares about.
 
-These modules can be required in any other you want:
+These modules can be required in any order you want:
 
 ```javascript
 // just one
