@@ -1,25 +1,27 @@
-var subject;
-
 describe("Main", function(){
   it(".register", function(){
-    var controller = "AppCtrl";
-    var action     = "Login";
-    var closure    = function(){};
+    var controller, action, executionUnit;
+
+    controller    = "AppCtrl";
+    action        = "Login";
+    executionUnit = function(){};
 
     spyOn(stik.$$manager, "$register");
 
-    stik.register(controller, action, closure);
+    stik.register(controller, action, executionUnit);
 
     expect(
       stik.$$manager.$register
-    ).toHaveBeenCalledWith(controller, action, closure);
+    ).toHaveBeenCalledWith(controller, action, executionUnit);
   });
 
-  it(".init", function(){
-    spyOn(stik.$$manager, "$buildContexts");
+  describe(".init", function(){
+    it("should", function(){
+      spyOn(stik.$$manager, "$buildContexts");
 
-    stik.init();
+      stik.init();
 
-    expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
+      expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
+    });
   });
 });
