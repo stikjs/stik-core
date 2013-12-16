@@ -11,8 +11,7 @@ describe("Context", function(){
     return {
       $template: function(){},
       $messaging: function(){},
-      $courier: function(){},
-      $viewBag: function(){}
+      $courier: function(){}
     };
   };
 
@@ -90,23 +89,23 @@ describe("Context", function(){
 
   describe("#$mergeModules", function(){
     it("should attach the context and template", function(){
-      var template, modules, expectedModules = {};
+      var context, template, modules, expectedModules = {};
 
       template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
 
       modules = modulesDouble();
 
-      subject = new stik.Context('AppCtrl', 'list', template, function(){});
+      context = new stik.Context('AppCtrl', 'list', template, function(){});
 
       expectedModules.$template  = modules.$template,
       expectedModules.$messaging = modules.$messaging,
       expectedModules.$courier   = modules.$courier,
-      expectedModules.$viewBag   = modules.$viewBag,
-      expectedModules.$context   = subject;
+      expectedModules.$viewBag   = context.$$viewBag,
+      expectedModules.$context   = context;
       expectedModules.$template  = template;
 
       expect(
-        subject.$mergeModules(modules)
+        context.$mergeModules(modules)
       ).toEqual(
         expectedModules
       );

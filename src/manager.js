@@ -8,8 +8,7 @@ window.stik || (window.stik = {});
   }
 
   Manager.prototype.$register = function(controller, action, executionUnit){
-    if (!executionUnit)
-      throw "execution unit is missing";
+    if (!executionUnit) { throw "execution unit is missing"; }
 
     this.$storeExecutionUnit(controller, action, executionUnit);
     this.$bindExecutionUnit(controller, action, executionUnit);

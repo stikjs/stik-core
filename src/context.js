@@ -12,6 +12,7 @@ window.stik || (window.stik = {});
     this.$$template = template;
     this.$$executionUnit = executionUnit;
     this.$$disposable = false;
+    this.$$viewBag = new stik.ViewBag(template);
   }
 
   Context.prototype.$load = function(modules){
@@ -25,6 +26,7 @@ window.stik || (window.stik = {});
   Context.prototype.$mergeModules = function(modules){
     modules.$context = this;
     modules.$template = this.$$template;
+    modules.$viewBag = this.$$viewBag;
 
     return modules;
   };

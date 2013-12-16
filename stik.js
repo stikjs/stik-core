@@ -21,6 +21,7 @@ window.stik || (window.stik = {});
     this.$$template = template;
     this.$$executionUnit = executionUnit;
     this.$$disposable = false;
+    this.$$viewBag = new stik.ViewBag(template);
   }
 
   Context.prototype.$load = function(modules){
@@ -34,6 +35,7 @@ window.stik || (window.stik = {});
   Context.prototype.$mergeModules = function(modules){
     modules.$context = this;
     modules.$template = this.$$template;
+    modules.$viewBag = this.$$viewBag;
 
     return modules;
   };
@@ -129,8 +131,7 @@ window.stik || (window.stik = {});
   }
 
   Manager.prototype.$register = function(controller, action, executionUnit){
-    if (!executionUnit)
-      throw "execution unit is missing";
+    if (!executionUnit) { throw "execution unit is missing"; }
 
     this.$storeExecutionUnit(controller, action, executionUnit);
     this.$bindExecutionUnit(controller, action, executionUnit);
@@ -220,4 +221,38 @@ window.stik || (window.stik = {});
   stik.binddLazy = function(){
     this.$$manager.$buildContexts();
   };
+})();
+
+window.stik || (window.stik = {});
+
+(function(){
+  var bindingKey = "data-bind";
+
+  function ViewBag(template){
+    this.$$template = template;
+  }
+
+  ViewBag.prototype.$render = function(dataSet){
+    var fields, dataToBind;
+
+    fields = this.$fieldsToBind();
+
+    for (var i = 0; i < fields.length; i++) {
+      dataToBind = fields[i].getAttribute(bindingKey);
+
+      fields[i].textContent = dataSet[dataToBind];
+    }
+  };
+
+  ViewBag.prototype.$fieldsToBind = function(){
+    if (this.$$template.getAttribute(bindingKey)) {
+      return [this.$$template];
+    }
+
+    return this.$$template.querySelectorAll(
+      "[" + bindingKey + "]"
+    );
+  }
+
+  stik.ViewBag = ViewBag;
 })();

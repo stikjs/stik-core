@@ -48,7 +48,9 @@
       <button class="mail-button">Send Message</button>
     </div>
 
-    <div class="mail-man" data-controller="MailCtrl" data-action="Receiver"></div>
+    <div class="mail-man" data-controller="MailCtrl" data-action="Receiver">
+      <span data-bind="newMsg"></span>
+    </div>
   </div>
 
   <script src="../stik.min.js" type="text/javascript" charset="utf-8"></script>
@@ -92,10 +94,9 @@
       });
     });
 
-    stik.register("MailCtrl", "Receiver", function($courier){
-      var qwe = "qwe";
+    stik.register("MailCtrl", "Receiver", function($courier, $viewBag){
       $courier.$receive("new-mail", function(message){
-        alert("This message was received by the controller responsible: \"" + message + "\"");
+        $viewBag.$render({newMsg: message})
       });
     });
   </script>

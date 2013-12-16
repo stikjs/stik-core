@@ -162,6 +162,7 @@ stik.register("MessageCtrl", "Receiver", function($courier){
 ##$context
 Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stick.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
 
+###Using it
 ```javascript
 stik.register("YourCtrl", "YourAction", function($context){
   ...
