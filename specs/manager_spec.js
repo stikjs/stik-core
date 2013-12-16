@@ -1,26 +1,16 @@
 describe("Manager", function(){
-  var subject;
-
   function DOMDouble(){
     return {
       querySelectorAll: function(){}
     };
   };
 
-  beforeEach(function(){
-    subject = new stik.Manager();
-  });
-
-  afterEach(function(){
-    subject = null;
-  });
-
   describe("#initialize", function(){
     it("when ok", function(){
-      subject = new stik.Manager();
+      var manager = new stik.Manager();
 
-      expect(subject.$$contexts).toEqual([]);
-      expect(subject.$$executionUnits).toEqual({});
+      expect(manager.$$contexts).toEqual([]);
+      expect(manager.$$executionUnits).toEqual({});
     });
   });
 
@@ -37,95 +27,105 @@ describe("Manager", function(){
       }).toThrow("action can't be empty");
 
       expect(function(){
-        subject.$register("ItemCtrl", "detail");
+        manager.$register("ItemCtrl", "detail");
       }).toThrow("execution unit is missing");
     });
 
     it("should register and bind the new execution unit", function(){
-      var controller, action, executionUnit;
+      var manager, controller, action, executionUnit;
+
+      manager = new stik.Manager();
 
       controller    = "ItemCtrl"
       action        = "detail"
       executionUnit = function(){};
 
-      spyOn(subject, "$storeExecutionUnit").andCallThrough();
-      spyOn(subject, "$bindExecutionUnit");
+      spyOn(manager, "$storeExecutionUnit").andCallThrough();
+      spyOn(manager, "$bindExecutionUnit");
 
-      subject.$register(controller, action, executionUnit);
+      manager.$register(controller, action, executionUnit);
 
       expect(
-        subject.$storeExecutionUnit
+        manager.$storeExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit)
 
       expect(
-        subject.$bindExecutionUnit
+        manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit);
     });
   });
 
   describe("#$storeExecutionUnit", function(){
     it("should store the execution unit in its own namespace", function(){
-      var controller, action, executionUnit;
+      var manager, controller, action, executionUnit;
+
+      manager = new stik.Manager();
 
       controller    = "ItemCtrl";
       action        = "detail";
       executionUnit = function(){};
 
-      subject.$storeExecutionUnit(controller, action, executionUnit);
+      manager.$storeExecutionUnit(controller, action, executionUnit);
 
-      expect(subject.$$executionUnits[controller]).toBeDefined();
-      expect(subject.$$executionUnits[controller][action]).toBeDefined();
-      expect(subject.$$executionUnits[controller][action]).toBe(executionUnit);
+      expect(manager.$$executionUnits[controller]).toBeDefined();
+      expect(manager.$$executionUnits[controller][action]).toBeDefined();
+      expect(manager.$$executionUnits[controller][action]).toBe(executionUnit);
     });
 
     it("should throw if trying to store a controller and action twice", function(){
-      var controller, action, executionUnit;
+      var manager, controller, action, executionUnit;
+
+      manager = new stik.Manager();
 
       controller    = "ItemCtrl"
       action        = "detail"
       executionUnit = function(){};
 
-      subject.$storeExecutionUnit(controller, action, executionUnit);
+      manager.$storeExecutionUnit(controller, action, executionUnit);
 
       expect(function(){
-        subject.$storeExecutionUnit(controller, action, executionUnit);
+        manager.$storeExecutionUnit(controller, action, executionUnit);
       }).toThrow("Controller and Action already exist!");
     });
   });
 
   describe("#$storeContext", function(){
     it("should store the new context", function(){
-      var template, controller, action, executionUnit;
+      var manager, template, controller, action, executionUnit;
+
+      manager = new stik.Manager();
 
       template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
       controller    = "ItemCtrl"
       action        = "detail"
       executionUnit = function(){};
 
-      spyOn(subject, "$createContext").andReturn(1);
+      spyOn(manager, "$createContext").andReturn(1);
 
-      subject.$storeContext(controller, action, template, executionUnit);
+      manager.$storeContext(controller, action, template, executionUnit);
 
       expect(
-        subject.$createContext
+        manager.$createContext
       ).toHaveBeenCalledWith(controller, action, template, executionUnit);
 
-      expect(subject.$$contexts.length).toBe(1);
+      expect(manager.$$contexts.length).toBe(1);
     });
   });
 
   describe("#$findTemplate", function(){
     it("should look for templates in the DOM based on the controller and action", function(){
-      var DOM, controller, action;
+      var DOM, manager, controller, action;
 
       DOM = DOMDouble();
+
+      manager = new stik.Manager();
 
       controller = "ItemCtrl";
       action     = "detail";
 
       spyOn(DOM, "querySelectorAll").andReturn([1,2,3]);
 
-      result = subject.$findTemplate(controller, action, DOM);
+      result = manager.$findTemplate(controller, action, DOM);
 
       expect(DOM.querySelectorAll).toHaveBeenCalledWith(
         "[data-controller=" + controller + "][data-action=" + action + "]"
@@ -137,39 +137,45 @@ describe("Manager", function(){
 
   describe("#$buildContexts", function(){
     it("should not address any context if there is now execution unit available", function(){
+      var manager = new stik.Manager();
+
       expect(function(){
-        subject.$buildContexts();
+        manager.$buildContexts();
       }).toThrow("no execution units available");
     });
 
     it("should throw if no templates were bound", function(){
-      subject.$storeExecutionUnit("ItemCtrl", "detail", function(){});
+      var manager = new stik.Manager();
+
+      manager.$storeExecutionUnit("ItemCtrl", "detail", function(){});
 
       expect(function(){
-        subject.$buildContexts("AppCtrl", "List", function(){});
+        manager.$buildContexts("AppCtrl", "List", function(){});
       }).toThrow("no templates were bound");
     });
 
     it("should address the binding of one context", function(){
-      var controller, action, executionUnit;
+      var manager, controller, action, executionUnit;
+
+      manager = new stik.Manager();
 
       controller    = "ItemCtrl";
       action        = "detail";
       executionUnit = function(){};
 
-      subject.$storeExecutionUnit(controller, action, executionUnit);
+      manager.$storeExecutionUnit(controller, action, executionUnit);
 
-      spyOn(subject, "$bindExecutionUnit").andReturn(true);
+      spyOn(manager, "$bindExecutionUnit").andReturn(true);
 
-      subject.$buildContexts();
+      manager.$buildContexts();
 
       expect(
-        subject.$bindExecutionUnit
+        manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit);
     });
 
     it("should address the binding of multiple contexts", function(){
-      var controller, detail, creation, update, executionUnit;
+      var manager, controller, detail, creation, update, executionUnit;
 
       controller    = "ItemCtrl";
       detail        = "detail";
@@ -177,68 +183,76 @@ describe("Manager", function(){
       update        = "update";
       executionUnit = function(){};
 
-      subject.$storeExecutionUnit(controller, detail, executionUnit);
-      subject.$storeExecutionUnit(controller, creation, executionUnit);
-      subject.$storeExecutionUnit(controller, update, executionUnit);
+      manager = new stik.Manager();
 
-      spyOn(subject, "$bindExecutionUnit").andReturn(true);
+      manager.$storeExecutionUnit(controller, detail, executionUnit);
+      manager.$storeExecutionUnit(controller, creation, executionUnit);
+      manager.$storeExecutionUnit(controller, update, executionUnit);
 
-      subject.$buildContexts();
+      spyOn(manager, "$bindExecutionUnit").andReturn(true);
+
+      manager.$buildContexts();
 
       expect(
-        subject.$bindExecutionUnit.calls.length
+        manager.$bindExecutionUnit.calls.length
       ).toEqual(3);
 
       expect(
-        subject.$bindExecutionUnit
+        manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, detail, executionUnit);
 
       expect(
-        subject.$bindExecutionUnit
+        manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, creation, executionUnit);
 
       expect(
-        subject.$bindExecutionUnit
+        manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, update, executionUnit);
+    });
+
+    it("", function(){
+
     });
   });
 
   describe("#$bindExecutionUnit", function(){
     it("should create and store the new context", function(){
-      var template, controller, action, executionUnit, contextDouble;
+      var manager, template, controller, action, executionUnit, contextDouble;
 
       template      = '<div data-controller="ItemCtrl" data-action="detail"></div>';
       controller    = "ItemCtrl";
       action        = "detail";
       executionUnit = function(){};
 
+      manager = new stik.Manager();
+
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
-      spyOn(subject, "$findTemplate").andReturn([template]);
-      spyOn(subject, "$createContext").andReturn(contextDouble);
-      spyOn(subject, "$markAsBound");
+      spyOn(manager, "$findTemplate").andReturn([template]);
+      spyOn(manager, "$createContext").andReturn(contextDouble);
+      spyOn(manager, "$markAsBound");
 
-      subject.$bindExecutionUnit(controller, action, executionUnit);
+      manager.$bindExecutionUnit(controller, action, executionUnit);
 
       expect(
-        subject.$findTemplate
+        manager.$findTemplate
       ).toHaveBeenCalledWith(controller, action);
 
       expect(
-        subject.$markAsBound
+        manager.$markAsBound
       ).toHaveBeenCalledWith(template);
 
       expect(
-        subject.$createContext
+        manager.$createContext
       ).toHaveBeenCalledWith(controller, action, template, executionUnit);
 
-      expect(subject.$$contexts.length).toEqual(1);
+      expect(manager.$$contexts.length).toEqual(1);
 
       expect(contextDouble.$load).toHaveBeenCalled();
     });
 
     it("should create and store contexts for multiple templates", function(){
-      var template1, template2, controller, action, executionUnit, contextDouble;
+      var manager, template1, template2, controller, action, executionUnit, contextDouble;
 
       template1  = '<div id="item-1" data-controller="ItemCtrl" data-action="detail"></div>';
       template2  = '<div id="item-2" data-controller="ItemCtrl" data-action="detail"></div>';
@@ -246,47 +260,55 @@ describe("Manager", function(){
       action     = "detail";
       executionUnit = function(){};
 
+      manager = new stik.Manager();
+
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
-      spyOn(subject, "$findTemplate").andReturn([template1, template2]);
-      spyOn(subject, "$createContext").andReturn(contextDouble);
-      spyOn(subject, "$markAsBound");
+      spyOn(manager, "$findTemplate").andReturn([template1, template2]);
+      spyOn(manager, "$createContext").andReturn(contextDouble);
+      spyOn(manager, "$markAsBound");
 
-      subject.$bindExecutionUnit(controller, action, executionUnit);
+      manager.$bindExecutionUnit(controller, action, executionUnit);
 
       expect(
-        subject.$createContext
+        manager.$createContext
       ).toHaveBeenCalledWith(controller, action, template1, executionUnit);
 
       expect(
-        subject.$createContext
+        manager.$createContext
       ).toHaveBeenCalledWith(controller, action, template2, executionUnit);
 
-      expect(subject.$$contexts.length).toEqual(2);
+      expect(manager.$$contexts.length).toEqual(2);
     });
 
     it("should return false if no templates were bound", function(){
-      spyOn(subject, "$findTemplate").andReturn([]);
+      var manager = new stik.Manager();
+
+      spyOn(manager, "$findTemplate").andReturn([]);
 
       expect(
-        subject.$bindExecutionUnit("AppCtrl", "List", function(){})
+        manager.$bindExecutionUnit("AppCtrl", "List", function(){})
       ).toBeFalsy();
     });
   });
 
   describe("$markAsBound", function(){
     it("should flag it as bound", function(){
+      var manager = new stik.Manager();
+
       var templateDouble = {className: ""};
 
-      subject.$markAsBound(templateDouble);
+      manager.$markAsBound(templateDouble);
 
       expect(templateDouble.className).toEqual(" stik-bound");
     });
 
     it("should not messup current classes", function(){
+      var manager = new stik.Manager();
+
       var templateDouble = {className: "wierd-class"};
 
-      subject.$markAsBound(templateDouble);
+      manager.$markAsBound(templateDouble);
 
       expect(templateDouble.className).toEqual("wierd-class stik-bound");
     });
