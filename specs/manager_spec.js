@@ -25,8 +25,16 @@ describe("Manager", function(){
   });
 
   describe("#$register", function(){
-    it("should throw if execution unit is missing", function(){
-      spyOn(subject, "$findTemplate").andReturn([]);
+    it("should throw if any parameters is empty or missing", function(){
+      var manager = new stik.Manager();
+
+      expect(function(){
+        manager.$register("", "detal", function(){})
+      }).toThrow("controller can't be empty");
+
+      expect(function(){
+        manager.$register("ItemCtrl", "", function(){})
+      }).toThrow("action can't be empty");
 
       expect(function(){
         subject.$register("ItemCtrl", "detail");

@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.4.0 | From: 15-12-2013
+// Version: 0.4.0 | From: 16-12-2013
 
 window.stik || (window.stik = {});
 
@@ -131,6 +131,8 @@ window.stik || (window.stik = {});
   }
 
   Manager.prototype.$register = function(controller, action, executionUnit){
+    if (!controller)    { throw "controller can't be empty"; }
+    if (!action)        { throw "action can't be empty"; }
     if (!executionUnit) { throw "execution unit is missing"; }
 
     this.$storeExecutionUnit(controller, action, executionUnit);
