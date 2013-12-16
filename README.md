@@ -157,6 +157,17 @@ stik.register("MessageCtrl", "Receiver", function($courier){
   // a message can be delivered to any number of controllers that
   // defines an expectation for it
 });
+
+stik.register("MessageCtrl", "OneTimeReceiver", function($courier){
+  // sometimes a controller needs to receive a message just once
+  // the $receive method returns another method that can be called
+  // to `unsubscribe` to further messages
+  var unsubscribe = $courier.$receive("new-message", function(msg){
+    ...
+    unsubscribe();
+    // this receiver will never again be called
+  });
+});
 ```
 
 ##$viewBag
