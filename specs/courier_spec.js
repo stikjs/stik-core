@@ -2,7 +2,7 @@ describe("Courier", function(){
   it("#initialize", function(){
     courier = new stik.Courier();
 
-    expect(courier.$$receivers).toEqual({});
+    expect(courier.$$subscriptions).toEqual({});
   });
 
   describe("#$receive", function(){
@@ -17,15 +17,15 @@ describe("Courier", function(){
       courier.$receive(box, opener);
 
       expect(
-        Object.keys(courier.$$receivers)[0]
+        Object.keys(courier.$$subscriptions)[0]
       ).toEqual(box);
 
       expect(
-        courier.$$receivers[box].length
+        courier.$$subscriptions[box].length
       ).toEqual(1);
 
       expect(
-        courier.$$receivers[box][0]
+        courier.$$subscriptions[box][0].$$opener
       ).toEqual(opener);
     });
 
@@ -42,28 +42,54 @@ describe("Courier", function(){
       courier.$receive(updateBox, opener);
 
       expect(
-        Object.keys(courier.$$receivers)
+        Object.keys(courier.$$subscriptions)
       ).toEqual([createBox, updateBox]);
 
       expect(
-        courier.$$receivers[createBox].length
+        courier.$$subscriptions[createBox].length
       ).toEqual(1);
 
       expect(
-        courier.$$receivers[updateBox].length
+        courier.$$subscriptions[updateBox].length
       ).toEqual(1);
 
       expect(
-        courier.$$receivers[createBox][0]
+        courier.$$subscriptions[createBox][0].$$opener
       ).toEqual(opener);
 
       expect(
-        courier.$$receivers[updateBox][0]
+        courier.$$subscriptions[updateBox][0].$$opener
       ).toEqual(opener);
+    });
+
+    it("should return a function to allow removing the receiver", function(){
+      var courier, box, opener, unsubscribe;
+
+      box    = "new-item";
+      opener = function(){};
+
+      courier = new stik.Courier();
+
+      unsubscribe = courier.$receive(box, opener);
+      unsubscribe();
+
+      expect(function(){
+        courier.$send('new-item', {some: "data"});
+      }).toThrow("no one is waiting for this message");
     });
   });
 
   describe("#$send", function(){
+    it("should throw if no $receiver is register", function(){
+      var courier;
+
+      courier = new stik.Courier();
+
+      expect(function(){
+        courier.$send('new-item', {some: "data"});
+      }).toThrow("no one is waiting for this message");
+    });
+
     it("a text message", function(){
       var courier, message, receiver;
 

@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.5.0 | From: 16-12-2013
+// Version: 0.4.2 | From: 16-12-2013
 
 window.stik || (window.stik = {});
 
@@ -53,21 +53,48 @@ window.stik || (window.stik = {});
 
 (function(){
   function Courier(){
-    this.$$receivers = {};
+    this.$$subscriptions = {};
   }
 
   Courier.prototype.$receive = function(box, opener){
-    this.$$receivers[box] || (this.$$receivers[box] = []);
-    this.$$receivers[box].push(opener);
+    var subscription = new Subscription(box, opener)
+
+    this.$$subscriptions[box] || (this.$$subscriptions[box] = []);
+    this.$$subscriptions[box].push(subscription);
+
+    var self = this;
+    return function(){
+      self.$unsubscribe(subscription);
+    };
+  };
+
+  Courier.prototype.$unsubscribe = function(subscription){
+    this.$$subscriptions[subscription.$$box] =
+    this.$$subscriptions[subscription.$$box].filter(function(subs){
+      return subs.$$id !== subscription.$$id;
+    });
   };
 
   Courier.prototype.$send = function(box, message){
-    var openers = this.$$receivers[box];
+    var openers = this.$$subscriptions[box];
+
+    if (!openers || openers.length === 0) {
+      throw "no one is waiting for this message"
+    }
 
     for (var i = 0; i < openers.length; i++) {
-      openers[i](message);
+      openers[i].$$opener(message);
     }
   };
+
+  function Subscription(box, opener){
+    this.$$id = '#' + Math.floor(
+      Math.random()*16777215
+    ).toString(16);
+
+    this.$$box    = box;
+    this.$$opener = opener;
+  }
 
   stik.Courier = Courier;
 })();
