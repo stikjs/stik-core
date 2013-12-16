@@ -159,6 +159,29 @@ stik.register("MessageCtrl", "Receiver", function($courier){
 });
 ```
 
+##$viewBag
+Enables a controller to do a semi 1 way binding with its current template.
+
+###Using it
+```javascript
+stik.register("MessageCtrl", "Revelation", function($viewBag){
+  // the $render method receives an object with the
+  // values that it will use
+  $viewBag.$render({
+    senderName: "Darth Vader",
+    receiverName: "Luke Skywalker"
+    message: "I'm your father!"
+  });
+});
+```
+```html
+<div data-controller="MessageCtrl" data-action="Revelation">
+  <span data-bind="senderName"></span>
+  <span data-bind="receiverName"></span>
+  <span data-bind="message"></span>
+</div>
+```
+
 ##$context
 Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stick.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
 
