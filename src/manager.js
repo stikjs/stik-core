@@ -40,7 +40,9 @@ window.stik || (window.stik = {});
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
-    var selector = "[data-controller=" + controller + "][data-action=" + action + "]";
+    var selector = "[data-controller=" + controller + "]" +
+                   "[data-action=" + action + "]" +
+                   ":not([class*=stik-bound])"
     return DOMHandler.querySelectorAll(selector);
   };
 

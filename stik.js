@@ -163,7 +163,9 @@ window.stik || (window.stik = {});
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
-    var selector = "[data-controller=" + controller + "][data-action=" + action + "]";
+    var selector = "[data-controller=" + controller + "]" +
+                   "[data-action=" + action + "]" +
+                   ":not([class*=stik-bound])"
     return DOMHandler.querySelectorAll(selector);
   };
 
@@ -220,7 +222,7 @@ window.stik || (window.stik = {});
     stik.$$manager.$register(controller, action, executionUnit);
   };
 
-  stik.binddLazy = function(){
+  stik.bindLazy = function(){
     this.$$manager.$buildContexts();
   };
 })();
@@ -242,7 +244,9 @@ window.stik || (window.stik = {});
     for (var i = 0; i < fields.length; i++) {
       dataToBind = fields[i].getAttribute(bindingKey);
 
-      fields[i].textContent = dataSet[dataToBind];
+      if (dataSet[dataToBind]) {
+        fields[i].textContent = dataSet[dataToBind];
+      }
     }
   };
 

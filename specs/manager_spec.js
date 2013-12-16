@@ -127,8 +127,12 @@ describe("Manager", function(){
 
       result = manager.$findTemplate(controller, action, DOM);
 
-      expect(DOM.querySelectorAll).toHaveBeenCalledWith(
-        "[data-controller=" + controller + "][data-action=" + action + "]"
+      expect(
+        DOM.querySelectorAll
+      ).toHaveBeenCalledWith(
+        "[data-controller=" + controller + "]" +
+        "[data-action=" + action + "]" +
+        ":not([class*=stik-bound])"
       );
 
       expect(result).toEqual([1,2,3]);
@@ -210,9 +214,18 @@ describe("Manager", function(){
       ).toHaveBeenCalledWith(controller, update, executionUnit);
     });
 
-    it("", function(){
+    // it("should bind a lazily added template with an existing controller", function(){
+    //   manager = new stik.Manager();
 
-    });
+    //   manager.$storeExecutionUnit(controller, detail, executionUnit);
+
+    //   manager.$buildContexts();
+
+    //   new DOMParser().parseFromString(
+    //     ,
+    //     "text/xml"
+    //   ).firstChild
+    // });
   });
 
   describe("#$bindExecutionUnit", function(){

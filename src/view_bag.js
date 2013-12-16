@@ -15,7 +15,9 @@ window.stik || (window.stik = {});
     for (var i = 0; i < fields.length; i++) {
       dataToBind = fields[i].getAttribute(bindingKey);
 
-      fields[i].textContent = dataSet[dataToBind];
+      if (dataSet[dataToBind]) {
+        fields[i].textContent = dataSet[dataToBind];
+      }
     }
   };
 

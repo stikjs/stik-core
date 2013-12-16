@@ -10,7 +10,7 @@ window.stik || (window.stik = {});
     stik.$$manager.$register(controller, action, executionUnit);
   };
 
-  stik.binddLazy = function(){
+  stik.bindLazy = function(){
     this.$$manager.$buildContexts();
   };
 })();

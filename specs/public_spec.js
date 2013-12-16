@@ -18,7 +18,7 @@ describe("Main", function(){
   it(".bindLazy", function(){
     spyOn(stik.$$manager, "$buildContexts");
 
-    stik.binddLazy();
+    stik.bindLazy();
 
     expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
   });

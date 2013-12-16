@@ -77,5 +77,32 @@ describe("ViewBag", function(){
         template.textContent
       ).toEqual(data.userName);
     });
+
+    it("should only try to bind properties that are in the object", function(){
+      var template, viewBag, data;
+
+      template = new DOMParser().parseFromString(
+        '<div>'+
+          '<span data-bind="userName"></span>' +
+          '<strong data-bind="dontBind"></strong>' +
+          '<a href="#" data-bind="removal"></a>' +
+        '</div>',
+        "text/xml"
+      ).firstChild;
+
+      viewBag = new stik.ViewBag(template);
+
+      data = {userName: 'Luke Skywalker'};
+
+      viewBag.$render(data);
+
+      expect(
+        template.getElementsByTagName("span")[0].textContent
+      ).toEqual(data.userName);
+
+      expect(
+        template.getElementsByTagName("strong")[0].textContent
+      ).toEqual("");
+    });
   });
 });
