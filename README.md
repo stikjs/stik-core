@@ -160,7 +160,7 @@ stik.register("MessageCtrl", "Receiver", function($courier){
 ```
 
 ##$viewBag
-Enables a controller to do a semi 1 way binding with its current template.
+Enables a controller to do a semi 1 way binding with its current template. `$viewBag` will only care about the values within the object passed.
 
 ###Using it
 ```javascript
