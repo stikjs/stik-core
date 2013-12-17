@@ -193,6 +193,21 @@ stik.register("MessageCtrl", "Revelation", function($viewBag){
 </div>
 ```
 
+##$urlState
+`$urlState` will help you answer questions about the current state of your restful application.
+
+###Using it
+```javascript
+stik.register("YourCtrl", "YourAction", function($urlState){
+  // http://my-website.com?someKey=someValue
+  $urlState.$queries(); // {someKey: "someValue"}
+});
+```
+
+Available methods:
+
+* $queries
+
 ##$context
 Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stik.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
 

@@ -12,7 +12,15 @@ module.exports = function(grunt){
               '// Version: <%= pkg.version %> | From: <%= grunt.template.today("dd-mm-yyyy") %>\n\n'
     },
     jasmine: {
-      src: 'src/*.js',
+      src: [
+        'src/context.js',
+        'src/courier.js',
+        'src/injector.js',
+        'src/url_state.js',
+        'src/view_bag.js',
+        'src/manager.js',
+        'src/public.js',
+      ],
       options: {
         specs: 'specs/*_spec.js'
       }
@@ -23,7 +31,15 @@ module.exports = function(grunt){
         banner: '<%= meta.banner %>'
       },
       src: {
-        src: ['src/**/*.js'],
+        src: [
+          'src/context.js',
+          'src/courier.js',
+          'src/injector.js',
+          'src/url_state.js',
+          'src/view_bag.js',
+          'src/manager.js',
+          'src/public.js',
+        ],
         dest: '<%= pkg.name %>'
       }
     },

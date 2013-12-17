@@ -6,7 +6,7 @@ window.stik || (window.stik = {});
   }
 
   Courier.prototype.$receive = function(box, opener){
-    var subscription = new Subscription(box, opener)
+    var subscription = new Subscription(box, opener);
 
     this.$$subscriptions[box] || (this.$$subscriptions[box] = []);
     this.$$subscriptions[box].push(subscription);
@@ -28,7 +28,7 @@ window.stik || (window.stik = {});
     var openers = this.$$subscriptions[box];
 
     if (!openers || openers.length === 0) {
-      throw "no one is waiting for this message"
+      throw "no one is waiting for this message";
     }
 
     for (var i = 0; i < openers.length; i++) {

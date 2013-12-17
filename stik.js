@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.4.2 | From: 16-12-2013
+// Version: 0.4.2 | From: 17-12-2013
 
 window.stik || (window.stik = {});
 
@@ -57,7 +57,7 @@ window.stik || (window.stik = {});
   }
 
   Courier.prototype.$receive = function(box, opener){
-    var subscription = new Subscription(box, opener)
+    var subscription = new Subscription(box, opener);
 
     this.$$subscriptions[box] || (this.$$subscriptions[box] = []);
     this.$$subscriptions[box].push(subscription);
@@ -79,7 +79,7 @@ window.stik || (window.stik = {});
     var openers = this.$$subscriptions[box];
 
     if (!openers || openers.length === 0) {
-      throw "no one is waiting for this message"
+      throw "no one is waiting for this message";
     }
 
     for (var i = 0; i < openers.length; i++) {
@@ -146,6 +146,73 @@ window.stik || (window.stik = {});
   };
 
   stik.Injector = Injector;
+})();
+
+window.stik || (window.stik = {});
+
+(function(){
+  function UrlState(){}
+
+  UrlState.prototype.$baseUrl = function(){
+    return location.href;
+  };
+
+  UrlState.prototype.$queries = function(){
+    var result, queries, query;
+
+    queries = this.$baseUrl().split("?")[1];
+
+    if (queries) {
+      queries = queries.split("&");
+      result = {};
+      for (var i = 0; i < queries.length; i++) {
+        query = queries[i].split("=");
+
+        result[query[0]] = query[1];
+      }
+      return result;
+    } else {
+      return {};
+    }
+  };
+
+  stik.UrlState = UrlState;
+})();
+
+window.stik || (window.stik = {});
+
+(function(){
+  var bindingKey = "data-bind";
+
+  function ViewBag(template){
+    this.$$template = template;
+  }
+
+  ViewBag.prototype.$render = function(dataSet){
+    var fields, dataToBind;
+
+    fields = this.$fieldsToBind();
+
+    for (var i = 0; i < fields.length; i++) {
+      dataToBind = fields[i].getAttribute(bindingKey);
+
+      if (dataSet[dataToBind]) {
+        fields[i].textContent = dataSet[dataToBind];
+      }
+    }
+  };
+
+  ViewBag.prototype.$fieldsToBind = function(){
+    if (this.$$template.getAttribute(bindingKey)) {
+      return [this.$$template];
+    }
+
+    return this.$$template.querySelectorAll(
+      "[" + bindingKey + "]"
+    );
+  }
+
+  stik.ViewBag = ViewBag;
 })();
 
 window.stik || (window.stik = {});
@@ -243,7 +310,10 @@ window.stik || (window.stik = {});
   if (stik.$$manager)
     throw "Stik.js is already loaded. Check your requires ;)";
 
-  stik.$$manager = new stik.Manager({$courier: new stik.Courier});
+  stik.$$manager = new stik.Manager({
+    $courier: new stik.Courier,
+    $urlState: new stik.UrlState
+  });
 
   stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);
@@ -252,40 +322,4 @@ window.stik || (window.stik = {});
   stik.bindLazy = function(){
     this.$$manager.$buildContexts();
   };
-})();
-
-window.stik || (window.stik = {});
-
-(function(){
-  var bindingKey = "data-bind";
-
-  function ViewBag(template){
-    this.$$template = template;
-  }
-
-  ViewBag.prototype.$render = function(dataSet){
-    var fields, dataToBind;
-
-    fields = this.$fieldsToBind();
-
-    for (var i = 0; i < fields.length; i++) {
-      dataToBind = fields[i].getAttribute(bindingKey);
-
-      if (dataSet[dataToBind]) {
-        fields[i].textContent = dataSet[dataToBind];
-      }
-    }
-  };
-
-  ViewBag.prototype.$fieldsToBind = function(){
-    if (this.$$template.getAttribute(bindingKey)) {
-      return [this.$$template];
-    }
-
-    return this.$$template.querySelectorAll(
-      "[" + bindingKey + "]"
-    );
-  }
-
-  stik.ViewBag = ViewBag;
 })();

@@ -1,6 +1,6 @@
 describe("Courier", function(){
   it("#initialize", function(){
-    courier = new stik.Courier();
+    var courier = new stik.Courier();
 
     expect(courier.$$subscriptions).toEqual({});
   });
