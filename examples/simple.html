@@ -43,13 +43,19 @@
     </div>
 
     <h2>Controllers talking to each other</h2>
-    <div class="mail-man" data-controller="MailCtrl" data-action="Sender">
+    <div data-controller="MailCtrl" data-action="Sender">
       <input class="mail-input" type="text" placeholder="place your message here">
       <button class="mail-button">Send Message</button>
     </div>
 
-    <div class="mail-man" data-controller="MailCtrl" data-action="Receiver">
+    <div data-controller="MailCtrl" data-action="Receiver">
       <span data-bind="newMsg"></span>
+    </div>
+
+    <h2>Update the url query to see them reflect in here</h2>
+    <div data-controller="UrlCtrl" data-action="Queries">
+      <button>Update Queries</button>
+      <span data-bind="queries"></span>
     </div>
   </div>
 
@@ -96,7 +102,17 @@
 
     stik.register("MailCtrl", "Receiver", function($courier, $viewBag){
       $courier.$receive("new-mail", function(message){
-        $viewBag.$render({newMsg: message})
+        $viewBag.$render({newMsg: message});
+      });
+    });
+
+    stik.register("UrlCtrl", "Queries", function($template, $urlState, $viewBag){
+      var button = $template.getElementsByTagName("button")[0];
+
+      button.addEventListener("click", function(){
+        $viewBag.$render({
+          queries: JSON.stringify($urlState.$queries())
+        });
       });
     });
   </script>
