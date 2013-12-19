@@ -304,8 +304,6 @@ window.stik || (window.stik = {});
   stik.Manager = Manager;
 })();
 
-window.stik || (window.stik = {});
-
 (function() {
   if (stik.$$manager)
     throw "Stik.js is already loaded. Check your requires ;)";
