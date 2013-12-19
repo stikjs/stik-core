@@ -1,5 +1,3 @@
-window.stik || (window.stik = {});
-
 (function(){
   var bindingKey = "data-bind";
 
@@ -31,5 +29,5 @@ window.stik || (window.stik = {});
     );
   }
 
-  stik.ViewBag = ViewBag;
+  window.stik.ViewBag = ViewBag;
 })();

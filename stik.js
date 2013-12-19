@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.4.2 | From: 17-12-2013
+// Version: 0.4.2 | From: 19-12-2013
 
 window.stik || (window.stik = {});
 
@@ -46,10 +46,8 @@ window.stik || (window.stik = {});
     return injector.$resolveDependencies();
   };
 
-  stik.Context = Context;
+  window.stik.Context = Context;
 })();
-
-window.stik || (window.stik = {});
 
 (function(){
   function Courier(){
@@ -96,10 +94,8 @@ window.stik || (window.stik = {});
     this.$$opener = opener;
   }
 
-  stik.Courier = Courier;
+  window.stik.Courier = Courier;
 })();
-
-window.stik || (window.stik = {});
 
 (function(){
   function Injector(executionUnit, modules){
@@ -145,16 +141,22 @@ window.stik || (window.stik = {});
     return result;
   };
 
-  stik.Injector = Injector;
+  window.stik.Injector = Injector;
 })();
-
-window.stik || (window.stik = {});
 
 (function(){
   function UrlState(){}
 
   UrlState.prototype.$baseUrl = function(){
     return location.href;
+  };
+
+  UrlState.prototype.$pathName = function(){
+    return location.pathName;
+  };
+
+  UrlState.prototype.$mainPath = function() {
+    return "/" + this.$pathName().split("/")[1];
   };
 
   UrlState.prototype.$queries = function(){
@@ -176,10 +178,8 @@ window.stik || (window.stik = {});
     }
   };
 
-  stik.UrlState = UrlState;
+  window.stik.UrlState = UrlState;
 })();
-
-window.stik || (window.stik = {});
 
 (function(){
   var bindingKey = "data-bind";
@@ -212,7 +212,7 @@ window.stik || (window.stik = {});
     );
   }
 
-  stik.ViewBag = ViewBag;
+  window.stik.ViewBag = ViewBag;
 })();
 
 window.stik || (window.stik = {});
@@ -310,16 +310,16 @@ window.stik || (window.stik = {});
   if (stik.$$manager)
     throw "Stik.js is already loaded. Check your requires ;)";
 
-  stik.$$manager = new stik.Manager({
+  window.stik.$$manager = new stik.Manager({
     $courier: new stik.Courier,
     $urlState: new stik.UrlState
   });
 
-  stik.register = function(controller, action, executionUnit){
+  window.stik.register = function(controller, action, executionUnit){
     stik.$$manager.$register(controller, action, executionUnit);
   };
 
-  stik.bindLazy = function(){
+  window.stik.bindLazy = function(){
     this.$$manager.$buildContexts();
   };
 })();

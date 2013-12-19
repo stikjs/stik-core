@@ -1,0 +1,1 @@
+window.stik || (window.stik = {});

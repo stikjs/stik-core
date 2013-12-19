@@ -1,5 +1,3 @@
-window.stik || (window.stik = {});
-
 (function(){
   function Courier(){
     this.$$subscriptions = {};
@@ -45,5 +43,5 @@ window.stik || (window.stik = {});
     this.$$opener = opener;
   }
 
-  stik.Courier = Courier;
+  window.stik.Courier = Courier;
 })();

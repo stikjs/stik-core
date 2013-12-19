@@ -1,10 +1,16 @@
-window.stik || (window.stik = {});
-
 (function(){
   function UrlState(){}
 
   UrlState.prototype.$baseUrl = function(){
     return location.href;
+  };
+
+  UrlState.prototype.$pathName = function(){
+    return location.pathName;
+  };
+
+  UrlState.prototype.$mainPath = function() {
+    return "/" + this.$pathName().split("/")[1];
   };
 
   UrlState.prototype.$queries = function(){
@@ -26,5 +32,5 @@ window.stik || (window.stik = {});
     }
   };
 
-  stik.UrlState = UrlState;
+  window.stik.UrlState = UrlState;
 })();

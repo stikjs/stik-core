@@ -1,5 +1,3 @@
-window.stik || (window.stik = {});
-
 (function(){
   function Context(controller, action, template, executionUnit){
     if (!controller)    { throw "controller is missing"; }
@@ -37,5 +35,5 @@ window.stik || (window.stik = {});
     return injector.$resolveDependencies();
   };
 
-  stik.Context = Context;
+  window.stik.Context = Context;
 })();

@@ -1,4 +1,36 @@
 describe("UrlState", function(){
+  describe("#$mainPath", function(){
+    it("with a simples path", function(){
+      var urlState = new stik.UrlState();
+
+      spyOn(urlState, "$pathName").andReturn("/list");
+
+      expect(
+        urlState.$mainPath()
+      ).toEqual('/list');
+    });
+
+    it("with a doubled path", function(){
+      var urlState = new stik.UrlState();
+
+      spyOn(urlState, "$pathName").andReturn("/list/1234");
+
+      expect(
+        urlState.$mainPath()
+      ).toEqual('/list');
+    });
+
+    it("with an empty path", function(){
+      var urlState = new stik.UrlState();
+
+      spyOn(urlState, "$pathName").andReturn("/");
+
+      expect(
+        urlState.$mainPath()
+      ).toEqual('/');
+    });
+  });
+
   describe("#$queries", function(){
     it("an empty query", function(){
       var urlState = new stik.UrlState();

@@ -13,6 +13,7 @@ module.exports = function(grunt){
     },
     jasmine: {
       src: [
+        'src/setup.js',
         'src/context.js',
         'src/courier.js',
         'src/injector.js',
@@ -32,6 +33,7 @@ module.exports = function(grunt){
       },
       src: {
         src: [
+          'src/setup.js',
           'src/context.js',
           'src/courier.js',
           'src/injector.js',

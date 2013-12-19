@@ -1,5 +1,3 @@
-window.stik || (window.stik = {});
-
 (function(){
   function Injector(executionUnit, modules){
     this.$$executionUnit = executionUnit;
@@ -44,5 +42,5 @@ window.stik || (window.stik = {});
     return result;
   };
 
-  stik.Injector = Injector;
+  window.stik.Injector = Injector;
 })();
