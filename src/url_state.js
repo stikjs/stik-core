@@ -6,7 +6,7 @@
   };
 
   UrlState.prototype.$pathName = function(){
-    return location.pathName;
+    return location.pathname;
   };
 
   UrlState.prototype.$mainPath = function() {
