@@ -7,7 +7,7 @@
 
 // Version: 0.4.3 | From: 19-12-2013
 
-window.stik || (window.stik = {});
+window.stik = {};
 
 (function(){
   function Context(controller, action, template, executionUnit){
@@ -57,7 +57,7 @@ window.stik || (window.stik = {});
   Courier.prototype.$receive = function(box, opener){
     var subscription = new Subscription(box, opener);
 
-    this.$$subscriptions[box] || (this.$$subscriptions[box] = []);
+    this.$$subscriptions[box] = (this.$$subscriptions[box] || []);
     this.$$subscriptions[box].push(subscription);
 
     var self = this;
@@ -215,8 +215,6 @@ window.stik || (window.stik = {});
   window.stik.ViewBag = ViewBag;
 })();
 
-window.stik || (window.stik = {});
-
 (function(){
   function Manager(modules){
     this.$$contexts = [];
@@ -234,7 +232,7 @@ window.stik || (window.stik = {});
   };
 
   Manager.prototype.$storeExecutionUnit = function(controller, action, executionUnit){
-    this.$$executionUnits[controller] || (this.$$executionUnits[controller] = {});
+    this.$$executionUnits[controller] = (this.$$executionUnits[controller] || {});
 
     if (this.$$executionUnits[controller][action]){
       throw "Controller and Action already exist!";
