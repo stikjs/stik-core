@@ -127,7 +127,7 @@ stik.register("YourCtrl", "YourAction", function($template){
   $template.getElementsByClass("my-elm");
 
   // or any DOM lib to help you out
-  $($template).getElement(".my-elm"); // MooTools
+  $($template).getElement("my-elm"); // MooTools
   $($template).find(".my-elm"); // Zepto.js or jQuery
 
   // and do your stuff
