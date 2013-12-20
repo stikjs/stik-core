@@ -27,7 +27,7 @@
     return this.$$template.querySelectorAll(
       "[" + bindingKey + "]"
     );
-  }
+  };
 
   window.stik.ViewBag = ViewBag;
 })();
