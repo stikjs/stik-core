@@ -10,7 +10,7 @@
     this.$$template = template;
     this.$$executionUnit = executionUnit;
     this.$$disposable = false;
-    this.$$viewBag = new stik.ViewBag(template);
+    this.$$viewBag = new window.stik.ViewBag(template);
   }
 
   Context.prototype.$load = function(modules){
@@ -30,7 +30,7 @@
   };
 
   Context.prototype.$resolveDependencies = function(modules){
-    var injector = new stik.Injector(this.$$executionUnit, modules);
+    var injector = new window.stik.Injector(this.$$executionUnit, modules);
 
     return injector.$resolveDependencies();
   };

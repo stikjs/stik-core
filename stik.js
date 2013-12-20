@@ -21,7 +21,7 @@ window.stik = {};
     this.$$template = template;
     this.$$executionUnit = executionUnit;
     this.$$disposable = false;
-    this.$$viewBag = new stik.ViewBag(template);
+    this.$$viewBag = new window.stik.ViewBag(template);
   }
 
   Context.prototype.$load = function(modules){
@@ -41,7 +41,7 @@ window.stik = {};
   };
 
   Context.prototype.$resolveDependencies = function(modules){
-    var injector = new stik.Injector(this.$$executionUnit, modules);
+    var injector = new window.stik.Injector(this.$$executionUnit, modules);
 
     return injector.$resolveDependencies();
   };
@@ -248,7 +248,7 @@ window.stik = {};
   };
 
   Manager.prototype.$createContext = function(controller, action, template, executionUnit){
-    return new stik.Context(controller, action, template, executionUnit);
+    return new window.stik.Context(controller, action, template, executionUnit);
   };
 
   Manager.prototype.$findTemplate = function(controller, action, DOMInjection){
@@ -257,7 +257,7 @@ window.stik = {};
 
     var selector = "[data-controller=" + controller + "]" +
                    "[data-action=" + action + "]" +
-                   ":not([class*=stik-bound])"
+                   ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
   };
 
@@ -299,7 +299,7 @@ window.stik = {};
     template.className += ' stik-bound';
   };
 
-  stik.Manager = Manager;
+  window.stik.Manager = Manager;
 })();
 
 (function() {

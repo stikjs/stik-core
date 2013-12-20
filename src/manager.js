@@ -31,7 +31,7 @@
   };
 
   Manager.prototype.$createContext = function(controller, action, template, executionUnit){
-    return new stik.Context(controller, action, template, executionUnit);
+    return new window.stik.Context(controller, action, template, executionUnit);
   };
 
   Manager.prototype.$findTemplate = function(controller, action, DOMInjection){
@@ -40,7 +40,7 @@
 
     var selector = "[data-controller=" + controller + "]" +
                    "[data-action=" + action + "]" +
-                   ":not([class*=stik-bound])"
+                   ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
   };
 
@@ -82,5 +82,5 @@
     template.className += ' stik-bound';
   };
 
-  stik.Manager = Manager;
+  window.stik.Manager = Manager;
 })();
