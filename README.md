@@ -124,7 +124,7 @@ Contains the HTML template (HTMLElement) that was bound to the current controlle
 ```javascript
 stik.register("YourCtrl", "YourAction", function($template){
   // you can use plain JS to access the DOM
-  $template.getElementsByClass("my-elm");
+  $template.getElementsByClassName("my-elm");
 
   // or any DOM lib to help you out
   $($template).getElement("my-elm"); // MooTools
