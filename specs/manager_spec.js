@@ -15,20 +15,20 @@ describe("Manager", function(){
     });
   });
 
-  describe("#$register", function(){
+  describe("#$addController", function(){
     it("should throw if any parameters is empty or missing", function(){
       var manager = new stik.Manager();
 
       expect(function(){
-        manager.$register("", "detal", function(){})
+        manager.$addController("", "detal", function(){})
       }).toThrow("controller can't be empty");
 
       expect(function(){
-        manager.$register("ItemCtrl", "", function(){})
+        manager.$addController("ItemCtrl", "", function(){})
       }).toThrow("action can't be empty");
 
       expect(function(){
-        manager.$register("ItemCtrl", "detail");
+        manager.$addController("ItemCtrl", "detail");
       }).toThrow("execution unit is missing");
     });
 
@@ -44,7 +44,7 @@ describe("Manager", function(){
       spyOn(manager, "$storeExecutionUnit").andCallThrough();
       spyOn(manager, "$bindExecutionUnit");
 
-      manager.$register(controller, action, executionUnit);
+      manager.$addController(controller, action, executionUnit);
 
       expect(
         manager.$storeExecutionUnit

@@ -1,4 +1,20 @@
 describe("Main", function(){
+  it(".controller", function(){
+    var controller, action, executionUnit;
+
+    controller    = "AppCtrl";
+    action        = "Login";
+    executionUnit = function(){};
+
+    spyOn(stik.$$manager, "$addController");
+
+    stik.controller(controller, action, executionUnit);
+
+    expect(
+      stik.$$manager.$addController
+    ).toHaveBeenCalledWith(controller, action, executionUnit);
+  });
+
   it(".register", function(){
     var controller, action, executionUnit;
 
@@ -6,12 +22,12 @@ describe("Main", function(){
     action        = "Login";
     executionUnit = function(){};
 
-    spyOn(stik.$$manager, "$register");
+    spyOn(stik, "controller");
 
     stik.register(controller, action, executionUnit);
 
     expect(
-      stik.$$manager.$register
+      stik.controller
     ).toHaveBeenCalledWith(controller, action, executionUnit);
   });
 

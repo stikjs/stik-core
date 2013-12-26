@@ -8,8 +8,12 @@
     $urlState: new window.stik.UrlState()
   });
 
+  window.stik.controller = function(controller, action, executionUnit){
+    window.stik.$$manager.$addController(controller, action, executionUnit);
+  };
+
   window.stik.register = function(controller, action, executionUnit){
-    window.stik.$$manager.$register(controller, action, executionUnit);
+    window.stik.controller(controller, action, executionUnit);
   };
 
   window.stik.behavior = function(name, executionUnit){

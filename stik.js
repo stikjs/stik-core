@@ -259,7 +259,7 @@ window.stik = {};
     this.$$modules = modules;
   }
 
-  Manager.prototype.$register = function(controller, action, executionUnit){
+  Manager.prototype.$addController = function(controller, action, executionUnit){
     if (!controller)    { throw "controller can't be empty"; }
     if (!action)        { throw "action can't be empty"; }
     if (!executionUnit) { throw "execution unit is missing"; }
@@ -389,8 +389,12 @@ window.stik = {};
     $urlState: new window.stik.UrlState()
   });
 
+  window.stik.controller = function(controller, action, executionUnit){
+    window.stik.$$manager.$addController(controller, action, executionUnit);
+  };
+
   window.stik.register = function(controller, action, executionUnit){
-    window.stik.$$manager.$register(controller, action, executionUnit);
+    window.stik.controller(controller, action, executionUnit);
   };
 
   window.stik.behavior = function(name, executionUnit){
