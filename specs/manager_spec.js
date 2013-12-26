@@ -10,6 +10,7 @@ describe("Manager", function(){
       var manager = new stik.Manager();
 
       expect(manager.$$contexts).toEqual([]);
+      expect(manager.$$behaviors).toEqual([]);
       expect(manager.$$executionUnits).toEqual({});
     });
   });
@@ -112,7 +113,67 @@ describe("Manager", function(){
     });
   });
 
-  describe("#$findTemplate", function(){
+  describe("#$addBehavior", function(){
+    it("should throw if trying to add a behavior with an existing name", function(){
+      var manager, name, executionUnit;
+
+      name          = "some-behavior";
+      executionUnit = function(){};
+
+      manager = new stik.Manager();
+
+      spyOn(manager, "$isBehaviorRegistered").andReturn(true);
+      spyOn(manager, "$applyBehavior");
+
+      expect(function(){
+        manager.$addBehavior(name, executionUnit);
+      }).toThrow("behavior already exist with the specified name");
+    });
+
+    it("should store the new behavior", function(){
+      var manager, behavior, executionUnit;
+
+      manager = new stik.Manager();
+
+      behavior      = "some-behavior"
+      action        = "detail"
+      executionUnit = function(){};
+
+      spyOn(manager, "$createBehavior").andReturn(1);
+      spyOn(manager, "$applyBehavior");
+
+      manager.$addBehavior(behavior, executionUnit);
+
+      expect(
+        manager.$createBehavior
+      ).toHaveBeenCalledWith(behavior, executionUnit);
+
+      expect(manager.$$behaviors.length).toBe(1);
+    });
+  });
+
+  describe("$isBehaviorRegistered", function(){
+    it("when it does not exist", function(){
+      var manager;
+
+      manager = new stik.Manager();
+
+      expect(manager.$isBehaviorRegistered("some-behavior")).toBeFalsy();
+    });
+
+    it("when it does exist", function(){
+      var manager;
+
+      manager = new stik.Manager();
+      spyOn(manager, "$applyBehavior");
+
+      manager.$addBehavior("some-behavior", function(){});
+
+      expect(manager.$isBehaviorRegistered("some-behavior")).toBeTruthy();
+    });
+  });
+
+  describe("#$findControllerTemplates", function(){
     it("should look for templates in the DOM based on the controller and action", function(){
       var DOM, manager, controller, action;
 
@@ -125,7 +186,7 @@ describe("Manager", function(){
 
       spyOn(DOM, "querySelectorAll").andReturn([1,2,3]);
 
-      result = manager.$findTemplate(controller, action, DOM);
+      result = manager.$findControllerTemplates(controller, action, DOM);
 
       expect(
         DOM.querySelectorAll
@@ -133,6 +194,30 @@ describe("Manager", function(){
         "[data-controller=" + controller + "]" +
         "[data-action=" + action + "]" +
         ":not([class*=stik-bound])"
+      );
+
+      expect(result).toEqual([1,2,3]);
+    });
+  });
+
+  describe("#$findBehaviorTemplates", function(){
+    it("should look for templates in the DOM based on the className", function(){
+      var DOM, manager, behavior, name;
+
+      DOM  = DOMDouble();
+      name = "some-behavior"
+
+      manager = new stik.Manager();
+
+      spyOn(DOM, "querySelectorAll").andReturn([1,2,3]);
+
+      result = manager.$findBehaviorTemplates(name, DOM);
+
+      expect(
+        DOM.querySelectorAll
+      ).toHaveBeenCalledWith(
+        "[class*=" + name + "]" +
+        ":not([class*=" + name + "-applyed])"
       );
 
       expect(result).toEqual([1,2,3]);
@@ -213,19 +298,6 @@ describe("Manager", function(){
         manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, update, executionUnit);
     });
-
-    // it("should bind a lazily added template with an existing controller", function(){
-    //   manager = new stik.Manager();
-
-    //   manager.$storeExecutionUnit(controller, detail, executionUnit);
-
-    //   manager.$buildContexts();
-
-    //   new DOMParser().parseFromString(
-    //     ,
-    //     "text/xml"
-    //   ).firstChild
-    // });
   });
 
   describe("#$bindExecutionUnit", function(){
@@ -241,19 +313,14 @@ describe("Manager", function(){
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
-      spyOn(manager, "$findTemplate").andReturn([template]);
+      spyOn(manager, "$findControllerTemplates").andReturn([template]);
       spyOn(manager, "$createContext").andReturn(contextDouble);
-      spyOn(manager, "$markAsBound");
 
       manager.$bindExecutionUnit(controller, action, executionUnit);
 
       expect(
-        manager.$findTemplate
+        manager.$findControllerTemplates
       ).toHaveBeenCalledWith(controller, action);
-
-      expect(
-        manager.$markAsBound
-      ).toHaveBeenCalledWith(template);
 
       expect(
         manager.$createContext
@@ -277,9 +344,8 @@ describe("Manager", function(){
 
       contextDouble = jasmine.createSpyObj('contextDouble', ['$load']);
 
-      spyOn(manager, "$findTemplate").andReturn([template1, template2]);
+      spyOn(manager, "$findControllerTemplates").andReturn([template1, template2]);
       spyOn(manager, "$createContext").andReturn(contextDouble);
-      spyOn(manager, "$markAsBound");
 
       manager.$bindExecutionUnit(controller, action, executionUnit);
 
@@ -297,7 +363,7 @@ describe("Manager", function(){
     it("should return false if no templates were bound", function(){
       var manager = new stik.Manager();
 
-      spyOn(manager, "$findTemplate").andReturn([]);
+      spyOn(manager, "$findControllerTemplates").andReturn([]);
 
       expect(
         manager.$bindExecutionUnit("AppCtrl", "List", function(){})
@@ -305,25 +371,53 @@ describe("Manager", function(){
     });
   });
 
-  describe("$markAsBound", function(){
-    it("should flag it as bound", function(){
-      var manager = new stik.Manager();
+  describe("#$applyBehavior", function(){
+    it("with one template", function(){
+      var manager, behavior, template, name;
 
-      var templateDouble = {className: ""};
+      name     = "some-behavior";
+      template = '<div id="item-1" class="some-behavior"></div>';
 
-      manager.$markAsBound(templateDouble);
+      manager  = new stik.Manager();
+      behavior = new stik.Behavior(name, function(){});
 
-      expect(templateDouble.className).toEqual(" stik-bound");
+      spyOn(manager, "$findBehaviorTemplates").andReturn([template]);
+      spyOn(behavior, "$load");
+
+      manager.$applyBehavior(behavior);
+
+      expect(
+        manager.$findBehaviorTemplates
+      ).toHaveBeenCalledWith(behavior.$$name);
+
+      expect(
+        behavior.$load
+      ).toHaveBeenCalledWith(template, {});
     });
 
-    it("should not messup current classes", function(){
-      var manager = new stik.Manager();
+    it("with two template", function(){
+      var manager, behavior, template, name;
 
-      var templateDouble = {className: "wierd-class"};
+      firstName  = "some-behavior-1";
+      secondName = "some-behavior-2";
+      template1  = '<div id="item-1" class="some-behavior"></div>';
+      template2  = '<div id="item-2" class="some-behavior"></div>';
 
-      manager.$markAsBound(templateDouble);
+      manager  = new stik.Manager();
+      behavior = new stik.Behavior(firstName, function(){});
 
-      expect(templateDouble.className).toEqual("wierd-class stik-bound");
+      spyOn(manager, "$findBehaviorTemplates").andReturn([template1, template2]);
+      spyOn(behavior, "$load");
+
+      manager.$applyBehavior(behavior);
+
+      expect(
+        behavior.$load
+      ).toHaveBeenCalledWith(template1, {});
+
+      expect(
+        behavior.$load
+      ).toHaveBeenCalledWith(template2, {});
     });
   });
 });

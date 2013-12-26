@@ -12,6 +12,10 @@
     window.stik.$$manager.$register(controller, action, executionUnit);
   };
 
+  window.stik.behavior = function(name, executionUnit){
+    return this.$$manager.$addBehavior(name, executionUnit);
+  };
+
   window.stik.bindLazy = function(){
     this.$$manager.$buildContexts();
   };

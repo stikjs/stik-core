@@ -57,9 +57,12 @@
       <button>Update Queries</button>
       <span data-bind="queries"></span>
     </div>
+
+    <h2>Behavior composition</h2>
+    <span class="first-click second-click third-click">click me and see behavior composition!</span>
   </div>
 
-  <script src="../stik.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../stik.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
     stik.register("CharactesCtrl", "List", function($template){
       var supported, character;
@@ -114,6 +117,24 @@
           queries: JSON.stringify($urlState.$queries())
         });
       });
+    });
+
+    stik.behavior("first-click", function($template){
+      $template.addEventListener("click", function(){
+        alert("First Clik!");
+      })
+    });
+
+    stik.behavior("second-click", function($template){
+      $template.addEventListener("click", function(){
+        alert("Second Clik!");
+      })
+    });
+
+    stik.behavior("third-click", function($template){
+      $template.addEventListener("click", function(){
+        alert("Third Clik!");
+      })
     });
   </script>
 </body>

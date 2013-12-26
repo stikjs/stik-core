@@ -22,4 +22,19 @@ describe("Main", function(){
 
     expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
   });
+
+  it(".behavior", function(){
+    var name, executionUnit;
+
+    name          = "some-behavior"
+    executionUnit = function(){};
+
+    spyOn(stik.$$manager, "$addBehavior");
+
+    stik.behavior(name, executionUnit);
+
+    expect(
+      stik.$$manager.$addBehavior
+    ).toHaveBeenCalledWith(name, executionUnit);
+  });
 });

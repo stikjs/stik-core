@@ -19,6 +19,7 @@
     );
 
     this.$$executionUnit.apply({}, dependencies);
+    this.$markAsBound();
   };
 
   Context.prototype.$mergeModules = function(modules){
@@ -33,6 +34,10 @@
     var injector = new window.stik.Injector(this.$$executionUnit, modules);
 
     return injector.$resolveDependencies();
+  };
+
+  Context.prototype.$markAsBound = function(){
+    this.$$template.className += ' stik-bound';
   };
 
   window.stik.Context = Context;

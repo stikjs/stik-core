@@ -80,10 +80,14 @@ describe("Context", function(){
         injectedTemplate = $template;
       };
 
-      subject = new stik.Context('AppCtrl', 'list', template, executionUnitDouble);
-      subject.$load(modulesDouble());
+      context = new stik.Context('AppCtrl', 'list', template, executionUnitDouble);
+
+      spyOn(context, "$markAsBound");
+
+      context.$load(modulesDouble());
 
       expect(injectedTemplate).toEqual(template);
+      expect(context.$markAsBound).toHaveBeenCalled();
     });
   });
 
@@ -109,6 +113,33 @@ describe("Context", function(){
       ).toEqual(
         expectedModules
       );
+    });
+  });
+
+  describe("$markAsBound", function(){
+    it("should flag the template as bound", function(){
+      var context, template, attribute;
+
+      template = document.createElement("div");
+
+      context = new stik.Context("AppCtrl", "List", template, function(){});
+
+      context.$markAsBound();
+
+      expect(template.className).toEqual(" stik-bound");
+    });
+
+    it("should not messup current classes", function(){
+      var context, template, attribute;
+
+      template = document.createElement("div");
+      template.className += "wierd-class"
+
+      context = new stik.Context("AppCtrl", "List", template, function(){});
+
+      context.$markAsBound();
+
+      expect(template.className).toEqual("wierd-class stik-bound");
     });
   });
 });
