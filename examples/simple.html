@@ -64,7 +64,7 @@
 
   <script src="../stik.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-    stik.register("CharactesCtrl", "List", function($template){
+    stik.controller("CharactesCtrl", "List", function($template){
       var supported, character;
 
       character = $template.getElementsByClassName("character");
@@ -79,7 +79,7 @@
       };
     });
 
-    stik.register("BattleCtrl", "List", function($template){
+    stik.controller("BattleCtrl", "List", function($template){
       var heroes = $template.getElementsByClassName('hero');
 
       function clickHandler(event){
@@ -91,7 +91,7 @@
       };
     });
 
-    stik.register("MailCtrl", "Sender", function($template, $courier){
+    stik.controller("MailCtrl", "Sender", function($template, $courier){
       var mailInput, mailButton;
 
       mailInput = $template.getElementsByClassName("mail-input")[0];
@@ -103,13 +103,13 @@
       });
     });
 
-    stik.register("MailCtrl", "Receiver", function($courier, $viewBag){
+    stik.controller("MailCtrl", "Receiver", function($courier, $viewBag){
       $courier.$receive("new-mail", function(message){
         $viewBag.$render({newMsg: message});
       });
     });
 
-    stik.register("UrlCtrl", "Queries", function($template, $urlState, $viewBag){
+    stik.controller("UrlCtrl", "Queries", function($template, $urlState, $viewBag){
       var button = $template.getElementsByTagName("button")[0];
 
       button.addEventListener("click", function(){
