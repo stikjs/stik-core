@@ -1,4 +1,6 @@
 (function(){
+  var behaviorKey = "data-behaviors";
+
   function Behavior(name, executionUnit){
     if (!name)          { throw "name is missing"; }
     if (!executionUnit) { throw "executionUnit is missing"; }
@@ -23,7 +25,10 @@
   };
 
   Behavior.prototype.$markAsApplyed = function(template){
-    template.className += " " + this.$$name + "-applyed";
+    behaviors = template.getAttribute(behaviorKey);
+    behaviors = ((behaviors || "") + " " + this.$$name).trim();
+
+    template.setAttribute(behaviorKey, behaviors);
   };
 
   window.stik.Behavior = Behavior;

@@ -33,6 +33,7 @@ describe("Behavior", function(){
       behavior = new stik.Behavior("some-behavior", function(){});
 
       spyOn(behavior, "$resolveDependencies");
+      spyOn(behavior, "$markAsApplyed");
 
       behavior.$load("div", modules);
 
@@ -47,7 +48,8 @@ describe("Behavior", function(){
     it("should mark the template as applyed", function(){
       var behavior, template;
 
-      template = "div"
+      template = document.createElement("div");
+      template.className += "some-behavior";
 
       behavior = new stik.Behavior("some-behavior", function(){});
 
@@ -63,22 +65,69 @@ describe("Behavior", function(){
     it("should run its execution unit", function(){
       var template, modules, executionUnitDouble, injectedTemplate;
 
-      template = document.createElement("div");
-      template.className += "some-behavior";
-
       executionUnitDouble = function($template){
         injectedTemplate = $template;
       };
 
+      template = document.createElement("div");
+      template.className += "some-behavior";
+
       subject = new stik.Behavior('some-behavior', executionUnitDouble);
       subject.$load(template, {});
 
-      expect(
-        template.className
-      ).toEqual(
-        "some-behavior some-behavior-applyed"
-      );
       expect(injectedTemplate).toEqual(template);
+    });
+  });
+
+  describe("#$markAsApplyed", function(){
+    it("with one behavior", function(){
+      var behavior, template;
+
+      template = document.createElement("div");
+
+      behavior = new stik.Behavior("some-behavior", function(){});
+
+      behavior.$markAsApplyed(template);
+
+      expect(
+        template.getAttribute("data-behaviors")
+      ).toEqual(
+        "some-behavior"
+      );
+    });
+
+    it("with two behavior", function(){
+      var behavior, template;
+
+      template = document.createElement("div");
+      template.setAttribute("data-behaviors", "old-behavior");
+
+      behavior = new stik.Behavior("some-behavior", function(){});
+
+      behavior.$markAsApplyed(template);
+
+      expect(
+        template.getAttribute("data-behaviors")
+      ).toEqual(
+        "old-behavior some-behavior"
+      );
+    });
+
+    it("with three behavior", function(){
+      var behavior, template;
+
+      template = document.createElement("div");
+      template.setAttribute("data-behaviors", "old-behavior wierd-behavior");
+
+      behavior = new stik.Behavior("some-behavior", function(){});
+
+      behavior.$markAsApplyed(template);
+
+      expect(
+        template.getAttribute("data-behaviors")
+      ).toEqual(
+        "old-behavior wierd-behavior some-behavior"
+      );
     });
   });
 });
