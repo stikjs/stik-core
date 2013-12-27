@@ -1,5 +1,6 @@
 # 0.5.1 (2013-12-27)
 
+## Fix
 - **.behavior** now can inject $courier and $urlState
   ([1b0d5ab65e](https://github.com/lukelex/stik.js/commit/1b0d5ab65e7944cbcc4c4ecc79ff47d05628b6d1))
 
