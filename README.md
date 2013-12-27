@@ -107,7 +107,7 @@ After a template is bound to any behavior it will get a new attribute signalling
   <input class="sparkle-input some-other-behavior" data-behaviors="sparkle-input some-other-behavior" />
 ```
 
-**important** the only module that can be injected in a behavior is the $template in which it is applied.
+**important** the only modules that can't be injected in a behavior are $context and $viewBag.
 
 ##Dependency Injection
 With Dependency Injection (DI), your dependencies are given to your object instead of your object creating or explicitly referencing them. This means the dependency injector can provide a different dependency based on the context of the situation. For example, in your tests it might pass a fake version of your services API that doesn't make requests but returns static objects instead, while in production it provides the actual services API.

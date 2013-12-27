@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.5.0 | From: 26-12-2013
+// Version: 0.5.1 | From: 27-12-2013
 
 window.stik = {};
 
@@ -258,10 +258,10 @@ window.stik = {};
 
 (function(){
   function Manager(modules){
-    this.$$contexts = [];
-    this.$$behaviors = [];
+    this.$$contexts       = [];
+    this.$$behaviors      = [];
     this.$$executionUnits = {};
-    this.$$modules = modules;
+    this.$$modules        = modules || {};
   }
 
   Manager.prototype.$addController = function(controller, action, executionUnit){
@@ -358,7 +358,7 @@ window.stik = {};
     var templates = this.$findBehaviorTemplates(behavior.$$name);
 
     for (var i = 0; i < templates.length; i++) {
-      behavior.$load(templates[i], {});
+      behavior.$load(templates[i], this.$$modules);
     }
   };
 
