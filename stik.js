@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.5.2 | From: 28-12-2013
+// Version: 0.5.3 | From: 29-12-2013
 
 window.stik = {};
 
@@ -55,13 +55,13 @@ window.stik = {};
 })();
 
 (function(){
-  var behaviorKey = "data-behaviors";
+  var behaviorKey = "data-behaviors", namePrefix = "bh";
 
   function Behavior(name, executionUnit){
     if (!name)          { throw "name is missing"; }
     if (!executionUnit) { throw "executionUnit is missing"; }
 
-    this.$$name = name;
+    this.$$name = namePrefix + "-" + name;
     this.$$executionUnit = executionUnit;
   }
 
@@ -200,10 +200,10 @@ window.stik = {};
   };
 
   UrlState.prototype.$hash = function(newHashValue){
-    return this.$$locationHash(newHashValue).replace(/^#/, "");
+    return this.$locationHash(newHashValue).replace(/^#/, "");
   };
 
-  UrlState.prototype.$$locationHash = function(newHashValue){
+  UrlState.prototype.$locationHash = function(newHashValue){
     if (newHashValue) {
       location.hash = newHashValue;
     }

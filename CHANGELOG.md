@@ -1,3 +1,9 @@
+# 0.5.3 (2013-12-29)
+
+##Fix
+- **.behavior** Now prepends a `bh-` en every behavior for a clear separation of styling and behavior classes.
+  ([3dd74d0dc3](https://github.com/lukelex/stik.js/commit/3dd74d0dc331ef2605d0489b9c1bf7eaeaf4c523))
+
 # 0.5.2 (2013-12-28)
 
 ##Fix

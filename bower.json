@@ -1,7 +1,7 @@
 {
   "name": "stik.js",
   "main": "stik.js",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "homepage": "https://github.com/lukelex/stik.js",
   "authors": [
     "Lukas Alexandre <lukas@codelogic.me>"
