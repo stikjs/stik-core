@@ -109,6 +109,20 @@ describe("Injector", function(){
     });
   });
 
+  describe("#$grabModules", function(){
+    it("should throw if no modules was found", function(){
+      var injector, args, executionUnit;
+
+      executionUnit = function($absentModule){};
+
+      injector = new stik.Injector(executionUnit, {});
+
+      expect(function(){
+        injector.$resolveDependencies();
+      }).toThrow("¿$absentModule? These are not the droids you are looking for! (e.g. this module does not exists)");
+    });
+  });
+
   describe("#$trimmedArgs", function(){
     it("with a single param", function(){
       var subject, args;

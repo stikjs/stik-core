@@ -163,12 +163,15 @@ window.stik = {};
   };
 
   Injector.prototype.$grabModules = function(args){
-    var dependencies = [];
+    var dependencies = [], module;
 
     if (args.length === 1 && args[0] === '') { return []; }
 
     for (var i = 0; i < args.length; i++) {
-      dependencies.push(this.$$modules[args[i]]);
+      if (!(module = this.$$modules[args[i]])) {
+        throw "¿" + args[i] + "? These are not the droids you are looking for! (e.g. this module does not exists)";
+      }
+      dependencies.push(module);
     }
 
     return dependencies;
