@@ -8,7 +8,7 @@ describe("Behavior", function(){
 
       behavior = new stik.Behavior(name, executionUnit);
 
-      expect(behavior.$$name).toEqual(name);
+      expect(behavior.$$name).toEqual("bh-" + name);
       expect(behavior.$$executionUnit).toEqual(executionUnit);
     });
 
@@ -92,7 +92,7 @@ describe("Behavior", function(){
       expect(
         template.getAttribute("data-behaviors")
       ).toEqual(
-        "some-behavior"
+        "bh-some-behavior"
       );
     });
 
@@ -100,7 +100,7 @@ describe("Behavior", function(){
       var behavior, template;
 
       template = document.createElement("div");
-      template.setAttribute("data-behaviors", "old-behavior");
+      template.setAttribute("data-behaviors", "bh-old-behavior");
 
       behavior = new stik.Behavior("some-behavior", function(){});
 
@@ -109,7 +109,7 @@ describe("Behavior", function(){
       expect(
         template.getAttribute("data-behaviors")
       ).toEqual(
-        "old-behavior some-behavior"
+        "bh-old-behavior bh-some-behavior"
       );
     });
 
@@ -117,7 +117,7 @@ describe("Behavior", function(){
       var behavior, template;
 
       template = document.createElement("div");
-      template.setAttribute("data-behaviors", "old-behavior wierd-behavior");
+      template.setAttribute("data-behaviors", "bh-old-behavior bh-wierd-behavior");
 
       behavior = new stik.Behavior("some-behavior", function(){});
 
@@ -126,7 +126,7 @@ describe("Behavior", function(){
       expect(
         template.getAttribute("data-behaviors")
       ).toEqual(
-        "old-behavior wierd-behavior some-behavior"
+        "bh-old-behavior bh-wierd-behavior bh-some-behavior"
       );
     });
   });

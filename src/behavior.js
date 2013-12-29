@@ -1,11 +1,11 @@
 (function(){
-  var behaviorKey = "data-behaviors";
+  var behaviorKey = "data-behaviors", namePrefix = "bh";
 
   function Behavior(name, executionUnit){
     if (!name)          { throw "name is missing"; }
     if (!executionUnit) { throw "executionUnit is missing"; }
 
-    this.$$name = name;
+    this.$$name = namePrefix + "-" + name;
     this.$$executionUnit = executionUnit;
   }
 
