@@ -231,12 +231,18 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
 stik.controller("YourCtrl", "YourAction", function($urlState){
   // http://my-website.com?someKey=someValue
   $urlState.$queries(); // {someKey: "someValue"}
+
+  // http://my-website.com#users
+  $urlState.$hash(); // "users"
+  $urlState.$hash("products");
+  // http://my-website.com#products
 });
 ```
 
 Available methods:
 
 * $queries
+* $hash
 
 ###$context
 Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stik.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.

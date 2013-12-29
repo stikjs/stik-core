@@ -9,6 +9,18 @@
     return location.pathname;
   };
 
+  UrlState.prototype.$hash = function(newHashValue){
+    return this.$$locationHash(newHashValue).replace(/^#/, "");
+  };
+
+  UrlState.prototype.$$locationHash = function(newHashValue){
+    if (newHashValue) {
+      location.hash = newHashValue;
+    }
+
+    return location.hash;
+  };
+
   UrlState.prototype.$mainPath = function() {
     return "/" + this.$pathName().split("/")[1];
   };

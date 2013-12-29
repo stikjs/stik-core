@@ -91,4 +91,34 @@ describe("UrlState", function(){
       });
     });
   });
+
+  describe("#$hash", function(){
+    it("having a hash", function(){
+      var urlState = new stik.UrlState();
+
+      spyOn(urlState, "$$locationHash").andReturn("#123");
+
+      expect(urlState.$hash()).toEqual("123");
+    });
+
+    it("with an empty hash", function(){
+      var urlState = new stik.UrlState();
+
+      spyOn(urlState, "$$locationHash").andReturn("");
+
+      expect(urlState.$hash()).toEqual("");
+    });
+
+    it("setting a new hash", function(){
+      var urlState = new stik.UrlState();
+
+      spyOn(urlState, "$$locationHash").andReturn("some-hash");
+
+      urlState.$hash("some-hash");
+
+      expect(
+        urlState.$$locationHash
+      ).toHaveBeenCalledWith("some-hash");
+    });
+  });
 });

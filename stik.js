@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.5.1 | From: 27-12-2013
+// Version: 0.5.1 | From: 28-12-2013
 
 window.stik = {};
 
@@ -194,6 +194,18 @@ window.stik = {};
 
   UrlState.prototype.$pathName = function(){
     return location.pathname;
+  };
+
+  UrlState.prototype.$hash = function(newHashValue){
+    return this.$$locationHash(newHashValue).replace(/^#/, "");
+  };
+
+  UrlState.prototype.$$locationHash = function(newHashValue){
+    if (newHashValue) {
+      location.hash = newHashValue;
+    }
+
+    return location.hash;
   };
 
   UrlState.prototype.$mainPath = function() {
