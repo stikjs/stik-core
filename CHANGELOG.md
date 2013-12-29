@@ -1,3 +1,11 @@
+# 0.5.2 (2013-12-28)
+
+##Fix
+- **$injector** Now fails while trying to add an inexisting module
+  ([78ceb14091](https://github.com/lukelex/stik.js/commit/78ceb140911db72888da751f05e3ce30dd93faa2))
+- **$hash** $urlState now supports $hash
+  ([916ae0610a](https://github.com/lukelex/stik.js/commit/916ae0610aeff9e4e39bd14375987927ee501dd6))
+
 # 0.5.1 (2013-12-27)
 
 ## Fix

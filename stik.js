@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.5.1 | From: 28-12-2013
+// Version: 0.5.2 | From: 28-12-2013
 
 window.stik = {};
 
