@@ -104,7 +104,7 @@ The bind of a behavior to its component is achieved using css classes. Stik.js w
 After a template is bound to any behavior it will get a new attribute signalling behaviors were successfully applied, like so:
 
 ```html
-  <input class="sparkle-input some-other-behavior" data-behaviors="sparkle-input some-other-behavior" />
+  <input class="bh-sparkle-input bh-some-other-behavior" data-behaviors="bh-sparkle-input bh-some-other-behavior" />
 ```
 
 **important** the only modules that can't be injected in a behavior are $context and $viewBag.
