@@ -169,7 +169,7 @@ describe("Manager", function(){
 
       manager.$addBehavior("some-behavior", function(){});
 
-      expect(manager.$isBehaviorRegistered("some-behavior")).toBeTruthy();
+      expect(manager.$isBehaviorRegistered("bh-some-behavior")).toBeTruthy();
     });
   });
 

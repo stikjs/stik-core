@@ -10,10 +10,10 @@
   };
 
   UrlState.prototype.$hash = function(newHashValue){
-    return this.$$locationHash(newHashValue).replace(/^#/, "");
+    return this.$locationHash(newHashValue).replace(/^#/, "");
   };
 
-  UrlState.prototype.$$locationHash = function(newHashValue){
+  UrlState.prototype.$locationHash = function(newHashValue){
     if (newHashValue) {
       location.hash = newHashValue;
     }

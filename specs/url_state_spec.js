@@ -96,7 +96,7 @@ describe("UrlState", function(){
     it("having a hash", function(){
       var urlState = new stik.UrlState();
 
-      spyOn(urlState, "$$locationHash").andReturn("#123");
+      spyOn(urlState, "$locationHash").andReturn("#123");
 
       expect(urlState.$hash()).toEqual("123");
     });
@@ -104,7 +104,7 @@ describe("UrlState", function(){
     it("with an empty hash", function(){
       var urlState = new stik.UrlState();
 
-      spyOn(urlState, "$$locationHash").andReturn("");
+      spyOn(urlState, "$locationHash").andReturn("");
 
       expect(urlState.$hash()).toEqual("");
     });
@@ -112,12 +112,12 @@ describe("UrlState", function(){
     it("setting a new hash", function(){
       var urlState = new stik.UrlState();
 
-      spyOn(urlState, "$$locationHash").andReturn("some-hash");
+      spyOn(urlState, "$locationHash").andReturn("some-hash");
 
       urlState.$hash("some-hash");
 
       expect(
-        urlState.$$locationHash
+        urlState.$locationHash
       ).toHaveBeenCalledWith("some-hash");
     });
   });
