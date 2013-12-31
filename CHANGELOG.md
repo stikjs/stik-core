@@ -1,6 +1,8 @@
 # 0.6.0 (2014-01-05)
 
 ##Fix
+- **.bindLazy** Now tries to apply both behaviors and controllers
+  ([144f1beb0e](https://github.com/lukelex/stik.js/commit/144f1beb0edeed724ac520f62f7b50b3af6cd82a))
 - **.behavior** Now prepends a `bh-` en every behavior for a clear separation of styling and behavior classes.
   ([3dd74d0dc3](https://github.com/lukelex/stik.js/commit/3dd74d0dc331ef2605d0489b9c1bf7eaeaf4c523))
 
