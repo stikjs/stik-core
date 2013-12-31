@@ -1,4 +1,4 @@
-# 0.5.3 (2013-12-31)
+# 0.6.0 (2014-01-05)
 
 ##Fix
 - **.behavior** Now prepends a `bh-` en every behavior for a clear separation of styling and behavior classes.
