@@ -5,7 +5,8 @@
     if (!name)          { throw "name is missing"; }
     if (!executionUnit) { throw "executionUnit is missing"; }
 
-    this.$$name = namePrefix + "-" + name;
+    this.$$className     = name;
+    this.$$name          = namePrefix + "-" + name;
     this.$$executionUnit = executionUnit;
   }
 

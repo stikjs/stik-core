@@ -8,6 +8,7 @@ describe("Behavior", function(){
 
       behavior = new stik.Behavior(name, executionUnit);
 
+      expect(behavior.$$className).toEqual(name);
       expect(behavior.$$name).toEqual("bh-" + name);
       expect(behavior.$$executionUnit).toEqual(executionUnit);
     });

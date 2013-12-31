@@ -97,7 +97,7 @@
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
-    var templates = this.$findBehaviorTemplates(behavior.$$name);
+    var templates = this.$findBehaviorTemplates(behavior);
 
     for (var i = 0; i < templates.length; i++) {
       behavior.$load(templates[i], this.$$modules);
@@ -128,12 +128,13 @@
     return DOMHandler.querySelectorAll(selector);
   };
 
-  Manager.prototype.$findBehaviorTemplates = function(name, DOMInjection){
+  Manager.prototype.$findBehaviorTemplates = function(behavior, DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
-    var selector = "[class*=" + name + "]" +
-                   ":not([class*=" + name + "-applyed])";
+    var selector = "[class*=" + behavior.$$className + "]" +
+                   ":not([data-behaviors*=" + behavior.$$name + "])";
+
     return DOMHandler.querySelectorAll(selector);
   };
 

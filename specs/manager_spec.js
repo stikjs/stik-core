@@ -362,7 +362,7 @@ describe("Manager", function(){
 
       expect(
         manager.$findBehaviorTemplates
-      ).toHaveBeenCalledWith(behavior.$$name);
+      ).toHaveBeenCalledWith(behavior);
 
       expect(
         behavior.$load
@@ -454,22 +454,23 @@ describe("Manager", function(){
 
   describe("#$findBehaviorTemplates", function(){
     it("should look for templates in the DOM based on the className", function(){
-      var DOM, manager, behavior, name;
+      var DOM, manager, behavior;
 
       DOM  = DOMDouble();
-      name = "some-behavior"
 
       manager = new stik.Manager();
 
+      behavior = new stik.Behavior("some-behavior", function(){});
+
       spyOn(DOM, "querySelectorAll").andReturn([1,2,3]);
 
-      result = manager.$findBehaviorTemplates(name, DOM);
+      result = manager.$findBehaviorTemplates(behavior, DOM);
 
       expect(
         DOM.querySelectorAll
       ).toHaveBeenCalledWith(
-        "[class*=" + name + "]" +
-        ":not([class*=" + name + "-applyed])"
+        "[class*=" + behavior.$$className + "]" +
+        ":not([data-behaviors*=" + behavior.$$name + "])"
       );
 
       expect(result).toEqual([1,2,3]);
