@@ -26,7 +26,23 @@ module.exports = function(grunt){
     jasmine: {
       src: srcFiles,
       options: {
-        specs: 'specs/*_spec.js'
+        specs: 'specs/*_spec.js',
+        template: require('grunt-template-jasmine-istanbul'),
+        templateOptions: {
+          coverage: 'reports/coverage.json',
+          report: [{
+            type: 'lcov',
+            options: {
+              dir: 'reports/lcov'
+            }
+          },{
+            type: 'html',
+            options: {
+              dir: 'reports/html'
+            }
+          }
+          ]
+        }
       }
     },
     concat: {

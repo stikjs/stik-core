@@ -4,7 +4,7 @@
   "description": "A JS library to wire you JavaScript execution to your HTML template",
   "main": "stik.js",
   "scripts": {
-    "test": "spec"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
     "grunt-cli": "~0.1.11",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-contrib-concat": "~0.3.0"
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-template-jasmine-istanbul": "~0.2.5"
   },
   "banner": {
     "divider": "// ==========================================================================\n",
