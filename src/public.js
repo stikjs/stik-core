@@ -21,6 +21,8 @@
   };
 
   window.stik.bindLazy = function(){
-    this.$$manager.$buildContexts();
+    if (!this.$$manager.$buildContexts() & !this.$$manager.$applyBehaviors()) {
+      throw "nothing to bind!"
+    }
   };
 })();

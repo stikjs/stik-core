@@ -65,7 +65,7 @@
 
   Manager.prototype.$buildContexts = function(){
     var controller, action, executionUnit;
-    var boundAny;
+    var boundAny = false;
 
     if (Object.keys(this.$$executionUnits).length === 0){
       throw "no execution units available";
@@ -80,7 +80,7 @@
       }
     }
 
-    if (!boundAny) { throw "no templates were bound"; }
+    return boundAny;
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
@@ -102,7 +102,21 @@
     for (var i = 0; i < templates.length; i++) {
       behavior.$load(templates[i], this.$$modules);
     }
+
+    return templates.length > 0;
   };
+
+  Manager.prototype.$applyBehaviors = function(){
+    var boundAny = false;
+
+    for (var i = 0; i < this.$$behaviors.length; i++) {
+      if (this.$applyBehavior(this.$$behaviors[i])) {
+        boundAny = true;
+      }
+    }
+
+    return boundAny;
+  }
 
   Manager.prototype.$findControllerTemplates = function(controller, action, DOMInjection){
     var DOMHandler = document;
