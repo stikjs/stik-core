@@ -6,6 +6,10 @@
 - **.behavior** Now prepends a `bh-` en every behavior for a clear separation of styling and behavior classes.
   ([3dd74d0dc3](https://github.com/lukelex/stik.js/commit/3dd74d0dc331ef2605d0489b9c1bf7eaeaf4c523))
 
+##Bug
+- **$findBehaviorTemplates** Fixing duplicate selection while lazily binding
+  ([a1de0ae885](https://github.com/lukelex/stik.js/commit/a1de0ae885e5ba14947d908d0a4838c325c2b50d))
+
 # 0.5.2 (2013-12-28)
 
 ##Fix
