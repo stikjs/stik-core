@@ -6,7 +6,7 @@
   window.stik.$$manager = new window.stik.Manager({
     $courier: new window.stik.Courier(),
     $urlState: new window.stik.UrlState()
-  });
+  }, window.stik.DOMLibLoader.$currentDOMSelector());
 
   window.stik.controller = function(controller, action, executionUnit){
     window.stik.$$manager.$addController(controller, action, executionUnit);
