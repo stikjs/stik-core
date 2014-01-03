@@ -10,13 +10,21 @@
     this.$$executionUnit = executionUnit;
   }
 
-  Behavior.prototype.$load = function(template, modules){
-    modules.$template = template;
+  Behavior.prototype.$load = function(template, modules, selector){
+    modules.$template = this.$wrapTemplate(template, selector);
 
     var dependencies = this.$resolveDependencies(modules);
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsApplyed(template);
+  };
+
+  Behavior.prototype.$wrapTemplate = function(template, selector) {
+    if (selector) {
+      return selector(template);
+    } else{
+      return template;
+    }
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){

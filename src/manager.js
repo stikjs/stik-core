@@ -101,7 +101,7 @@
     var templates = this.$findBehaviorTemplates(behavior);
 
     for (var i = 0; i < templates.length; i++) {
-      behavior.$load(templates[i], this.$$modules);
+      behavior.$load(templates[i], this.$$modules, this.$$selector);
     }
 
     return templates.length > 0;
