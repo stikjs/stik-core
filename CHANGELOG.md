@@ -1,5 +1,8 @@
 # 0.6.0 (2014-01-05)
 
+##Features
+- **$wrapTemplate** Now identifies if MooTools, Zepto or jQuery are loaded and wraps the $template before injection with the respective library
+
 ##Fix
 - **.bindLazy** Now tries to apply both behaviors and controllers
   ([144f1beb0e](https://github.com/lukelex/stik.js/commit/144f1beb0edeed724ac520f62f7b50b3af6cd82a))
