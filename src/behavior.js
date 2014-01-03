@@ -20,11 +20,7 @@
   };
 
   Behavior.prototype.$wrapTemplate = function(template, selector) {
-    if (selector) {
-      return selector(template);
-    } else{
-      return template;
-    }
+    return (selector ? selector(template) : template);
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){

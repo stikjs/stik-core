@@ -34,11 +34,7 @@ window.stik = {};
   };
 
   Context.prototype.$wrapTemplate = function(template, selector) {
-    if (selector) {
-      return selector(template);
-    } else{
-      return template;
-    }
+    return (selector ? selector(template) : template);
   };
 
   Context.prototype.$mergeModules = function(modules, selector){
@@ -84,11 +80,7 @@ window.stik = {};
   };
 
   Behavior.prototype.$wrapTemplate = function(template, selector) {
-    if (selector) {
-      return selector(template);
-    } else{
-      return template;
-    }
+    return (selector ? selector(template) : template);
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){
