@@ -366,7 +366,7 @@ describe("Manager", function(){
 
       expect(
         behavior.$load
-      ).toHaveBeenCalledWith(template, {});
+      ).toHaveBeenCalledWith(template, {}, undefined);
     });
 
     it("with two template", function(){
@@ -387,11 +387,11 @@ describe("Manager", function(){
 
       expect(
         behavior.$load
-      ).toHaveBeenCalledWith(template1, {});
+      ).toHaveBeenCalledWith(template1, {}, undefined);
 
       expect(
         behavior.$load
-      ).toHaveBeenCalledWith(template2, {});
+      ).toHaveBeenCalledWith(template2, {}, undefined);
     });
   });
 
