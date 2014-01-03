@@ -16,12 +16,11 @@ window.stik = {};
     if (!template)      { throw "template is missing"; }
     if (!executionUnit) { throw "execution unit is missing"; }
 
-    this.$$controller = controller;
-    this.$$action = action;
-    this.$$template = template;
+    this.$$controller    = controller;
+    this.$$action        = action;
+    this.$$template      = template;
     this.$$executionUnit = executionUnit;
-    this.$$disposable = false;
-    this.$$viewBag = new window.stik.ViewBag(template);
+    this.$$viewBag       = new window.stik.ViewBag(template);
   }
 
   Context.prototype.$load = function(modules, selector){
@@ -38,9 +37,9 @@ window.stik = {};
   };
 
   Context.prototype.$mergeModules = function(modules, selector){
-    modules.$context = this;
+    modules.$context  = this;
     modules.$template = this.$wrapTemplate(this.$$template, selector);
-    modules.$viewBag = this.$$viewBag;
+    modules.$viewBag  = this.$$viewBag;
 
     return modules;
   };

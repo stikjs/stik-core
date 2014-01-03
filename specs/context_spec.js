@@ -36,7 +36,6 @@ describe("Context", function(){
       expect(subject.$$action).toEqual('list');
       expect(subject.$$template).toBe(elmDouble);
       expect(subject.$$executionUnit).toBe(executionUnitDouble);
-      expect(subject.$$disposable).toEqual(false);
     });
 
     it("should throw if controller is missing", function(){
