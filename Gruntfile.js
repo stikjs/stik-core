@@ -8,7 +8,8 @@ module.exports = function(grunt){
     'src/url_state.js',
     'src/view_bag.js',
     'src/manager.js',
-    'src/public.js',
+    'src/dom_lib_loader.js',
+    'src/public.js'
   ];
 
   grunt.initConfig({

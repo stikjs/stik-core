@@ -1,9 +1,10 @@
 (function(){
-  function Manager(modules){
+  function Manager(modules, selector){
     this.$$contexts       = [];
     this.$$behaviors      = [];
     this.$$executionUnits = {};
     this.$$modules        = modules || {};
+    this.$$selector       = selector;
   }
 
   Manager.prototype.$addController = function(controller, action, executionUnit){
@@ -90,7 +91,7 @@
 
     for (var i = 0; i < templates.length; i++) {
       context = this.$storeContext(controller, action, templates[i], executionUnit);
-      context.$load(this.$$modules);
+      context.$load(this.$$modules, this.$$selector);
     }
 
     return templates.length > 0;
@@ -100,7 +101,7 @@
     var templates = this.$findBehaviorTemplates(behavior);
 
     for (var i = 0; i < templates.length; i++) {
-      behavior.$load(templates[i], this.$$modules);
+      behavior.$load(templates[i], this.$$modules, this.$$selector);
     }
 
     return templates.length > 0;

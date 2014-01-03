@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.6.0 | From: 31-12-2013
+// Version: 0.6.0 | From: 03-01-2014
 
 window.stik = {};
 
@@ -24,18 +24,26 @@ window.stik = {};
     this.$$viewBag = new window.stik.ViewBag(template);
   }
 
-  Context.prototype.$load = function(modules){
+  Context.prototype.$load = function(modules, selector){
     var dependencies = this.$resolveDependencies(
-      this.$mergeModules(modules)
+      this.$mergeModules(modules, selector)
     );
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsBound();
   };
 
-  Context.prototype.$mergeModules = function(modules){
+  Context.prototype.$wrapTemplate = function(template, selector) {
+    if (selector) {
+      return selector(template);
+    } else{
+      return template;
+    }
+  };
+
+  Context.prototype.$mergeModules = function(modules, selector){
     modules.$context = this;
-    modules.$template = this.$$template;
+    modules.$template = this.$wrapTemplate(this.$$template, selector);
     modules.$viewBag = this.$$viewBag;
 
     return modules;
@@ -66,13 +74,21 @@ window.stik = {};
     this.$$executionUnit = executionUnit;
   }
 
-  Behavior.prototype.$load = function(template, modules){
-    modules.$template = template;
+  Behavior.prototype.$load = function(template, modules, selector){
+    modules.$template = this.$wrapTemplate(template, selector);
 
     var dependencies = this.$resolveDependencies(modules);
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsApplyed(template);
+  };
+
+  Behavior.prototype.$wrapTemplate = function(template, selector) {
+    if (selector) {
+      return selector(template);
+    } else{
+      return template;
+    }
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){
@@ -273,11 +289,12 @@ window.stik = {};
 })();
 
 (function(){
-  function Manager(modules){
+  function Manager(modules, selector){
     this.$$contexts       = [];
     this.$$behaviors      = [];
     this.$$executionUnits = {};
     this.$$modules        = modules || {};
+    this.$$selector       = selector;
   }
 
   Manager.prototype.$addController = function(controller, action, executionUnit){
@@ -364,7 +381,7 @@ window.stik = {};
 
     for (var i = 0; i < templates.length; i++) {
       context = this.$storeContext(controller, action, templates[i], executionUnit);
-      context.$load(this.$$modules);
+      context.$load(this.$$modules, this.$$selector);
     }
 
     return templates.length > 0;
@@ -374,7 +391,7 @@ window.stik = {};
     var templates = this.$findBehaviorTemplates(behavior);
 
     for (var i = 0; i < templates.length; i++) {
-      behavior.$load(templates[i], this.$$modules);
+      behavior.$load(templates[i], this.$$modules, this.$$selector);
     }
 
     return templates.length > 0;
@@ -415,6 +432,24 @@ window.stik = {};
   window.stik.Manager = Manager;
 })();
 
+(function () {
+  var DOMLibLoader = {
+    $currentDOMSelector: function() {
+      if (window.hasOwnProperty("jQuery")) {
+        return window.jQuery;
+      }
+      else if(window.hasOwnProperty("Zepto")) {
+        return window.Zepto;
+      }
+      else if (window.hasOwnProperty("MooTools")) {
+        return window.document.id;
+      }
+    }
+  }
+
+  window.stik.DOMLibLoader = DOMLibLoader;
+})();
+
 (function() {
   if (window.stik.$$manager){
     throw "Stik.js is already loaded. Check your requires ;)";
@@ -423,7 +458,7 @@ window.stik = {};
   window.stik.$$manager = new window.stik.Manager({
     $courier: new window.stik.Courier(),
     $urlState: new window.stik.UrlState()
-  });
+  }, window.stik.DOMLibLoader.$currentDOMSelector());
 
   window.stik.controller = function(controller, action, executionUnit){
     window.stik.$$manager.$addController(controller, action, executionUnit);

@@ -13,18 +13,26 @@
     this.$$viewBag = new window.stik.ViewBag(template);
   }
 
-  Context.prototype.$load = function(modules){
+  Context.prototype.$load = function(modules, selector){
     var dependencies = this.$resolveDependencies(
-      this.$mergeModules(modules)
+      this.$mergeModules(modules, selector)
     );
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsBound();
   };
 
-  Context.prototype.$mergeModules = function(modules){
+  Context.prototype.$wrapTemplate = function(template, selector) {
+    if (selector) {
+      return selector(template);
+    } else{
+      return template;
+    }
+  };
+
+  Context.prototype.$mergeModules = function(modules, selector){
     modules.$context = this;
-    modules.$template = this.$$template;
+    modules.$template = this.$wrapTemplate(this.$$template, selector);
     modules.$viewBag = this.$$viewBag;
 
     return modules;
