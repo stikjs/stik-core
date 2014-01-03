@@ -118,21 +118,21 @@
     });
 
     stik.behavior("first-click", function($template){
-      $template.addEventListener("click", function(){
+      $template.click(function(){
         alert("First Click!");
-      })
+      });
     });
 
     stik.behavior("second-click", function($template){
-      $template.addEventListener("click", function(){
+      $template.click(function(){
         alert("Second Click!");
-      })
+      });
     });
 
     stik.behavior("third-click", function($template){
-      $template.addEventListener("click", function(){
+      $template.click(function(){
         alert("Third Click!");
-      })
+      });
     });
   </script>
 </body>
