@@ -7,15 +7,15 @@ describe("Load DOM Library", function() {
     delete window.document.id
   });
 
-
-  it("should discover if jQuery is loaded", function() {
+  it("should discover if MooTools is loaded", function() {
     var DOMLibLoader;
 
-    window.jQuery = jasmine.createSpy("jQuery");
+    window.MooTools = jasmine.createSpy("MooTools");
+    window.document.id = jasmine.createSpy("MooTools Selector");
 
     expect(
       stik.DOMLibLoader.$currentDOMSelector()
-    ).toEqual(jQuery);
+    ).toEqual(window.document.id);
   });
 
   it("should discover if Zepto is loaded", function() {
@@ -28,14 +28,13 @@ describe("Load DOM Library", function() {
     ).toEqual(Zepto);
   });
 
-  it("should discover if MooTools is loaded", function() {
+  it("should discover if jQuery is loaded", function() {
     var DOMLibLoader;
 
-    window.MooTools = jasmine.createSpy("MooTools");
-    window.document.id = jasmine.createSpy("MooTools Selector");
+    window.jQuery = jasmine.createSpy("jQuery");
 
     expect(
       stik.DOMLibLoader.$currentDOMSelector()
-    ).toEqual(window.document.id);
+    ).toEqual(jQuery);
   });
 });
