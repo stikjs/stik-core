@@ -29,7 +29,8 @@
       throw "no one is waiting for this message";
     }
 
-    for (var i = 0; i < openers.length; i++) {
+    i = openers.length;
+    while (i--) {
       openers[i].$$opener(message);
     }
   };
