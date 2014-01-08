@@ -23,7 +23,8 @@
   };
 
   Injector.prototype.$grabModules = function(args){
-    var dependencies = [], module;
+    var module,
+        dependencies = [];
 
     if (args.length === 1 && args[0] === '') { return []; }
 

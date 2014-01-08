@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.6.0 | From: 08-01-2014
+// Version: 0.6.0 | From: 09-01-2014
 
 window.stik = {};
 
@@ -32,8 +32,10 @@ window.stik = {};
     this.$markAsBound();
   };
 
-  Context.prototype.$wrapTemplate = function(template, selector) {
-    return (selector ? selector(template) : template);
+  Context.prototype.$resolveDependencies = function(modules){
+    var injector = new window.stik.Injector(this.$$executionUnit, modules);
+
+    return injector.$resolveDependencies();
   };
 
   Context.prototype.$mergeModules = function(modules, selector){
@@ -44,10 +46,8 @@ window.stik = {};
     return modules;
   };
 
-  Context.prototype.$resolveDependencies = function(modules){
-    var injector = new window.stik.Injector(this.$$executionUnit, modules);
-
-    return injector.$resolveDependencies();
+  Context.prototype.$wrapTemplate = function(template, selector) {
+    return (selector ? selector(template) : template);
   };
 
   Context.prototype.$markAsBound = function(){
@@ -104,12 +104,12 @@ window.stik = {};
   }
 
   Courier.prototype.$receive = function(box, opener){
-    var subscription = new Subscription(box, opener);
+    var self = this,
+        subscription = new Subscription(box, opener);
 
     this.$$subscriptions[box] = (this.$$subscriptions[box] || []);
     this.$$subscriptions[box].push(subscription);
 
-    var self = this;
     return function(){
       self.$unsubscribe(subscription);
     };
@@ -172,7 +172,8 @@ window.stik = {};
   };
 
   Injector.prototype.$grabModules = function(args){
-    var dependencies = [], module;
+    var module,
+        dependencies = [];
 
     if (args.length === 1 && args[0] === '') { return []; }
 

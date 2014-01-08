@@ -21,8 +21,10 @@
     this.$markAsBound();
   };
 
-  Context.prototype.$wrapTemplate = function(template, selector) {
-    return (selector ? selector(template) : template);
+  Context.prototype.$resolveDependencies = function(modules){
+    var injector = new window.stik.Injector(this.$$executionUnit, modules);
+
+    return injector.$resolveDependencies();
   };
 
   Context.prototype.$mergeModules = function(modules, selector){
@@ -33,10 +35,8 @@
     return modules;
   };
 
-  Context.prototype.$resolveDependencies = function(modules){
-    var injector = new window.stik.Injector(this.$$executionUnit, modules);
-
-    return injector.$resolveDependencies();
+  Context.prototype.$wrapTemplate = function(template, selector) {
+    return (selector ? selector(template) : template);
   };
 
   Context.prototype.$markAsBound = function(){
