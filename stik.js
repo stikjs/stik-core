@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.6.0 | From: 03-01-2014
+// Version: 0.6.0 | From: 08-01-2014
 
 window.stik = {};
 
@@ -129,7 +129,8 @@ window.stik = {};
       throw "no one is waiting for this message";
     }
 
-    for (var i = 0; i < openers.length; i++) {
+    i = openers.length;
+    while (i--) {
       openers[i].$$opener(message);
     }
   };
@@ -312,7 +313,9 @@ window.stik = {};
   };
 
   Manager.prototype.$isBehaviorRegistered = function(name){
-    for (var i = 0; i < this.$$behaviors.length; i++) {
+    var i = this.$$behaviors.length;
+
+    while (i--) {
       if (this.$$behaviors[i].$$name === name) {
         return true;
       }
@@ -346,8 +349,10 @@ window.stik = {};
   };
 
   Manager.prototype.$buildContexts = function(){
-    var controller, action, executionUnit;
-    var boundAny = false;
+    var controller,
+        action,
+        executionUnit,
+        boundAny = false;
 
     if (Object.keys(this.$$executionUnits).length === 0){
       throw "no execution units available";
@@ -366,11 +371,11 @@ window.stik = {};
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
-    var context, templates;
+    var templates = this.$findControllerTemplates(controller, action),
+        i         = templates.length,
+        context;
 
-    templates = this.$findControllerTemplates(controller, action);
-
-    for (var i = 0; i < templates.length; i++) {
+    while (i--) {
       context = this.$storeContext(controller, action, templates[i], executionUnit);
       context.$load(this.$$modules, this.$$selector);
     }
@@ -379,9 +384,10 @@ window.stik = {};
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
-    var templates = this.$findBehaviorTemplates(behavior);
+    var templates = this.$findBehaviorTemplates(behavior),
+        i         = templates.length;
 
-    for (var i = 0; i < templates.length; i++) {
+    while (i--) {
       behavior.$load(templates[i], this.$$modules, this.$$selector);
     }
 
@@ -389,9 +395,10 @@ window.stik = {};
   };
 
   Manager.prototype.$applyBehaviors = function(){
-    var boundAny = false;
+    var boundAny = false,
+        i        = this.$$behaviors.length;
 
-    for (var i = 0; i < this.$$behaviors.length; i++) {
+    while (i--) {
       if (this.$applyBehavior(this.$$behaviors[i])) {
         boundAny = true;
       }
