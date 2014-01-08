@@ -4,12 +4,12 @@
   }
 
   Courier.prototype.$receive = function(box, opener){
-    var subscription = new Subscription(box, opener);
+    var self = this,
+        subscription = new Subscription(box, opener);
 
     this.$$subscriptions[box] = (this.$$subscriptions[box] || []);
     this.$$subscriptions[box].push(subscription);
 
-    var self = this;
     return function(){
       self.$unsubscribe(subscription);
     };

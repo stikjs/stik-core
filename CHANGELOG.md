@@ -1,4 +1,4 @@
-# 0.6.0 (2014-01-05)
+# 0.6.0 (2014-01-15)
 
 ##Features
 - **$wrapTemplate** Now identifies if MooTools, Zepto or jQuery are loaded and wraps the $template before injection with the respective library
