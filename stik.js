@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.6.0 | From: 09-01-2014
+// Version: 0.6.0 | From: 11-01-2014
 
 window.stik = {};
 
@@ -263,8 +263,16 @@ window.stik = {};
       dataToBind = fields[i].getAttribute(bindingKey);
 
       if (dataSet[dataToBind]) {
-        fields[i].textContent = dataSet[dataToBind];
+        this.$updateElementValue(fields[i], dataSet[dataToBind]);
       }
+    }
+  };
+
+  ViewBag.prototype.$updateElementValue = function(element, value){
+    if(element.nodeName === "input" || element.nodeName === "textarea") {
+      element.value = value;
+    } else {
+      element.textContent = value;
     }
   };
 

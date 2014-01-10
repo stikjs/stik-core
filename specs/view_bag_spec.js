@@ -78,6 +78,35 @@ describe("ViewBag", function(){
       ).toEqual(data.userName);
     });
 
+    it("should update input elements", function(){
+      var template, viewBag, data;
+
+      template = new DOMParser().parseFromString(
+        '<div>'+
+          '<input type="text" data-bind="speaker" />' +
+          '<textarea data-bind="catchPhrase"></textarea>' +
+        '</div>',
+        "text/xml"
+      ).firstChild;
+
+      viewBag = new stik.ViewBag(template);
+
+      data = {
+        speaker: "Darth Vader",
+        catchPhrase: "I'm you father!!"
+      };
+
+      viewBag.$render(data);
+
+      expect(
+        template.getElementsByTagName("input")[0].value
+      ).toEqual(data.speaker);
+
+      expect(
+        template.getElementsByTagName("textarea")[0].value
+      ).toEqual(data.catchPhrase);
+    });
+
     it("should only try to bind properties that are in the object", function(){
       var template, viewBag, data;
 

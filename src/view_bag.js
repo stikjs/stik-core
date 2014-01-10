@@ -14,8 +14,16 @@
       dataToBind = fields[i].getAttribute(bindingKey);
 
       if (dataSet[dataToBind]) {
-        fields[i].textContent = dataSet[dataToBind];
+        this.$updateElementValue(fields[i], dataSet[dataToBind]);
       }
+    }
+  };
+
+  ViewBag.prototype.$updateElementValue = function(element, value){
+    if(element.nodeName === "input" || element.nodeName === "textarea") {
+      element.value = value;
+    } else {
+      element.textContent = value;
     }
   };
 
