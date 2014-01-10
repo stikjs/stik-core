@@ -12,6 +12,7 @@
 ##Bug
 - **$findBehaviorTemplates** Fixing duplicate selection while lazily binding
   ([a1de0ae885](https://github.com/lukelex/stik.js/commit/a1de0ae885e5ba14947d908d0a4838c325c2b50d))
+- **$viewBag** Fixing $viewBag to update input elements as well ([48cbf69aeb](https://github.com/lukelex/stik.js/commit/48cbf69aebe0571a2bf30e3598846cb07374401a))
 
 # 0.5.2 (2013-12-28)
 
