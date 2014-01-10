@@ -212,8 +212,9 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
   // values that it will use
   $viewBag.$render({
     senderName: "Darth Vader",
-    receiverName: "Luke Skywalker"
-    message: "I'm your father!"
+    receiverName: "Luke Skywalker",
+    message: "I'm your father!",
+    customNOOO: "NOOOOOO!!!"
   });
 });
 ```
@@ -222,6 +223,7 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
   <span data-bind="senderName"></span>
   <span data-bind="receiverName"></span>
   <span data-bind="message"></span>
+  <input data-bind="customNOOO"/>
 </div>
 ```
 
