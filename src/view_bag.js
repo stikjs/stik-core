@@ -20,7 +20,7 @@
   };
 
   ViewBag.prototype.$updateElementValue = function(element, value){
-    if(element.nodeName === "input" || element.nodeName === "textarea") {
+    if(element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA") {
       element.value = value;
     } else {
       element.textContent = value;
