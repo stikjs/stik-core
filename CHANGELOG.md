@@ -3,7 +3,7 @@
 ##Features
 - **$wrapTemplate** Now identifies if MooTools, Zepto or jQuery are loaded and wraps the $template before injection with the respective library
 
-##Fix
+##Improvements
 - **.bindLazy** Now tries to apply both behaviors and controllers
   ([144f1beb0e](https://github.com/lukelex/stik.js/commit/144f1beb0edeed724ac520f62f7b50b3af6cd82a))
 - **.behavior** Now prepends a `bh-` en every behavior for a clear separation of styling and behavior classes.
@@ -16,7 +16,7 @@
 
 # 0.5.2 (2013-12-28)
 
-##Fix
+##Improvements
 - **$injector** Now fails while trying to add an inexisting module
   ([78ceb14091](https://github.com/lukelex/stik.js/commit/78ceb140911db72888da751f05e3ce30dd93faa2))
 - **$hash** $urlState now supports $hash
@@ -24,7 +24,7 @@
 
 # 0.5.1 (2013-12-27)
 
-## Fix
+##Improvements
 - **.behavior** now can inject $courier and $urlState
   ([1b0d5ab65e](https://github.com/lukelex/stik.js/commit/1b0d5ab65e7944cbcc4c4ecc79ff47d05628b6d1))
 
