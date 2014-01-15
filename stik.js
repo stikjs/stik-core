@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.6.0 | From: 11-01-2014
+// Version: 0.6.0 | From: 15-01-2014
 
 window.stik = {};
 
@@ -51,7 +51,7 @@ window.stik = {};
   };
 
   Context.prototype.$markAsBound = function(){
-    this.$$template.className += ' stik-bound';
+    this.$$template.className = (this.$$template.className + ' stik-bound').trim();
   };
 
   window.stik.Context = Context;
