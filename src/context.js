@@ -40,7 +40,7 @@
   };
 
   Context.prototype.$markAsBound = function(){
-    this.$$template.className += ' stik-bound';
+    this.$$template.className = (this.$$template.className + ' stik-bound').trim();
   };
 
   window.stik.Context = Context;
