@@ -116,7 +116,7 @@ describe("Context", function(){
   });
 
   describe("$markAsBound", function(){
-    it("should flag the template as bound", function(){
+    it("being to only class", function(){
       var context, template, attribute;
 
       template = document.createElement("div");
@@ -125,10 +125,10 @@ describe("Context", function(){
 
       context.$markAsBound();
 
-      expect(template.className).toEqual(" stik-bound");
+      expect(template.className).toEqual("stik-bound");
     });
 
-    it("should not messup current classes", function(){
+    it("having another class in the template", function(){
       var context, template, attribute;
 
       template = document.createElement("div");
