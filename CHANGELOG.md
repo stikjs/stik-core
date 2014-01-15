@@ -8,6 +8,7 @@
   ([144f1beb0e](https://github.com/lukelex/stik.js/commit/144f1beb0edeed724ac520f62f7b50b3af6cd82a))
 - **.behavior** Now prepends a `bh-` en every behavior for a clear separation of styling and behavior classes.
   ([3dd74d0dc3](https://github.com/lukelex/stik.js/commit/3dd74d0dc331ef2605d0489b9c1bf7eaeaf4c523))
+- **$markAsBound** bound class flag doesn't include unecessary spacing ([d4d2e5253b](https://github.com/lukelex/stik.js/commit/d4d2e5253b2794f28a776d707a37016a7ffb7421))
 
 ##Bug
 - **$findBehaviorTemplates** Fixing duplicate selection while lazily binding
