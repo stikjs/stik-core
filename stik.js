@@ -314,7 +314,7 @@ window.stik = {};
       throw "behavior already exist with the specified name";
     }
 
-    behavior = this.$createBehavior(name, executionUnit)
+    behavior = this.$createBehavior(name, executionUnit);
     this.$$behaviors.push(behavior);
     this.$applyBehavior(behavior);
 
@@ -414,7 +414,7 @@ window.stik = {};
     }
 
     return boundAny;
-  }
+  };
 
   Manager.prototype.$findControllerTemplates = function(controller, action, DOMInjection){
     var DOMHandler = document;
@@ -452,7 +452,7 @@ window.stik = {};
         return window.jQuery;
       }
     }
-  }
+  };
 
   window.stik.DOMLibLoader = DOMLibLoader;
 })();
@@ -460,7 +460,7 @@ window.stik = {};
 (function() {
   if (window.stik.$$manager){
     throw "Stik.js is already loaded. Check your requires ;)";
-  };
+  }
 
   window.stik.$$manager = new window.stik.Manager({
     $courier: new window.stik.Courier(),
@@ -481,7 +481,7 @@ window.stik = {};
 
   window.stik.bindLazy = function(){
     if (!this.$$manager.$buildContexts() & !this.$$manager.$applyBehaviors()) {
-      throw "nothing to bind!"
+      throw "nothing to bind!";
     }
   };
 })();

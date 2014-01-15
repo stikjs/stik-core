@@ -11,7 +11,7 @@
         return window.jQuery;
       }
     }
-  }
+  };
 
   window.stik.DOMLibLoader = DOMLibLoader;
 })();

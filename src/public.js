@@ -1,7 +1,7 @@
 (function() {
   if (window.stik.$$manager){
     throw "Stik.js is already loaded. Check your requires ;)";
-  };
+  }
 
   window.stik.$$manager = new window.stik.Manager({
     $courier: new window.stik.Courier(),
@@ -22,7 +22,7 @@
 
   window.stik.bindLazy = function(){
     if (!this.$$manager.$buildContexts() & !this.$$manager.$applyBehaviors()) {
-      throw "nothing to bind!"
+      throw "nothing to bind!";
     }
   };
 })();

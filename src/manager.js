@@ -23,7 +23,7 @@
       throw "behavior already exist with the specified name";
     }
 
-    behavior = this.$createBehavior(name, executionUnit)
+    behavior = this.$createBehavior(name, executionUnit);
     this.$$behaviors.push(behavior);
     this.$applyBehavior(behavior);
 
@@ -123,7 +123,7 @@
     }
 
     return boundAny;
-  }
+  };
 
   Manager.prototype.$findControllerTemplates = function(controller, action, DOMInjection){
     var DOMHandler = document;
