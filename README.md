@@ -221,7 +221,7 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
   var dataset = $viewBag.$pull();
   // this will return an object with the following structure
   // {
-  //   senderName: "Dartg Vader",
+  //   senderName: "Darth Vader",
   //   receiverName: "Luke Skywalker",
   //   message: "I'm your father!",
   //   customNOOO: "NOOOOOO!!!"
