@@ -53,7 +53,7 @@ describe("ViewBag", function(){
 
       data = {
         userName: 'Luke Skywalker',
-        removal: 'Remove Luke Skywalker'
+        removal: 'kill Luke Skywalker'
       };
 
       viewBag.$push(data);
@@ -140,6 +140,42 @@ describe("ViewBag", function(){
       expect(
         template.getElementsByTagName("strong")[0].textContent
       ).toEqual("");
+    });
+  });
+
+  describe("#pull", function(){
+    it("out of one bound node", function(){
+      var template, viewBag;
+
+      template = new DOMParser().parseFromString(
+        '<div data-bind="userName">Luke Skywalker</div>',
+        "text/xml"
+      ).firstChild;
+
+      viewBag = new stik.ViewBag(template);
+
+      dataSet = viewBag.$pull();
+
+      expect(dataSet.userName).toEqual("Luke Skywalker");
+    });
+
+    it("out of multiple bound nodes", function(){
+      var template, viewBag;
+
+      template = new DOMParser().parseFromString(
+        '<div>'+
+          '<span data-bind="userName">Luke Skywalker</span>' +
+          '<a href="#" data-bind="removal">kill Luke Skywalker</a>' +
+        '</div>',
+        "text/xml"
+      ).firstChild;
+
+      viewBag = new stik.ViewBag(template);
+
+      dataSet = viewBag.$pull();
+
+      expect(dataSet.userName).toEqual("Luke Skywalker");
+      expect(dataSet.removal).toEqual("kill Luke Skywalker");
     });
   });
 });
