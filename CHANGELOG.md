@@ -1,8 +1,10 @@
 # 0.7.0 (2014-01-25)
 
 ##Features
-- **$push** $viewBag uses $push to push new data into the view ([a0fbbacd0c](https://github.com/lukelex/stik.js/commit/a0fbbacd0cd322a32e191b9a75cf2ca43f865283))
 - **$pull** $viewBag can have its bound data pulled out of the DOM as a dataset ([1387dd8dc0](https://github.com/lukelex/stik.js/commit/1387dd8dc004aa93ebdb6924948ec8890e042a2b))
+
+##Improvements
+- **$push** $viewBag uses $push to push new data into the view ([a0fbbacd0c](https://github.com/lukelex/stik.js/commit/a0fbbacd0cd322a32e191b9a75cf2ca43f865283))
 
 # 0.6.0 (2014-01-15)
 
