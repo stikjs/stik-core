@@ -12,6 +12,14 @@ describe("ViewBag", function(){
   });
 
   describe("#$render", function(){
+    it("should delegate to #push", function(){
+      var viewBag = new stik.ViewBag();
+
+      expect(viewBag.$render).toEqual(viewBag.$push);
+    });
+  });
+
+  describe("#$push", function(){
     it("with a single binding", function(){
       var template, viewBag, data;
 
@@ -23,7 +31,7 @@ describe("ViewBag", function(){
 
       data = {userName: 'Luke Skywalker'};
 
-      viewBag.$render(data);
+      viewBag.$push(data);
 
       expect(
         template.textContent
@@ -48,7 +56,7 @@ describe("ViewBag", function(){
         removal: 'Remove Luke Skywalker'
       };
 
-      viewBag.$render(data);
+      viewBag.$push(data);
 
       expect(
         template.getElementsByTagName("span")[0].textContent
@@ -71,7 +79,7 @@ describe("ViewBag", function(){
 
       data = {userName: 'Luke Skywalker'};
 
-      viewBag.$render(data);
+      viewBag.$push(data);
 
       expect(
         template.textContent
@@ -96,7 +104,7 @@ describe("ViewBag", function(){
         catchPhrase: "I'm you father!!"
       };
 
-      viewBag.$render(data);
+      viewBag.$push(data);
 
       expect(
         template.getElementsByTagName("input")[0].value
@@ -123,7 +131,7 @@ describe("ViewBag", function(){
 
       data = {userName: 'Luke Skywalker'};
 
-      viewBag.$render(data);
+      viewBag.$push(data);
 
       expect(
         template.getElementsByTagName("span")[0].textContent

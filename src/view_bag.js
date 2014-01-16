@@ -5,7 +5,7 @@
     this.$$template = template;
   }
 
-  ViewBag.prototype.$render = function(dataSet){
+  ViewBag.prototype.$push = function(dataSet){
     var fields, dataToBind;
 
     fields = this.$fieldsToBind();
@@ -18,6 +18,8 @@
       }
     }
   };
+
+  ViewBag.prototype.$render = ViewBag.prototype.$push;
 
   ViewBag.prototype.$updateElementValue = function(element, value){
     if(element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA") {

@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.6.0 | From: 15-01-2014
+// Version: 0.6.0 | From: 16-01-2014
 
 window.stik = {};
 
@@ -254,7 +254,7 @@ window.stik = {};
     this.$$template = template;
   }
 
-  ViewBag.prototype.$render = function(dataSet){
+  ViewBag.prototype.$push = function(dataSet){
     var fields, dataToBind;
 
     fields = this.$fieldsToBind();
@@ -267,6 +267,8 @@ window.stik = {};
       }
     }
   };
+
+  ViewBag.prototype.$render = ViewBag.prototype.$push;
 
   ViewBag.prototype.$updateElementValue = function(element, value){
     if(element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA") {
