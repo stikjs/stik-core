@@ -1,4 +1,4 @@
-#Stik.js
+![Stik.js Logo](https://raw.github.com/lukelex/stik.js/master/stik.js.png)
 
 [![Build Status](https://travis-ci.org/lukelex/stik.js.png?branch=master)](https://travis-ci.org/lukelex/stik.js)
 [![Code Climate](https://codeclimate.com/github/lukelex/stik.js.png)](https://codeclimate.com/github/lukelex/stik.js)
