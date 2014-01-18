@@ -20,6 +20,9 @@ describe("Behavior", function(){
       expect(function(){
         new stik.Behavior("some-behavior");
       }).toThrow("executionUnit is missing");
+      expect(function(){
+        new stik.Behavior("some behavior");
+      }).toThrow("invalid name. Please use dash(-) instead of spaces");
     });
   });
 

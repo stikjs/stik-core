@@ -2,8 +2,9 @@
   var behaviorKey = "data-behaviors", namePrefix = "bh";
 
   function Behavior(name, executionUnit){
-    if (!name)          { throw "name is missing"; }
-    if (!executionUnit) { throw "executionUnit is missing"; }
+    if (!name)                   { throw "name is missing"; }
+    if (name.indexOf(" ") != -1) { throw "invalid name. Please use dash(-) instead of spaces"; }
+    if (!executionUnit)          { throw "executionUnit is missing"; }
 
     this.$$className     = name;
     this.$$name          = namePrefix + "-" + name;
