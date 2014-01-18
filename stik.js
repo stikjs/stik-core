@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.0 | From: 16-01-2014
+// Version: 0.7.0 | From: 18-01-2014
 
 window.stik = {};
 
@@ -104,15 +104,12 @@ window.stik = {};
   }
 
   Courier.prototype.$receive = function(box, opener){
-    var self = this,
-        subscription = new Subscription(box, opener);
+    var subscription = new Subscription(box, opener);
 
     this.$$subscriptions[box] = (this.$$subscriptions[box] || []);
     this.$$subscriptions[box].push(subscription);
 
-    return function(){
-      self.$unsubscribe(subscription);
-    };
+    return this.$unsubscribe.bind(this, subscription);
   };
 
   Courier.prototype.$unsubscribe = function(subscription){
