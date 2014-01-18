@@ -12,10 +12,6 @@
     window.stik.$$manager.$addController(controller, action, executionUnit);
   };
 
-  window.stik.register = function(controller, action, executionUnit){
-    window.stik.controller(controller, action, executionUnit);
-  };
-
   window.stik.behavior = function(name, executionUnit){
     return this.$$manager.$addBehavior(name, executionUnit);
   };

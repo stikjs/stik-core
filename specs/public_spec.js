@@ -1,4 +1,4 @@
-describe("Main", function(){
+describe("Public", function(){
   it(".controller", function(){
     var controller, action, executionUnit;
 
@@ -12,22 +12,6 @@ describe("Main", function(){
 
     expect(
       stik.$$manager.$addController
-    ).toHaveBeenCalledWith(controller, action, executionUnit);
-  });
-
-  it(".register", function(){
-    var controller, action, executionUnit;
-
-    controller    = "AppCtrl";
-    action        = "Login";
-    executionUnit = function(){};
-
-    spyOn(stik, "controller");
-
-    stik.register(controller, action, executionUnit);
-
-    expect(
-      stik.controller
     ).toHaveBeenCalledWith(controller, action, executionUnit);
   });
 
