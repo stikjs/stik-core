@@ -15,6 +15,21 @@ describe("Public", function(){
     ).toHaveBeenCalledWith(controller, action, executionUnit);
   });
 
+  it(".behavior", function(){
+    var name, executionUnit;
+
+    name          = "some-behavior"
+    executionUnit = function(){};
+
+    spyOn(stik.$$manager, "$addBehavior");
+
+    stik.behavior(name, executionUnit);
+
+    expect(
+      stik.$$manager.$addBehavior
+    ).toHaveBeenCalledWith(name, executionUnit);
+  });
+
   describe(".bindLazy", function(){
     it("when ok", function(){
       spyOn(stik.$$manager, "$buildContexts").andReturn(true);
@@ -54,20 +69,5 @@ describe("Public", function(){
         stik.bindLazy()
       }).toThrow("nothing to bind!");
     });
-  });
-
-  it(".behavior", function(){
-    var name, executionUnit;
-
-    name          = "some-behavior"
-    executionUnit = function(){};
-
-    spyOn(stik.$$manager, "$addBehavior");
-
-    stik.behavior(name, executionUnit);
-
-    expect(
-      stik.$$manager.$addBehavior
-    ).toHaveBeenCalledWith(name, executionUnit);
   });
 });
