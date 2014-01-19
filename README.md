@@ -1,6 +1,6 @@
 ![Stik.js Logo](https://raw.github.com/lukelex/stik.js/master/stik.js.png)
 
-[![Build Status](https://travis-ci.org/lukelex/stik.js.png?branch=master)](https://travis-ci.org/lukelex/stik.js)
+[![Build Status](https://travis-ci.org/stikjs/stik.js.png?branch=master)](https://travis-ci.org/stikjs/stik.js)
 [![Code Climate](https://codeclimate.com/github/lukelex/stik.js.png)](https://codeclimate.com/github/lukelex/stik.js)
 [![Coverage Status](https://coveralls.io/repos/lukelex/stik.js/badge.png)](https://coveralls.io/r/lukelex/stik.js)
 
