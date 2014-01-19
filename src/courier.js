@@ -20,7 +20,9 @@
   };
 
   Courier.prototype.$send = function(box, message){
-    var openers = this.$$subscriptions[box];
+    var openers, i;
+
+    openers = this.$$subscriptions[box];
 
     if (!openers || openers.length === 0) {
       throw "no one is waiting for this message";

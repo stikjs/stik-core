@@ -62,7 +62,7 @@ window.stik = {};
 
   function Behavior(name, executionUnit){
     if (!name)                   { throw "name is missing"; }
-    if (name.indexOf(" ") != -1) { throw "invalid name. Please use dash(-) instead of spaces"; }
+    if (name.indexOf(" ") !== -1) { throw "invalid name. Please use dash(-) instead of spaces"; }
     if (!executionUnit)          { throw "executionUnit is missing"; }
 
     this.$$className     = name;
@@ -90,6 +90,8 @@ window.stik = {};
   };
 
   Behavior.prototype.$markAsApplyed = function(template){
+    var behaviors;
+
     behaviors = template.getAttribute(behaviorKey);
     behaviors = ((behaviors || "") + " " + this.$$name).trim();
 
@@ -101,12 +103,12 @@ window.stik = {};
 
 (function(){
   function Boundary(as, to){
-    if (as.indexOf(" ") != -1) { throw "Invalid 'as'. Can't have spaces" }
-    if (!to)                   { throw "Invalid 'to'. Can't be null" }
+    if (as.indexOf(" ") !== -1) { throw "Invalid 'as'. Can't have spaces"; }
+    if (!to)                    { throw "Invalid 'to'. Can't be null"; }
 
     this.$$as = as;
     this.$$to = to;
-  };
+  }
 
   window.stik.Boundary = Boundary;
 })();
@@ -133,7 +135,9 @@ window.stik = {};
   };
 
   Courier.prototype.$send = function(box, message){
-    var openers = this.$$subscriptions[box];
+    var openers, i;
+
+    openers = this.$$subscriptions[box];
 
     if (!openers || openers.length === 0) {
       throw "no one is waiting for this message";
@@ -361,7 +365,7 @@ window.stik = {};
 
     this.$validateFrom(from);
 
-    boundary = new stik.Boundary(as, to);
+    boundary = new window.stik.Boundary(as, to);
     this.$$boundaries[from.toLowerCase()][as] = boundary;
 
     return boundary;
@@ -370,7 +374,7 @@ window.stik = {};
   Manager.prototype.$validateFrom = function(from){
     var loweredFrom = from.toLowerCase();
 
-    if (loweredFrom != "controller" && loweredFrom != "behavior") {
+    if (loweredFrom !== "controller" && loweredFrom !== "behavior") {
       throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
     }
   };
@@ -451,7 +455,7 @@ window.stik = {};
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
-    var templates, modules, i, context;
+    var templates, modules, i;
 
     templates = this.$findBehaviorTemplates(behavior);
     modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.behavior);
@@ -471,7 +475,7 @@ window.stik = {};
   Manager.prototype.$applyBehaviors = function(){
     var boundAny, i;
 
-    boundAny = false,
+    boundAny = false;
     i        = this.$$behaviors.length;
 
     while (i--) {

@@ -36,7 +36,7 @@
 
     this.$validateFrom(from);
 
-    boundary = new stik.Boundary(as, to);
+    boundary = new window.stik.Boundary(as, to);
     this.$$boundaries[from.toLowerCase()][as] = boundary;
 
     return boundary;
@@ -45,7 +45,7 @@
   Manager.prototype.$validateFrom = function(from){
     var loweredFrom = from.toLowerCase();
 
-    if (loweredFrom != "controller" && loweredFrom != "behavior") {
+    if (loweredFrom !== "controller" && loweredFrom !== "behavior") {
       throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
     }
   };
@@ -126,7 +126,7 @@
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
-    var templates, modules, i, context;
+    var templates, modules, i;
 
     templates = this.$findBehaviorTemplates(behavior);
     modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.behavior);
@@ -146,7 +146,7 @@
   Manager.prototype.$applyBehaviors = function(){
     var boundAny, i;
 
-    boundAny = false,
+    boundAny = false;
     i        = this.$$behaviors.length;
 
     while (i--) {
