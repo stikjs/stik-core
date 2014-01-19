@@ -19,8 +19,6 @@
     }
   };
 
-  ViewBag.prototype.$render = ViewBag.prototype.$push;
-
   ViewBag.prototype.$pull = function(){
     var fields, dataSet, key;
 
