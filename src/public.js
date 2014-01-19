@@ -21,4 +21,12 @@
       throw "nothing to bind!";
     }
   };
+
+  window.stik.boundary = function(boundary){
+    this.$$manager.$addBoundary(
+      boundary.as,
+      boundary.from,
+      boundary.to
+    );
+  };
 })();

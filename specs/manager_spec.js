@@ -12,6 +12,8 @@ describe("Manager", function(){
       expect(manager.$$contexts).toEqual([]);
       expect(manager.$$behaviors).toEqual([]);
       expect(manager.$$executionUnits).toEqual({});
+      expect(manager.$$executionUnits).toEqual({});
+      expect(manager.$$boundaries).toEqual({controller:{}, behavior:{}});
     });
   });
 
@@ -53,6 +55,76 @@ describe("Manager", function(){
       expect(
         manager.$bindExecutionUnit
       ).toHaveBeenCalledWith(controller, action, executionUnit);
+    });
+  });
+
+  describe("#$addBoundary", function(){
+    it("when not ok", function(){
+      var manager = new stik.Manager();
+
+      expect(function(){
+        manager.$addBoundary("CustomObj", "different", {});
+      }).toThrow("Invalid 'from'. Needs to be 'controller' or 'behavior'");
+
+      expect(function(){
+        manager.$addBoundary("with space", "controller", {});
+      }).toThrow("Invalid 'as'. Can't have spaces");
+
+      expect(function(){
+        manager.$addBoundary("CustomObj", "controller", null);
+      }).toThrow("Invalid 'to'. Can't be null");
+    });
+
+    it("should create a new controller boundary", function(){
+      var manager;
+
+      manager = new stik.Manager();
+
+      manager.$addBoundary("CustomObj", "controller", function(){});
+
+      expect(
+        manager.$$boundaries.controller["CustomObj"]
+      ).toBeDefined();
+    });
+
+    it("should be injectable into a behavior", function(){
+      var manager, executionUnit, injectable, template, result;
+
+      manager = new stik.Manager();
+
+      injectable = function(){};
+      manager.$addBoundary("CustomFunc", "behavior", injectable);
+
+      template = new DOMParser().parseFromString(
+        '<div class="new-behavior"></div>', "text/xml"
+      ).firstChild;
+      spyOn(manager, "$findBehaviorTemplates").andReturn([template]);
+
+      manager.$addBehavior("new-behavior", function(CustomFunc){
+        result = CustomFunc;
+      });
+
+      expect(result).toEqual(injectable);
+    });
+
+    it("should be injectable into a controller", function(){
+      var manager, executionUnit, injectable, template, result;
+
+      manager = new stik.Manager();
+
+      injectable = {};
+      manager.$addBoundary("CustomObj", "controller", injectable);
+
+      template = new DOMParser().parseFromString(
+        '<div data-controller="AppCtrl" data-action="List"></div>', "text/xml"
+      ).firstChild;
+      spyOn(manager, "$findControllerTemplates").andReturn([template]);
+
+      manager.$addController("AppCtrl", "List", function(CustomObj){
+        result = CustomObj;
+      });
+
+      expect(result).toEqual(injectable);
     });
   });
 

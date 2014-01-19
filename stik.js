@@ -5,7 +5,7 @@
 //            See https://github.com/lukelex/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.0 | From: 18-01-2014
+// Version: 0.7.0 | From: 19-01-2014
 
 window.stik = {};
 
@@ -61,8 +61,9 @@ window.stik = {};
   var behaviorKey = "data-behaviors", namePrefix = "bh";
 
   function Behavior(name, executionUnit){
-    if (!name)          { throw "name is missing"; }
-    if (!executionUnit) { throw "executionUnit is missing"; }
+    if (!name)                   { throw "name is missing"; }
+    if (name.indexOf(" ") != -1) { throw "invalid name. Please use dash(-) instead of spaces"; }
+    if (!executionUnit)          { throw "executionUnit is missing"; }
 
     this.$$className     = name;
     this.$$name          = namePrefix + "-" + name;
@@ -96,6 +97,18 @@ window.stik = {};
   };
 
   window.stik.Behavior = Behavior;
+})();
+
+(function(){
+  function Boundary(as, to){
+    if (as.indexOf(" ") != -1) { throw "Invalid 'as'. Can't have spaces" }
+    if (!to)                   { throw "Invalid 'to'. Can't be null" }
+
+    this.$$as = as;
+    this.$$to = to;
+  };
+
+  window.stik.Boundary = Boundary;
 })();
 
 (function(){
@@ -317,6 +330,7 @@ window.stik = {};
     this.$$executionUnits = {};
     this.$$modules        = modules || {};
     this.$$selector       = selector;
+    this.$$boundaries     = {controller:{}, behavior:{}};
   }
 
   Manager.prototype.$addController = function(controller, action, executionUnit){
@@ -340,6 +354,25 @@ window.stik = {};
     this.$applyBehavior(behavior);
 
     return behavior;
+  };
+
+  Manager.prototype.$addBoundary = function(as, from, to){
+    var boundary;
+
+    this.$validateFrom(from);
+
+    boundary = new stik.Boundary(as, to);
+    this.$$boundaries[from.toLowerCase()][as] = boundary;
+
+    return boundary;
+  };
+
+  Manager.prototype.$validateFrom = function(from){
+    var loweredFrom = from.toLowerCase();
+
+    if (loweredFrom != "controller" && loweredFrom != "behavior") {
+      throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
+    }
   };
 
   Manager.prototype.$isBehaviorRegistered = function(name){
@@ -401,32 +434,45 @@ window.stik = {};
   };
 
   Manager.prototype.$bindExecutionUnit = function(controller, action, executionUnit){
-    var templates = this.$findControllerTemplates(controller, action),
-        i         = templates.length,
-        context;
+    var templates, modules, i, context;
+
+    templates = this.$findControllerTemplates(controller, action);
+    modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.controller);
+    i         = templates.length;
 
     while (i--) {
-      context = this.$storeContext(controller, action, templates[i], executionUnit);
-      context.$load(this.$$modules, this.$$selector);
+      context = this.$storeContext(
+        controller, action, templates[i], executionUnit
+      );
+      context.$load(modules, this.$$selector);
     }
 
     return templates.length > 0;
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
-    var templates = this.$findBehaviorTemplates(behavior),
-        i         = templates.length;
+    var templates, modules, i, context;
+
+    templates = this.$findBehaviorTemplates(behavior);
+    modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.behavior);
+    i         = templates.length;
 
     while (i--) {
-      behavior.$load(templates[i], this.$$modules, this.$$selector);
+      behavior.$load(
+        templates[i],
+        modules,
+        this.$$selector
+      );
     }
 
     return templates.length > 0;
   };
 
   Manager.prototype.$applyBehaviors = function(){
-    var boundAny = false,
-        i        = this.$$behaviors.length;
+    var boundAny, i;
+
+    boundAny = false,
+    i        = this.$$behaviors.length;
 
     while (i--) {
       if (this.$applyBehavior(this.$$behaviors[i])) {
@@ -435,6 +481,15 @@ window.stik = {};
     }
 
     return boundAny;
+  };
+
+  Manager.prototype.$mergeObjs = function(obj1, obj2){
+    var newObj, attr;
+
+    newObj = {};
+    for (attr in obj1) { newObj[attr] = obj1[attr]; }
+    for (attr in obj2) { newObj[attr] = obj2[attr].$$to; }
+    return newObj;
   };
 
   Manager.prototype.$findControllerTemplates = function(controller, action, DOMInjection){
@@ -492,10 +547,6 @@ window.stik = {};
     window.stik.$$manager.$addController(controller, action, executionUnit);
   };
 
-  window.stik.register = function(controller, action, executionUnit){
-    window.stik.controller(controller, action, executionUnit);
-  };
-
   window.stik.behavior = function(name, executionUnit){
     return this.$$manager.$addBehavior(name, executionUnit);
   };
@@ -504,5 +555,13 @@ window.stik = {};
     if (!this.$$manager.$buildContexts() & !this.$$manager.$applyBehaviors()) {
       throw "nothing to bind!";
     }
+  };
+
+  window.stik.boundary = function(boundary){
+    this.$$manager.$addBoundary(
+      boundary.as,
+      boundary.from,
+      boundary.to
+    );
   };
 })();

@@ -3,6 +3,7 @@ module.exports = function(grunt){
     'src/setup.js',
     'src/context.js',
     'src/behavior.js',
+    'src/boundary.js',
     'src/courier.js',
     'src/injector.js',
     'src/url_state.js',

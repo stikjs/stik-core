@@ -268,6 +268,61 @@ stik.controller("YourCtrl", "YourAction", function($context){
 });
 ```
 
+####Boundaries
+External libraries can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
+
+```javascript
+// creating a function boundary
+stik.boundary({
+  as: "MyDataLibrary",
+  from: "controller",
+  to: function(){
+    // your awesome data related function
+  }
+  // or
+  to: {
+    // your awesome data related object
+  }
+});
+
+stik.controller("AppCtrl", "List", function(MyDataLibrary){
+  // here you can manipulate your data
+  // using your external dependency
+
+  // if it is an object
+  MyDataLibrary.doSomeDataManipulation();
+
+  // if it is a function
+  MyDataLibrary();
+});
+
+// creating a behavior boundary
+stik.boundary({
+  as: "MyEffectsLibrary",
+  from: "behavior",
+  to: {
+    // your awesome visual related object
+  }
+  // or
+  to: function(){
+    // your awesome visual related function
+  }
+});
+
+stik.behavior("sparkling-input", function($template, MyEffectsLibrary){
+  // here you can attach your visual effects
+  // using your external dependency
+
+  // if it is an object
+  MyEffectsLibrary.doSomething($template);
+
+  // if it is a function
+  MyEffectsLibrary($template);
+});
+```
+
+Boundaries can't be reused in both controllers and behaviors since they have a clear separation of concerns (data and visual, respectively).
+
 ##Helping Stik.js
 ###I found a bug!
 If you found a repeatable bug then file an issue on [issues page](https://github.com/lukelex/stik.js/issues), preferably with a working example or repo.

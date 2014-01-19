@@ -70,4 +70,24 @@ describe("Public", function(){
       }).toThrow("nothing to bind!");
     });
   });
+
+  it(".boundary", function(){
+    var myBoundary = {
+      as: "AwesomeFunc",
+      from: "Controller",
+      to: function(){}
+    };
+
+    spyOn(stik.$$manager, "$addBoundary");
+
+    stik.boundary(myBoundary);
+
+    expect(
+      stik.$$manager.$addBoundary
+    ).toHaveBeenCalledWith(
+      myBoundary.as,
+      myBoundary.from,
+      myBoundary.to
+    );
+  });
 });
