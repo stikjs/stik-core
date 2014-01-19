@@ -2,7 +2,7 @@
 // Project:   Stik.js - JavaScript Separation Of Concerns
 // Copyright: Copyright 2011-2013 Lukas Alexandre
 // License:   Licensed under MIT license
-//            See https://github.com/lukelex/stik.js/blob/master/LICENSE
+//            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
 // Version: 0.7.0 | From: 19-01-2014
@@ -213,55 +213,6 @@ window.stik = {};
 })();
 
 (function(){
-  function UrlState(){}
-
-  UrlState.prototype.$baseUrl = function(){
-    return location.href;
-  };
-
-  UrlState.prototype.$pathName = function(){
-    return location.pathname;
-  };
-
-  UrlState.prototype.$hash = function(newHashValue){
-    return this.$locationHash(newHashValue).replace(/^#/, "");
-  };
-
-  UrlState.prototype.$locationHash = function(newHashValue){
-    if (newHashValue) {
-      location.hash = newHashValue;
-    }
-
-    return location.hash;
-  };
-
-  UrlState.prototype.$mainPath = function() {
-    return "/" + this.$pathName().split("/")[1];
-  };
-
-  UrlState.prototype.$queries = function(){
-    var result, queries, query;
-
-    queries = this.$baseUrl().split("?")[1];
-
-    if (queries) {
-      queries = queries.split("&");
-      result = {};
-      for (var i = 0; i < queries.length; i++) {
-        query = queries[i].split("=");
-
-        result[query[0]] = query[1];
-      }
-      return result;
-    } else {
-      return {};
-    }
-  };
-
-  window.stik.UrlState = UrlState;
-})();
-
-(function(){
   var bindingKey = "data-bind";
 
   function ViewBag(template){
@@ -328,11 +279,10 @@ window.stik = {};
 })();
 
 (function(){
-  function Manager(modules, selector){
+  function Manager(selector){
     this.$$contexts       = [];
     this.$$behaviors      = [];
     this.$$executionUnits = {};
-    this.$$modules        = modules || {};
     this.$$selector       = selector;
     this.$$boundaries     = {controller:{}, behavior:{}};
   }
@@ -449,7 +399,7 @@ window.stik = {};
     var templates, modules, i, context;
 
     templates = this.$findControllerTemplates(controller, action);
-    modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.controller);
+    modules   = this.$extractBoundaries(this.$$boundaries.controller);
     i         = templates.length;
 
     while (i--) {
@@ -466,14 +416,12 @@ window.stik = {};
     var templates, modules, i;
 
     templates = this.$findBehaviorTemplates(behavior);
-    modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.behavior);
+    modules   = this.$extractBoundaries(this.$$boundaries.behavior);
     i         = templates.length;
 
     while (i--) {
       behavior.$load(
-        templates[i],
-        modules,
-        this.$$selector
+        templates[i], modules, this.$$selector
       );
     }
 
@@ -495,13 +443,16 @@ window.stik = {};
     return boundAny;
   };
 
-  Manager.prototype.$mergeObjs = function(obj1, obj2){
-    var newObj, attr;
+  Manager.prototype.$extractBoundaries = function(collection){
+    var modules, i, key, rp;
 
-    newObj = {};
-    for (attr in obj1) { newObj[attr] = obj1[attr]; }
-    for (attr in obj2) { newObj[attr] = obj2[attr].$$to; }
-    return newObj;
+    modules = {};
+
+    for (key in collection) {
+      modules[key] = collection[key].$$to;
+    }
+
+    return modules;
   };
 
   Manager.prototype.$findControllerTemplates = function(controller, action, DOMInjection){
@@ -550,9 +501,9 @@ window.stik = {};
     throw "Stik.js is already loaded. Check your requires ;)";
   }
 
-  window.stik.$$manager = new window.stik.Manager({
-    $urlState: new window.stik.UrlState()
-  }, window.stik.DOMLibLoader.$currentDOMSelector());
+  window.stik.$$manager = new window.stik.Manager(
+    window.stik.DOMLibLoader.$currentDOMSelector()
+  );
 
   window.stik.controller = function(controller, action, executionUnit){
     window.stik.$$manager.$addController(controller, action, executionUnit);

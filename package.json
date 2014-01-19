@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:lukelex/stik.js.git"
+    "url": "git@github.com:stikjs/stik.js.git"
   },
   "keywords": [
     "scope",
@@ -21,9 +21,9 @@
   "author": "Lukas Alexandre",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lukelex/stik.js/issues"
+    "url": "https://github.com/stikjs/stik.js/issues"
   },
-  "homepage": "https://github.com/lukelex/stik.js",
+  "homepage": "https://github.com/stikjs/stik.js",
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-cli": "~0.1.11",
@@ -37,6 +37,6 @@
     "project": "// Project:   Stik.js - JavaScript Separation Of Concerns\n",
     "copyright": "// Copyright: Copyright 2011-2013 Lukas Alexandre\n",
     "license": "// License:   Licensed under MIT license\n",
-    "licenseLink": "//            See https://github.com/lukelex/stik.js/blob/master/LICENSE\n"
+    "licenseLink": "//            See https://github.com/stikjs/stik.js/blob/master/LICENSE\n"
   }
 }

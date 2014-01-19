@@ -2,7 +2,7 @@
   "name": "stik.js",
   "main": "stik.js",
   "version": "0.7.0",
-  "homepage": "https://github.com/lukelex/stik.js",
+  "homepage": "https://github.com/stikjs/stik.js",
   "authors": [
     "Lukas Alexandre <lukas@codelogic.me>"
   ],
@@ -10,6 +10,7 @@
   "keywords": [
     "scope",
     "management",
+    "testability",
     "dependency-injection",
     "single-responsibility-principle"
   ],

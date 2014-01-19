@@ -1,9 +1,8 @@
 (function(){
-  function Manager(modules, selector){
+  function Manager(selector){
     this.$$contexts       = [];
     this.$$behaviors      = [];
     this.$$executionUnits = {};
-    this.$$modules        = modules || {};
     this.$$selector       = selector;
     this.$$boundaries     = {controller:{}, behavior:{}};
   }
@@ -120,7 +119,7 @@
     var templates, modules, i, context;
 
     templates = this.$findControllerTemplates(controller, action);
-    modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.controller);
+    modules   = this.$extractBoundaries(this.$$boundaries.controller);
     i         = templates.length;
 
     while (i--) {
@@ -137,14 +136,12 @@
     var templates, modules, i;
 
     templates = this.$findBehaviorTemplates(behavior);
-    modules   = this.$mergeObjs(this.$$modules, this.$$boundaries.behavior);
+    modules   = this.$extractBoundaries(this.$$boundaries.behavior);
     i         = templates.length;
 
     while (i--) {
       behavior.$load(
-        templates[i],
-        modules,
-        this.$$selector
+        templates[i], modules, this.$$selector
       );
     }
 
@@ -166,13 +163,16 @@
     return boundAny;
   };
 
-  Manager.prototype.$mergeObjs = function(obj1, obj2){
-    var newObj, attr;
+  Manager.prototype.$extractBoundaries = function(collection){
+    var modules, i, key, rp;
 
-    newObj = {};
-    for (attr in obj1) { newObj[attr] = obj1[attr]; }
-    for (attr in obj2) { newObj[attr] = obj2[attr].$$to; }
-    return newObj;
+    modules = {};
+
+    for (key in collection) {
+      modules[key] = collection[key].$$to;
+    }
+
+    return modules;
   };
 
   Manager.prototype.$findControllerTemplates = function(controller, action, DOMInjection){
