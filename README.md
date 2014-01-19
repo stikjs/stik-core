@@ -272,7 +272,7 @@ stik.controller("YourCtrl", "YourAction", function($context){
 External libraries can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
 
 ```javascript
-// creating a function boundary
+// creating a controller boundary
 stik.boundary({
   as: "MyDataLibrary",
   from: "controller",
