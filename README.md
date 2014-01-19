@@ -275,6 +275,7 @@ External libraries can be added as injectable modules to Stik.js. With that you 
 // creating a controller boundary
 stik.boundary({
   as: "MyDataLibrary",
+  // from can receive "controller", "behavior" or both "controller|behavior"
   from: "controller",
   to: function(){
     // your awesome data related function
@@ -299,6 +300,7 @@ stik.controller("AppCtrl", "List", function(MyDataLibrary){
 // creating a behavior boundary
 stik.boundary({
   as: "MyEffectsLibrary",
+  // from can receive "controller", "behavior" or both "controller|behavior"
   from: "behavior",
   to: {
     // your awesome visual related object
@@ -320,8 +322,6 @@ stik.behavior("sparkling-input", function($template, MyEffectsLibrary){
   MyEffectsLibrary($template);
 });
 ```
-
-Boundaries can't be reused in both controllers and behaviors since they have a clear separation of concerns (data and visual, respectively).
 
 ##Helping Stik.js
 ###I found a bug!
