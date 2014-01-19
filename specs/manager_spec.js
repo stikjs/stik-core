@@ -12,7 +12,6 @@ describe("Manager", function(){
       expect(manager.$$contexts).toEqual([]);
       expect(manager.$$behaviors).toEqual([]);
       expect(manager.$$executionUnits).toEqual({});
-      expect(manager.$$executionUnits).toEqual({});
       expect(manager.$$boundaries).toEqual({controller:{}, behavior:{}});
     });
   });
