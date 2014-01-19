@@ -361,21 +361,29 @@ window.stik = {};
   };
 
   Manager.prototype.$addBoundary = function(as, from, to){
-    var boundary;
+    var boundary, that;
 
-    this.$validateFrom(from);
-
-    boundary = new window.stik.Boundary(as, to);
-    this.$$boundaries[from.toLowerCase()][as] = boundary;
+    that = this;
+    this.$parseFrom(from, function(parsedFrom){
+      boundary = new window.stik.Boundary(as, to);
+      that.$$boundaries[parsedFrom][as] = boundary
+    });
 
     return boundary;
   };
 
-  Manager.prototype.$validateFrom = function(from){
-    var loweredFrom = from.toLowerCase();
+  Manager.prototype.$parseFrom = function(from, forEachFound){
+    var targets, i;
 
-    if (loweredFrom !== "controller" && loweredFrom !== "behavior") {
-      throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
+    targets = from.toLowerCase().split("|");
+
+    i = targets.length;
+    while (i--) {
+      if (targets[i] !== "controller" && targets[i] !== "behavior") {
+        throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
+      } else {
+        forEachFound(targets[i]);
+      }
     }
   };
 
@@ -543,7 +551,6 @@ window.stik = {};
   }
 
   window.stik.$$manager = new window.stik.Manager({
-    $courier: new window.stik.Courier(),
     $urlState: new window.stik.UrlState()
   }, window.stik.DOMLibLoader.$currentDOMSelector());
 
@@ -568,4 +575,10 @@ window.stik = {};
       boundary.to
     );
   };
+
+  window.stik.boundary({
+    as: "$courier",
+    from: "controller|behavior",
+    to: new window.stik.Courier()
+  });
 })();

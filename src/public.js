@@ -4,7 +4,6 @@
   }
 
   window.stik.$$manager = new window.stik.Manager({
-    $courier: new window.stik.Courier(),
     $urlState: new window.stik.UrlState()
   }, window.stik.DOMLibLoader.$currentDOMSelector());
 
@@ -29,4 +28,10 @@
       boundary.to
     );
   };
+
+  window.stik.boundary({
+    as: "$courier",
+    from: "controller|behavior",
+    to: new window.stik.Courier()
+  });
 })();
