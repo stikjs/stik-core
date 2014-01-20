@@ -39,7 +39,7 @@ window.stik = {};
     var newInstance, value;
 
     TempConstructor.prototype = module.prototype;
-    newInstance = new TempConstructor;
+    newInstance = new TempConstructor();
 
     value = callWithDependencies(
       module, newInstance, dependencies
@@ -101,14 +101,14 @@ window.stik = {};
 
   Context.prototype.$mergeModules = function(modules){
     modules.$context  = this;
-    modules.$template = this.$$template
+    modules.$template = this.$$template;
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
   };
 
   Context.prototype.$markAsBound = function(){
-    template = this.$$template.$resolve();
+    var template = this.$$template.$resolve();
     template.className = (template.className + ' stik-bound').trim();
   };
 
@@ -375,7 +375,7 @@ window.stik = {};
     that = this;
     this.$parseFrom(from, function(parsedFrom){
       boundary = new window.stik.Boundary(as, to, instantiable, callable);
-      that.$$boundaries[parsedFrom][as] = boundary
+      that.$$boundaries[parsedFrom][as] = boundary;
     });
 
     return boundary;
@@ -500,7 +500,7 @@ window.stik = {};
   };
 
   Manager.prototype.$extractBoundaries = function(collection){
-    var modules, i, key;
+    var modules, key;
 
     modules = {};
 

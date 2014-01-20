@@ -35,7 +35,7 @@
     that = this;
     this.$parseFrom(from, function(parsedFrom){
       boundary = new window.stik.Boundary(as, to, instantiable, callable);
-      that.$$boundaries[parsedFrom][as] = boundary
+      that.$$boundaries[parsedFrom][as] = boundary;
     });
 
     return boundary;
@@ -160,7 +160,7 @@
   };
 
   Manager.prototype.$extractBoundaries = function(collection){
-    var modules, i, key;
+    var modules, key;
 
     modules = {};
 

@@ -28,7 +28,7 @@
     var newInstance, value;
 
     TempConstructor.prototype = module.prototype;
-    newInstance = new TempConstructor;
+    newInstance = new TempConstructor();
 
     value = callWithDependencies(
       module, newInstance, dependencies

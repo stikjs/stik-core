@@ -36,14 +36,14 @@
 
   Context.prototype.$mergeModules = function(modules){
     modules.$context  = this;
-    modules.$template = this.$$template
+    modules.$template = this.$$template;
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
   };
 
   Context.prototype.$markAsBound = function(){
-    template = this.$$template.$resolve();
+    var template = this.$$template.$resolve();
     template.className = (template.className + ' stik-bound').trim();
   };
 
