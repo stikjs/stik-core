@@ -26,7 +26,7 @@ describe("Injectable", function(){
       ).toEqual(dependencies.customModule.$resolve());
     });
 
-    it("a function module", function(){
+    it("a simple function module", function(){
       var dependencies, mockFunc;
 
       dependencies = {
@@ -43,7 +43,24 @@ describe("Injectable", function(){
       ).toEqual(mockFunc);
     });
 
-    it("an object module", function(){
+    it("a callable function module", function(){
+      var dependencies, mockFunc;
+
+      dependencies = {
+        $template: new stik.Injectable("worked!"),
+        customModule: new stik.Injectable({})
+      };
+
+      mockFunc = function($template){ return $template };
+
+      injectable = new stik.Injectable(mockFunc, false, true);
+
+      expect(
+        injectable.$resolve(dependencies)
+      ).toEqual("worked!");
+    });
+
+    it("a simple object module", function(){
       var dependencies, mockObj;
 
       dependencies = {

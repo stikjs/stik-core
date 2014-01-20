@@ -2,7 +2,6 @@
   function Injector(executionUnit, modules){
     this.$$executionUnit = executionUnit;
     this.$$modules       = modules;
-
   }
 
   Injector.prototype.$resolveDependencies = function(){

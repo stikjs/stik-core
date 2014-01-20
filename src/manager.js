@@ -1,9 +1,8 @@
 (function(){
-  function Manager(selector){
+  function Manager(){
     this.$$contexts       = [];
     this.$$behaviors      = [];
     this.$$executionUnits = {};
-    this.$$selector       = selector;
     this.$$boundaries     = {controller:{}, behavior:{}};
   }
 
@@ -30,12 +29,12 @@
     return behavior;
   };
 
-  Manager.prototype.$addBoundary = function(as, from, to){
+  Manager.prototype.$addBoundary = function(as, from, to, instantiable, callable){
     var boundary, that;
 
     that = this;
     this.$parseFrom(from, function(parsedFrom){
-      boundary = new window.stik.Boundary(as, to);
+      boundary = new window.stik.Boundary(as, to, instantiable, callable);
       that.$$boundaries[parsedFrom][as] = boundary
     });
 
@@ -125,7 +124,7 @@
       context = this.$storeContext(
         controller, action, templates[i], executionUnit
       );
-      context.$load(modules, this.$$selector);
+      context.$load(modules);
     }
 
     return templates.length > 0;
@@ -139,9 +138,7 @@
     i         = templates.length;
 
     while (i--) {
-      behavior.$load(
-        templates[i], modules, this.$$selector
-      );
+      behavior.$load(templates[i], modules);
     }
 
     return templates.length > 0;

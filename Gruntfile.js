@@ -9,7 +9,6 @@ module.exports = function(grunt){
     'src/injector.js',
     'src/view_bag.js',
     'src/manager.js',
-    'src/dom_lib_loader.js',
     'src/public.js'
   ];
 

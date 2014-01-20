@@ -17,9 +17,9 @@
     );
   }
 
-  Context.prototype.$load = function(modules, selector){
+  Context.prototype.$load = function(modules){
     var dependencies = this.$resolveDependencies(
-      this.$mergeModules(modules, selector)
+      this.$mergeModules(modules)
     );
 
     this.$$executionUnit.apply({}, dependencies);
@@ -34,16 +34,12 @@
     return injector.$resolveDependencies();
   };
 
-  Context.prototype.$mergeModules = function(modules, selector){
+  Context.prototype.$mergeModules = function(modules){
     modules.$context  = this;
-    modules.$template = this.$wrapTemplate(this.$$template, selector);
+    modules.$template = this.$$template
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
-  };
-
-  Context.prototype.$wrapTemplate = function(template, selector) {
-    return (selector ? selector(template) : template);
   };
 
   Context.prototype.$markAsBound = function(){

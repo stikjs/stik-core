@@ -75,7 +75,9 @@ describe("Public", function(){
     var myBoundary = {
       as: "AwesomeFunc",
       from: "Controller",
-      to: function(){}
+      to: function(){},
+      inst: false,
+      call: false
     };
 
     spyOn(stik.$$manager, "$addBoundary");
@@ -87,7 +89,9 @@ describe("Public", function(){
     ).toHaveBeenCalledWith(
       myBoundary.as,
       myBoundary.from,
-      myBoundary.to
+      myBoundary.to,
+      myBoundary.inst,
+      myBoundary.call
     );
   });
 });

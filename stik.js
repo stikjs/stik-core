@@ -5,22 +5,29 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.0 | From: 20-01-2014
+// Version: 0.7.1 | From: 20-01-2014
 
 window.stik = {};
 
 (function(){
   function TempConstructor(){}
 
-  function Injectable(module, instantiable){
+  function Injectable(module, instantiable, callable){
     this.$$module       = module;
     this.$$instantiable = instantiable || false;
+    this.$$callable     = callable || false;
   }
 
   Injectable.prototype.$resolve = function(dependencies){
     if (this.$$instantiable) {
       return buildModule(
         this.$$module,
+        resolveDependencies(this.$$module, dependencies)
+      );
+    } else if (this.$$callable) {
+      return callWithDependencies(
+        this.$$module,
+        {},
         resolveDependencies(this.$$module, dependencies)
       );
     } else {
@@ -34,16 +41,24 @@ window.stik = {};
     TempConstructor.prototype = module.prototype;
     newInstance = new TempConstructor;
 
-    value = module.apply(newInstance, dependencies);
+    value = callWithDependencies(
+      module, newInstance, dependencies
+    );
 
     return Object(value) === value ? value : newInstance;
-  };
+  }
 
   function resolveDependencies(module, dependencies){
     var injector = new window.stik.Injector(module, dependencies);
 
     return injector.$resolveDependencies();
-  };
+  }
+
+  function callWithDependencies(module, context, dependencies){
+    return module.apply(
+      context, dependencies
+    );
+  }
 
   window.stik.Injectable = Injectable;
 })();
@@ -67,9 +82,9 @@ window.stik = {};
     );
   }
 
-  Context.prototype.$load = function(modules, selector){
+  Context.prototype.$load = function(modules){
     var dependencies = this.$resolveDependencies(
-      this.$mergeModules(modules, selector)
+      this.$mergeModules(modules)
     );
 
     this.$$executionUnit.apply({}, dependencies);
@@ -84,16 +99,12 @@ window.stik = {};
     return injector.$resolveDependencies();
   };
 
-  Context.prototype.$mergeModules = function(modules, selector){
+  Context.prototype.$mergeModules = function(modules){
     modules.$context  = this;
-    modules.$template = this.$wrapTemplate(this.$$template, selector);
+    modules.$template = this.$$template
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
-  };
-
-  Context.prototype.$wrapTemplate = function(template, selector) {
-    return (selector ? selector(template) : template);
   };
 
   Context.prototype.$markAsBound = function(){
@@ -108,28 +119,22 @@ window.stik = {};
   var behaviorKey = "data-behaviors", namePrefix = "bh";
 
   function Behavior(name, executionUnit){
-    if (!name)                   { throw "name is missing"; }
+    if (!name)                    { throw "name is missing"; }
     if (name.indexOf(" ") !== -1) { throw "invalid name. Please use dash(-) instead of spaces"; }
-    if (!executionUnit)          { throw "executionUnit is missing"; }
+    if (!executionUnit)           { throw "executionUnit is missing"; }
 
     this.$$className     = name;
     this.$$name          = namePrefix + "-" + name;
     this.$$executionUnit = executionUnit;
   }
 
-  Behavior.prototype.$load = function(template, modules, selector){
-    modules.$template = new window.stik.Injectable(
-      this.$wrapTemplate(template, selector)
-    );
+  Behavior.prototype.$load = function(template, modules){
+    modules.$template = new window.stik.Injectable(template);
 
     var dependencies = this.$resolveDependencies(modules);
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsApplyed(template);
-  };
-
-  Behavior.prototype.$wrapTemplate = function(template, selector) {
-    return (selector ? selector(template) : template);
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){
@@ -153,12 +158,14 @@ window.stik = {};
 })();
 
 (function(){
-  function Boundary(as, to, inst){
+  function Boundary(as, to, instantiable, callable){
     if (as.indexOf(" ") !== -1) { throw "Invalid 'as'. Can't have spaces"; }
     if (!to)                    { throw "Invalid 'to'. Can't be null"; }
 
     this.$$as = as;
-    this.$$to = new window.stik.Injectable(to, inst);
+    this.$$to = new window.stik.Injectable(
+      to, instantiable, callable
+    );
   }
 
   window.stik.Boundary = Boundary;
@@ -216,7 +223,6 @@ window.stik = {};
   function Injector(executionUnit, modules){
     this.$$executionUnit = executionUnit;
     this.$$modules       = modules;
-
   }
 
   Injector.prototype.$resolveDependencies = function(){
@@ -333,11 +339,10 @@ window.stik = {};
 })();
 
 (function(){
-  function Manager(selector){
+  function Manager(){
     this.$$contexts       = [];
     this.$$behaviors      = [];
     this.$$executionUnits = {};
-    this.$$selector       = selector;
     this.$$boundaries     = {controller:{}, behavior:{}};
   }
 
@@ -364,12 +369,12 @@ window.stik = {};
     return behavior;
   };
 
-  Manager.prototype.$addBoundary = function(as, from, to){
+  Manager.prototype.$addBoundary = function(as, from, to, instantiable, callable){
     var boundary, that;
 
     that = this;
     this.$parseFrom(from, function(parsedFrom){
-      boundary = new window.stik.Boundary(as, to);
+      boundary = new window.stik.Boundary(as, to, instantiable, callable);
       that.$$boundaries[parsedFrom][as] = boundary
     });
 
@@ -459,7 +464,7 @@ window.stik = {};
       context = this.$storeContext(
         controller, action, templates[i], executionUnit
       );
-      context.$load(modules, this.$$selector);
+      context.$load(modules);
     }
 
     return templates.length > 0;
@@ -473,9 +478,7 @@ window.stik = {};
     i         = templates.length;
 
     while (i--) {
-      behavior.$load(
-        templates[i], modules, this.$$selector
-      );
+      behavior.$load(templates[i], modules);
     }
 
     return templates.length > 0;
@@ -531,32 +534,12 @@ window.stik = {};
   window.stik.Manager = Manager;
 })();
 
-(function () {
-  var DOMLibLoader = {
-    $currentDOMSelector: function() {
-      if (window.hasOwnProperty("MooTools")) {
-        return window.document.id;
-      }
-      else if(window.hasOwnProperty("Zepto")) {
-        return window.Zepto;
-      }
-      else if (window.hasOwnProperty("jQuery")) {
-        return window.jQuery;
-      }
-    }
-  };
-
-  window.stik.DOMLibLoader = DOMLibLoader;
-})();
-
 (function() {
   if (window.stik.$$manager){
     throw "Stik.js is already loaded. Check your requires ;)";
   }
 
-  window.stik.$$manager = new window.stik.Manager(
-    window.stik.DOMLibLoader.$currentDOMSelector()
-  );
+  window.stik.$$manager = new window.stik.Manager();
 
   window.stik.controller = function(controller, action, executionUnit){
     window.stik.$$manager.$addController(controller, action, executionUnit);
@@ -576,7 +559,9 @@ window.stik = {};
     this.$$manager.$addBoundary(
       boundary.as,
       boundary.from,
-      boundary.to
+      boundary.to,
+      boundary.inst,
+      boundary.call
     );
   };
 
