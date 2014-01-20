@@ -5,9 +5,48 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.0 | From: 19-01-2014
+// Version: 0.7.0 | From: 20-01-2014
 
 window.stik = {};
+
+(function(){
+  function TempConstructor(){}
+
+  function Injectable(module, instantiable){
+    this.$$module       = module;
+    this.$$instantiable = instantiable || false;
+  }
+
+  Injectable.prototype.$resolve = function(dependencies){
+    if (this.$$instantiable) {
+      return buildModule(
+        this.$$module,
+        resolveDependencies(this.$$module, dependencies)
+      );
+    } else {
+      return this.$$module;
+    }
+  };
+
+  function buildModule(module, dependencies){
+    var newInstance, value;
+
+    TempConstructor.prototype = module.prototype;
+    newInstance = new TempConstructor;
+
+    value = module.apply(newInstance, dependencies);
+
+    return Object(value) === value ? value : newInstance;
+  };
+
+  function resolveDependencies(module, dependencies){
+    var injector = new window.stik.Injector(module, dependencies);
+
+    return injector.$resolveDependencies();
+  };
+
+  window.stik.Injectable = Injectable;
+})();
 
 (function(){
   function Context(controller, action, template, executionUnit){
@@ -18,9 +57,14 @@ window.stik = {};
 
     this.$$controller    = controller;
     this.$$action        = action;
-    this.$$template      = template;
     this.$$executionUnit = executionUnit;
-    this.$$viewBag       = new window.stik.ViewBag(template);
+
+    this.$$template = new window.stik.Injectable(
+      template, false
+    );
+    this.$$viewBag = new window.stik.Injectable(
+      new window.stik.ViewBag(template), false
+    );
   }
 
   Context.prototype.$load = function(modules, selector){
@@ -33,7 +77,9 @@ window.stik = {};
   };
 
   Context.prototype.$resolveDependencies = function(modules){
-    var injector = new window.stik.Injector(this.$$executionUnit, modules);
+    var injector = new window.stik.Injector(
+      this.$$executionUnit, modules
+    );
 
     return injector.$resolveDependencies();
   };
@@ -51,7 +97,8 @@ window.stik = {};
   };
 
   Context.prototype.$markAsBound = function(){
-    this.$$template.className = (this.$$template.className + ' stik-bound').trim();
+    template = this.$$template.$resolve();
+    template.className = (template.className + ' stik-bound').trim();
   };
 
   window.stik.Context = Context;
@@ -71,7 +118,9 @@ window.stik = {};
   }
 
   Behavior.prototype.$load = function(template, modules, selector){
-    modules.$template = this.$wrapTemplate(template, selector);
+    modules.$template = new window.stik.Injectable(
+      this.$wrapTemplate(template, selector)
+    );
 
     var dependencies = this.$resolveDependencies(modules);
 
@@ -84,7 +133,9 @@ window.stik = {};
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){
-    var injector = new window.stik.Injector(this.$$executionUnit, modules);
+    var injector = new window.stik.Injector(
+      this.$$executionUnit, modules
+    );
 
     return injector.$resolveDependencies();
   };
@@ -102,12 +153,12 @@ window.stik = {};
 })();
 
 (function(){
-  function Boundary(as, to){
+  function Boundary(as, to, inst){
     if (as.indexOf(" ") !== -1) { throw "Invalid 'as'. Can't have spaces"; }
     if (!to)                    { throw "Invalid 'to'. Can't be null"; }
 
     this.$$as = as;
-    this.$$to = to;
+    this.$$to = new window.stik.Injectable(to, inst);
   }
 
   window.stik.Boundary = Boundary;
@@ -164,7 +215,8 @@ window.stik = {};
 (function(){
   function Injector(executionUnit, modules){
     this.$$executionUnit = executionUnit;
-    this.$$modules = modules;
+    this.$$modules       = modules;
+
   }
 
   Injector.prototype.$resolveDependencies = function(){
@@ -185,28 +237,32 @@ window.stik = {};
     return this.$trimmedArgs(args);
   };
 
-  Injector.prototype.$grabModules = function(args){
-    var module,
-        dependencies = [];
-
-    if (args.length === 1 && args[0] === '') { return []; }
-
-    for (var i = 0; i < args.length; i++) {
-      if (!(module = this.$$modules[args[i]])) {
-        throw "¿" + args[i] + "? These are not the droids you are looking for! (e.g. this module does not exists)";
-      }
-      dependencies.push(module);
-    }
-
-    return dependencies;
-  };
-
   Injector.prototype.$trimmedArgs = function(args){
     var result = [];
     args.forEach(function(arg){
       result.push(arg.trim());
     });
     return result;
+  };
+
+  Injector.prototype.$grabModules = function(args){
+    var module, dependencies;
+
+    dependencies = [];
+
+    if (args.length === 1 && args[0] === "") { return []; }
+
+    for (var i = 0; i < args.length; i++) {
+      if (!(module = this.$$modules[args[i]])) {
+        throw "¿" + args[i] + "? These are not the droids you are looking for! (e.g. this module does not exists)";
+      }
+
+      dependencies.push(
+        module.$resolve(this.$$modules)
+      );
+    }
+
+    return dependencies;
   };
 
   window.stik.Injector = Injector;
@@ -232,8 +288,6 @@ window.stik = {};
       }
     }
   };
-
-  ViewBag.prototype.$render = ViewBag.prototype.$push;
 
   ViewBag.prototype.$pull = function(){
     var fields, dataSet, key;
@@ -374,10 +428,9 @@ window.stik = {};
   };
 
   Manager.prototype.$buildContexts = function(){
-    var controller,
-        action,
-        executionUnit,
-        boundAny = false;
+    var controller, action, executionUnit, boundAny;
+
+    boundAny = false;
 
     if (Object.keys(this.$$executionUnits).length === 0){
       throw "no execution units available";
@@ -444,7 +497,7 @@ window.stik = {};
   };
 
   Manager.prototype.$extractBoundaries = function(collection){
-    var modules, i, key, rp;
+    var modules, i, key;
 
     modules = {};
 

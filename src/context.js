@@ -7,9 +7,14 @@
 
     this.$$controller    = controller;
     this.$$action        = action;
-    this.$$template      = template;
     this.$$executionUnit = executionUnit;
-    this.$$viewBag       = new window.stik.ViewBag(template);
+
+    this.$$template = new window.stik.Injectable(
+      template, false
+    );
+    this.$$viewBag = new window.stik.Injectable(
+      new window.stik.ViewBag(template), false
+    );
   }
 
   Context.prototype.$load = function(modules, selector){
@@ -22,7 +27,9 @@
   };
 
   Context.prototype.$resolveDependencies = function(modules){
-    var injector = new window.stik.Injector(this.$$executionUnit, modules);
+    var injector = new window.stik.Injector(
+      this.$$executionUnit, modules
+    );
 
     return injector.$resolveDependencies();
   };
@@ -40,7 +47,8 @@
   };
 
   Context.prototype.$markAsBound = function(){
-    this.$$template.className = (this.$$template.className + ' stik-bound').trim();
+    template = this.$$template.$resolve();
+    template.className = (template.className + ' stik-bound').trim();
   };
 
   window.stik.Context = Context;

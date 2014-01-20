@@ -94,10 +94,9 @@
   };
 
   Manager.prototype.$buildContexts = function(){
-    var controller,
-        action,
-        executionUnit,
-        boundAny = false;
+    var controller, action, executionUnit, boundAny;
+
+    boundAny = false;
 
     if (Object.keys(this.$$executionUnits).length === 0){
       throw "no execution units available";
@@ -164,7 +163,7 @@
   };
 
   Manager.prototype.$extractBoundaries = function(collection){
-    var modules, i, key, rp;
+    var modules, i, key;
 
     modules = {};
 

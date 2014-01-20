@@ -41,12 +41,7 @@ describe("Behavior", function(){
 
       behavior.$load("div", modules);
 
-      expect(
-        behavior.$resolveDependencies
-      ).toHaveBeenCalledWith({
-        $some: "$module",
-        $template: "div"
-      });
+      expect(behavior.$resolveDependencies).toHaveBeenCalled();
     });
 
     it("should mark the template as applyed", function(){

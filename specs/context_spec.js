@@ -25,19 +25,6 @@ describe("Context", function(){
   });
 
   describe("#initialize", function(){
-    it("when ok", function(){
-      spyOn(elmDouble, 'getAttribute').andReturn('AppCtrl');
-
-      var executionUnitDouble = function(){};
-
-      subject = new stik.Context('AppCtrl', 'list', elmDouble, executionUnitDouble);
-
-      expect(subject.$$controller).toEqual('AppCtrl');
-      expect(subject.$$action).toEqual('list');
-      expect(subject.$$template).toBe(elmDouble);
-      expect(subject.$$executionUnit).toBe(executionUnitDouble);
-    });
-
     it("should throw if controller is missing", function(){
       expect(function(){
         new stik.Context(null, 'application');
@@ -58,60 +45,29 @@ describe("Context", function(){
 
     it("should throw if execution unit is missing", function(){
       expect(function(){
-        new stik.Context('AppCtrl', 'list', '<br>');
+        new stik.Context("AppCtrl", "list", "<br>");
       }).toThrow("execution unit is missing");
     });
   });
 
   describe("$load", function(){
-    var injectedTemplate = false;
-
-    afterEach(function(){
-      injectedTemplate = false;
-    });
-
     it("should run the execution unit it is bound to", function(){
-      var template, modules, executionUnitDouble;
+      var template, modules, executionUnitDouble, injectedTemplate;
 
-      template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
+      injectedTemplate = false;
+
+      template = document.createElement("div");
 
       executionUnitDouble = function($template){
         injectedTemplate = $template;
       };
 
-      context = new stik.Context('AppCtrl', 'list', template, executionUnitDouble);
-
-      spyOn(context, "$markAsBound");
+      context = new stik.Context("AppCtrl", "list", template, executionUnitDouble);
 
       context.$load(modulesDouble());
 
       expect(injectedTemplate).toEqual(template);
-      expect(context.$markAsBound).toHaveBeenCalled();
-    });
-  });
-
-  describe("#$mergeModules", function(){
-    it("should attach the context and template", function(){
-      var context, template, modules, expectedModules = {};
-
-      template = '<div data-controller="ItemCtrl" data-action="detail"></div>';
-
-      modules = modulesDouble();
-
-      context = new stik.Context('AppCtrl', 'list', template, function(){});
-
-      expectedModules.$template  = modules.$template,
-      expectedModules.$messaging = modules.$messaging,
-      expectedModules.$courier   = modules.$courier,
-      expectedModules.$viewBag   = context.$$viewBag,
-      expectedModules.$context   = context;
-      expectedModules.$template  = template;
-
-      expect(
-        context.$mergeModules(modules)
-      ).toEqual(
-        expectedModules
-      );
+      expect(template.className).toEqual("stik-bound");
     });
   });
 

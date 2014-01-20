@@ -11,14 +11,6 @@ describe("ViewBag", function(){
     });
   });
 
-  describe("#$render", function(){
-    it("should delegate to #push", function(){
-      var viewBag = new stik.ViewBag();
-
-      expect(viewBag.$render).toEqual(viewBag.$push);
-    });
-  });
-
   describe("#$push", function(){
     it("with a single binding", function(){
       var template, viewBag, data;

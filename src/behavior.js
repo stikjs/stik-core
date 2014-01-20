@@ -12,7 +12,9 @@
   }
 
   Behavior.prototype.$load = function(template, modules, selector){
-    modules.$template = this.$wrapTemplate(template, selector);
+    modules.$template = new window.stik.Injectable(
+      this.$wrapTemplate(template, selector)
+    );
 
     var dependencies = this.$resolveDependencies(modules);
 
@@ -25,7 +27,9 @@
   };
 
   Behavior.prototype.$resolveDependencies = function(modules){
-    var injector = new window.stik.Injector(this.$$executionUnit, modules);
+    var injector = new window.stik.Injector(
+      this.$$executionUnit, modules
+    );
 
     return injector.$resolveDependencies();
   };
