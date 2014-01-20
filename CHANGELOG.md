@@ -1,7 +1,7 @@
-# 0.7.0 (2014-01-25)
+# 0.7.0 (2014-01-20)
 
 ##Features
-- **Boundaries** now supports extensions through $boundary ([699f090faf](https://github.com/lukelex/stik.js/commit/699f090fafaa08ff237e074f86bddcc813bc74bd))
+- **Boundaries** now supports extensions through $boundary ([699f090faf](https://github.com/lukelex/stik.js/commit/699f090fafaa08ff237e074f86bddcc813bc74bd), [096a394b94](https://github.com/lukelex/stik.js/commit/096a394b94ee4319c246f7e7a543af9cefd0a972), [d30444960f](https://github.com/lukelex/stik.js/commit/d30444960f98a8f234cf35676b051d726a4c45b5))
 - **$pull** $viewBag can have its bound data pulled out of the DOM as a dataset ([1387dd8dc0](https://github.com/lukelex/stik.js/commit/1387dd8dc004aa93ebdb6924948ec8890e042a2b))
 
 ##Improvements

@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.1 | From: 20-01-2014
+// Version: 0.7.0 | From: 21-01-2014
 
 window.stik = {};
 

@@ -158,10 +158,6 @@ stik.controller("YourCtrl", "YourAction", function($template){
   // you can use plain JS to access the DOM
   $template.getElementsByClassName("my-elm");
 
-  // or any DOM lib to help you out
-  $($template).getElement("my-elm"); // MooTools
-  $($template).find(".my-elm"); // Zepto.js or jQuery
-
   // and do your stuff
   ...
 });
@@ -248,57 +244,118 @@ stik.controller("YourCtrl", "YourAction", function($context){
 ```
 
 ##Boundaries
-External libraries can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
+External libraries, objects and functions can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
+
+###Object Boundaries:
 
 ```javascript
-// creating a controller boundary
 stik.boundary({
   as: "MyDataLibrary",
-  // from can receive "controller", "behavior" or both "controller|behavior"
   from: "controller",
-  to: function(){
-    // your awesome data related function
-  }
-  // or
   to: {
     // your awesome data related object
+    someAwesomeData: "Awesome!!",
+    doSomeDataManipulation: function(){ return "Yay!"; }
+  }
+});
+
+stik.boundary({
+  as: "MyEffectsLibrary",
+  from: "behavior",
+  to: {
+    // your awesome visual related obj
+    fadeIn: function(elm){},
+    fadeOut: function(elm){}
   }
 });
 
 stik.controller("AppCtrl", "List", function(MyDataLibrary){
   // here you can manipulate your data
   // using your external dependency
-
-  // if it is an object
-  MyDataLibrary.doSomeDataManipulation();
-
-  // if it is a function
-  MyDataLibrary();
+  MyDataLibrary.doSomeDataManipulation(); // "Yay!"
+  MyDataLibrary.someAwesomeData; // "Awesome!!"
 });
 
-// creating a behavior boundary
-stik.boundary({
-  as: "MyEffectsLibrary",
-  // from can receive "controller", "behavior" or both "controller|behavior"
-  from: "behavior",
-  to: {
-    // your awesome visual related object
-  }
-  // or
-  to: function(){
-    // your awesome visual related function
-  }
-});
-
-stik.behavior("sparkling-input", function($template, MyEffectsLibrary){
+stik.behavior("fade-input", function($template, MyEffectsLibrary){
   // here you can attach your visual effects
   // using your external dependency
 
-  // if it is an object
-  MyEffectsLibrary.doSomething($template);
+  MyEffectsLibrary.fadeIn($template);
+  MyEffectsLibrary.fadeOut($template);
+});
+```
 
-  // if it is a function
-  MyEffectsLibrary($template);
+###Function Boundaries:
+
+```javascript
+stik.boundary({
+  as: "GetTwitterFeed",
+  from: "controller",
+  to: function(){
+    return ajaxLib.get("https://twitter.com/twitterapi");
+  }
+});
+
+stik.boundary({
+  as: "fadeIn",
+  from: "behavior",
+  to: function(elm){
+    return applyFadeIn(elm);
+  }
+});
+
+stik.controller("AppCtrl", "List", function(GetTwitterFeed, $viewBag){
+  var feed = GetTwitterFeed();
+
+  $viewBag.$push(feed);
+});
+
+stik.behavior("fade-input", function($template, fadeIn){
+  fadeIn($template);
+});
+```
+
+###Callable Boundaries
+Callable Boundaries are functions that might depend Stik modules or other boundaries. They will be called with the required dependencies and their returned value will be passed on to whichever controller or behavior requiring it.
+
+```javascript
+stik.boundary({
+  as: "SomeFunkyFunc",
+  from: "controller",
+  call: true,
+  to: function($template){
+    return doSomethingFunky($template);
+  }
+});
+
+stik.controller("AppCtrl", "List", function(SomeFunkyFunc){
+  SomeFunkyFunc // some funky value returned from the boundary
+});
+```
+
+###Instantiable Boundaries:
+Instantiable boundaries can be used when you might have dependencies on Stik modules or other boundaries and you need to maintain separate states between your controllers and/or behaviors.
+
+```javascript
+stik.boundary({
+  as: "TwoWayDataBinding",
+  from: "controller",
+  inst: true,
+  to: function($template, $viewBag, GetTwitterFeed){
+    // this should be the obj constructor
+    // that will receive whichever dependency you declare
+    this.template = template;
+
+    this.bindTo = function(myDataObj){
+      // do your binding stuff
+    };
+  }
+});
+
+stik.controller("AppCtrl", "List", function(TwoWayDataBinding){
+  // this will be a new instance of the TwoWayDataBinding class
+  // that will have the $template as an instance variable
+  TwoWayDataBinding.bindTo(SomeData);
 });
 ```
 
