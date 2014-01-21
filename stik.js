@@ -511,8 +511,8 @@ window.stik = {};
 (function(){
   var bindingKey = "data-bind";
 
-  function ViewBag(template){
-    this.$$template = template;
+  function ViewBag($template){
+    this.$$template = $template;
   }
 
   ViewBag.prototype.$push = function(dataSet){
@@ -570,4 +570,11 @@ window.stik = {};
   };
 
   window.stik.ViewBag = ViewBag;
+
+  window.stik.boundary({
+    as: "$viewBag",
+    from: "controller|behavior",
+    inst: true,
+    to: ViewBag
+  });
 })();
