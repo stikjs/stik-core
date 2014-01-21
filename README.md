@@ -147,7 +147,7 @@ stik.controller("BattleCtrl", "List", function(){
 ```
 
 ##Modules
-Stik.js comes with a couple modules to help you organize your code, by separating their responsibilities. These modules can be injected in each controller, as needed.
+Stik.js comes with a couple modules to help you organize your code, by separating their responsibilities. These modules can be injected as needed.
 
 ###$template
 Contains the HTML template (HTMLElement) that was bound to the current controller. This shall be used as the scope of **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action needs to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
@@ -164,7 +164,7 @@ stik.controller("YourCtrl", "YourAction", function($template){
 ```
 
 ###$courier
-Enables a controller to send and receive messages from another controller.
+Enables a controller/behavior to send and receive messages from another controller/behavior.
 
 ####Using it
 ```javascript
@@ -316,7 +316,7 @@ stik.behavior("fade-input", function($template, fadeIn){
 ```
 
 ###Callable Boundaries
-Callable Boundaries are functions that might depend Stik modules or other boundaries. They will be called with the required dependencies and their returned value will be passed on to whichever controller or behavior requiring it.
+Callable Boundaries are functions that might depend on Stik modules or other boundaries. They will be called with the required dependencies and their returned value will be passed on to whichever controller or behavior requiring it.
 
 ```javascript
 stik.boundary({
@@ -334,7 +334,7 @@ stik.controller("AppCtrl", "List", function(SomeFunkyFunc){
 ```
 
 ###Instantiable Boundaries:
-Instantiable boundaries can be used when you might have dependencies on Stik modules or other boundaries and you need to maintain separate states between your controllers and/or behaviors.
+Instantiable boundaries can be used when you might have dependencies on Stik modules but mostly other boundaries and you need to maintain separate states between your controllers and/or behaviors.
 
 ```javascript
 stik.boundary({
