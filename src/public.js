@@ -28,10 +28,4 @@
       boundary.call
     );
   };
-
-  window.stik.boundary({
-    as: "$courier",
-    from: "controller|behavior",
-    to: new window.stik.Courier()
-  });
 })();

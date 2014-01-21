@@ -5,11 +5,11 @@ module.exports = function(grunt){
     'src/context.js',
     'src/behavior.js',
     'src/boundary.js',
-    'src/courier.js',
     'src/injector.js',
-    'src/view_bag.js',
     'src/manager.js',
-    'src/public.js'
+    'src/public.js',
+    'src/courier.js',
+    'src/view_bag.js'
   ];
 
   grunt.initConfig({
