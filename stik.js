@@ -504,7 +504,7 @@ window.stik = {};
   window.stik.boundary({
     as: "$courier",
     from: "controller|behavior",
-    to: new window.stik.Courier()
+    to: new Courier()
   });
 })();
 
