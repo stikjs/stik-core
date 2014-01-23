@@ -15,7 +15,7 @@
     while(i--) {
       dataToBind = fields[i].getAttribute(bindingKey);
 
-      if (dataSet[dataToBind]) {
+      if (dataSet[dataToBind] !== undefined) {
         this.$updateElementValue(fields[i], dataSet[dataToBind]);
       }
     }

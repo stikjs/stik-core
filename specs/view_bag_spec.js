@@ -133,6 +133,21 @@ describe("ViewBag", function(){
         template.getElementsByTagName("strong")[0].textContent
       ).toEqual("");
     });
+
+    it("should set empty values", function(){
+      var template, viewBag, data;
+
+      template = new DOMParser().parseFromString(
+        '<div><span data-bind="userName">Luke</span></div>',
+        "text/xml"
+      ).firstChild;
+
+      viewBag = new stik.ViewBag(template);
+
+      viewBag.$push({userName: ""});
+
+      expect(viewBag.$pull()).toEqual({userName: ""});
+    });
   });
 
   describe("#pull", function(){

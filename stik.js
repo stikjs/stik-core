@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.0 | From: 21-01-2014
+// Version: 0.7.1 | From: 23-01-2014
 
 window.stik = {};
 
@@ -516,26 +516,30 @@ window.stik = {};
   }
 
   ViewBag.prototype.$push = function(dataSet){
-    var fields, dataToBind;
+    var fields, dataToBind, i;
 
     fields = this.$fieldsToBind();
 
-    for (var i = 0; i < fields.length; i++) {
+    i = fields.length;
+
+    while(i--) {
       dataToBind = fields[i].getAttribute(bindingKey);
 
-      if (dataSet[dataToBind]) {
+      if (dataSet[dataToBind] !== undefined) {
         this.$updateElementValue(fields[i], dataSet[dataToBind]);
       }
     }
   };
 
   ViewBag.prototype.$pull = function(){
-    var fields, dataSet, key;
+    var fields, dataSet, key, i;
 
     dataSet = {};
     fields = this.$fieldsToBind();
 
-    for (var i = 0; i < fields.length; i++) {
+    i = fields.length;
+
+    while(i--) {
       key = fields[i].getAttribute(bindingKey);
       dataSet[key] = this.$extractValueOf(fields[i]);
     }
