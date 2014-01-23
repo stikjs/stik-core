@@ -8,7 +8,7 @@
   ViewBag.prototype.$push = function(dataSet){
     var fields, dataToBind, i;
 
-    fields = this.$fieldsToBind();
+    fields = fieldsToBind(this.$$template);
 
     i = fields.length;
 
@@ -16,7 +16,7 @@
       dataToBind = fields[i].getAttribute(bindingKey);
 
       if (dataSet[dataToBind] !== undefined) {
-        this.$updateElementValue(fields[i], dataSet[dataToBind]);
+        updateElementValue(fields[i], dataSet[dataToBind]);
       }
     }
   };
@@ -25,19 +25,19 @@
     var fields, dataSet, key, i;
 
     dataSet = {};
-    fields = this.$fieldsToBind();
+    fields = fieldsToBind(this.$$template);
 
     i = fields.length;
 
     while(i--) {
       key = fields[i].getAttribute(bindingKey);
-      dataSet[key] = this.$extractValueOf(fields[i]);
+      dataSet[key] = extractValueOf(fields[i]);
     }
 
     return dataSet;
   };
 
-  ViewBag.prototype.$extractValueOf = function(element){
+  function extractValueOf(element){
     if (isInput(element)) {
       return element.value;
     } else {
@@ -45,7 +45,7 @@
     }
   };
 
-  ViewBag.prototype.$updateElementValue = function(element, value){
+  function updateElementValue(element, value){
     if (isInput(element)) {
       element.value = value;
     } else {
@@ -53,12 +53,12 @@
     }
   };
 
-  ViewBag.prototype.$fieldsToBind = function(){
-    if (this.$$template.getAttribute(bindingKey)) {
-      return [this.$$template];
+  function fieldsToBind(template){
+    if (template.getAttribute(bindingKey)) {
+      return [template];
     }
 
-    return this.$$template.querySelectorAll(
+    return template.querySelectorAll(
       "[" + bindingKey + "]"
     );
   };
