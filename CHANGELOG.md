@@ -1,3 +1,8 @@
+# 0.7.1 (2014-01-23)
+
+##Bugs
+- **$push** $viewBag can now $push empty ("") values ([83e324ceb5](https://github.com/lukelex/stik.js/commit/83e324ceb561ebdc2d4ac2d14da6b2fdc7d7b94c))
+
 # 0.7.0 (2014-01-20)
 
 ##Features
