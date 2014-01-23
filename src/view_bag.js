@@ -6,11 +6,13 @@
   }
 
   ViewBag.prototype.$push = function(dataSet){
-    var fields, dataToBind;
+    var fields, dataToBind, i;
 
     fields = this.$fieldsToBind();
 
-    for (var i = 0; i < fields.length; i++) {
+    i = fields.length;
+
+    while(i--) {
       dataToBind = fields[i].getAttribute(bindingKey);
 
       if (dataSet[dataToBind]) {
@@ -20,12 +22,14 @@
   };
 
   ViewBag.prototype.$pull = function(){
-    var fields, dataSet, key;
+    var fields, dataSet, key, i;
 
     dataSet = {};
     fields = this.$fieldsToBind();
 
-    for (var i = 0; i < fields.length; i++) {
+    i = fields.length;
+
+    while(i--) {
       key = fields[i].getAttribute(bindingKey);
       dataSet[key] = this.$extractValueOf(fields[i]);
     }
