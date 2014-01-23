@@ -548,7 +548,7 @@ window.stik = {};
   };
 
   ViewBag.prototype.$extractValueOf = function(element){
-    if(element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA") {
+    if (isInput(element)) {
       return element.value;
     } else {
       return element.textContent;
@@ -556,7 +556,7 @@ window.stik = {};
   };
 
   ViewBag.prototype.$updateElementValue = function(element, value){
-    if(element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA") {
+    if (isInput(element)) {
       element.value = value;
     } else {
       element.textContent = value;
@@ -572,6 +572,10 @@ window.stik = {};
       "[" + bindingKey + "]"
     );
   };
+
+  function isInput(element){
+    return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA"
+  }
 
   window.stik.ViewBag = ViewBag;
 
