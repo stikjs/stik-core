@@ -1,1 +1,3 @@
-window.stik = {};
+window.stik = {
+  labs: {}
+};

@@ -5,9 +5,11 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.7.1 | From: 23-01-2014
+// Version: 0.8.0 | From: 25-01-2014
 
-window.stik = {};
+window.stik = {
+  labs: {}
+};
 
 (function(){
   function TempConstructor(){}
@@ -310,16 +312,6 @@ window.stik = {};
     this.$$executionUnits[controller][action] = executionUnit;
   };
 
-  Manager.prototype.$storeContext = function(controller, action, template, executionUnit){
-    var newContext = this.$createContext(controller, action, template, executionUnit);
-    this.$$contexts.push(newContext);
-    return newContext;
-  };
-
-  Manager.prototype.$createContext = function(controller, action, template, executionUnit){
-    return new window.stik.Context(controller, action, template, executionUnit);
-  };
-
   Manager.prototype.$buildContexts = function(){
     var controller, action, executionUnit, boundAny;
 
@@ -356,6 +348,16 @@ window.stik = {};
     }
 
     return templates.length > 0;
+  };
+
+  Manager.prototype.$storeContext = function(controller, action, template, executionUnit){
+    var newContext = this.$createContext(controller, action, template, executionUnit);
+    this.$$contexts.push(newContext);
+    return newContext;
+  };
+
+  Manager.prototype.$createContext = function(controller, action, template, executionUnit){
+    return new window.stik.Context(controller, action, template, executionUnit);
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
@@ -417,6 +419,21 @@ window.stik = {};
                    ":not([data-behaviors*=" + behavior.$$name + "])";
 
     return DOMHandler.querySelectorAll(selector);
+  };
+
+  Manager.prototype.$bindExecutionUnitWithTemplate = function(controller, action, template){
+    var modules, context;
+
+    modules = this.$extractBoundaries(this.$$boundaries.controller);
+
+    context = this.$createContext(
+      controller,
+      action,
+      template,
+      this.$$executionUnits[controller][action]
+    );
+
+    return [context, modules];
   };
 
   window.stik.Manager = Manager;
@@ -585,4 +602,41 @@ window.stik = {};
     inst: true,
     to: ViewBag
   });
+})();
+
+(function(){
+  function ControllerLab(env){
+    validate(env);
+
+    this.$$env      = env;
+    this.$$template = parseAsDOM(env.template);
+    this.$$context  = undefined;
+  }
+
+  function validate(env){
+    if (!env) { throw "Lab needs an environment to run" };
+    if (!env.name) { throw "name can't be empty"; }
+    if (!env.action) { throw "action can't be empty"; }
+    if (!env.template) { throw "template can't be empty"; }
+  }
+
+  function parseAsDOM(template){
+    var elmement = document.createElement("div");
+    elmement.innerHTML = template;
+    return elmement.firstChild;
+  }
+
+  ControllerLab.prototype.run = function(){
+    var result = window.stik.$$manager.$bindExecutionUnitWithTemplate(
+      this.$$env.name,
+      this.$$env.action,
+      this.$$template
+    );
+
+    this.$$context = result[0];
+
+    this.$$context.$load(result[1]);
+  };
+
+  window.stik.labs.Controller = ControllerLab;
 })();

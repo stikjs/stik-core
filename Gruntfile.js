@@ -9,7 +9,8 @@ module.exports = function(grunt){
     'src/manager.js',
     'src/public.js',
     'src/courier.js',
-    'src/view_bag.js'
+    'src/view_bag.js',
+    'src/controller_lab.js'
   ];
 
   grunt.initConfig({

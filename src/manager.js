@@ -82,16 +82,6 @@
     this.$$executionUnits[controller][action] = executionUnit;
   };
 
-  Manager.prototype.$storeContext = function(controller, action, template, executionUnit){
-    var newContext = this.$createContext(controller, action, template, executionUnit);
-    this.$$contexts.push(newContext);
-    return newContext;
-  };
-
-  Manager.prototype.$createContext = function(controller, action, template, executionUnit){
-    return new window.stik.Context(controller, action, template, executionUnit);
-  };
-
   Manager.prototype.$buildContexts = function(){
     var controller, action, executionUnit, boundAny;
 
@@ -128,6 +118,16 @@
     }
 
     return templates.length > 0;
+  };
+
+  Manager.prototype.$storeContext = function(controller, action, template, executionUnit){
+    var newContext = this.$createContext(controller, action, template, executionUnit);
+    this.$$contexts.push(newContext);
+    return newContext;
+  };
+
+  Manager.prototype.$createContext = function(controller, action, template, executionUnit){
+    return new window.stik.Context(controller, action, template, executionUnit);
   };
 
   Manager.prototype.$applyBehavior = function(behavior){
@@ -189,6 +189,21 @@
                    ":not([data-behaviors*=" + behavior.$$name + "])";
 
     return DOMHandler.querySelectorAll(selector);
+  };
+
+  Manager.prototype.$bindExecutionUnitWithTemplate = function(controller, action, template){
+    var modules, context;
+
+    modules = this.$extractBoundaries(this.$$boundaries.controller);
+
+    context = this.$createContext(
+      controller,
+      action,
+      template,
+      this.$$executionUnits[controller][action]
+    );
+
+    return [context, modules];
   };
 
   window.stik.Manager = Manager;
