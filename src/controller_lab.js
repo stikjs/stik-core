@@ -5,6 +5,15 @@
     this.$$env      = env;
     this.$$template = parseAsDOM(env.template);
     this.$$context  = undefined;
+
+    var result = window.stik.$$manager.$bindExecutionUnitWithTemplate(
+      this.$$env.name,
+      this.$$env.action,
+      this.$$template
+    );
+
+    this.$$context = result[0];
+    this.$$modules = result[1];
   }
 
   function validate(env){
@@ -21,15 +30,7 @@
   }
 
   ControllerLab.prototype.run = function(){
-    var result = window.stik.$$manager.$bindExecutionUnitWithTemplate(
-      this.$$env.name,
-      this.$$env.action,
-      this.$$template
-    );
-
-    this.$$context = result[0];
-
-    this.$$context.$load(result[1]);
+    this.$$context.$load(this.$$modules);
   };
 
   window.stik.labs.Controller = ControllerLab;
