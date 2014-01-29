@@ -48,10 +48,10 @@ describe("ControllerLab", function(){
 
     expect(
       lab.$$template.getElementsByClassName("luke")[0].value
-    ).toEqual();
+    ).toEqual(null);
 
     expect(
       lab.$$template.getElementsByClassName("vader")[0].value
-    ).toEqual();
+    ).toEqual(null);
   });
 });
