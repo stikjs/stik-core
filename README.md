@@ -11,7 +11,8 @@ By splitting your logic into small specialized responsible actions, Stik.js will
 ##Controllers
 With Stik.js you can define in your HTML which templates should be bound to a specific controller and action.
 
-The `controller` function accepts three arguments:
+###Single Actions
+While declaring single controller actions you can pass in three arguments:
 
 * `ControllerName` (String) -> Could be either the name of the page or the section in which the template will reside;
 * `ActionName` (String) -> The component name. Usually maps to the component's responsibility;
@@ -79,6 +80,32 @@ stik.controller("BattleCtrl", "List", function($template){
 });
 ```
 
+###Multiple action per Controller
+If you want to split responsibilities and compose your controller with multiple actions (and you should), you can declare multiple actions inside the same controller definition.
+
+```javascript
+stik.controller("MailCtrl", function(ctrl){
+  ctrl.action("Sender", function($template, $courier){
+    console.log(this);
+    var mailInput, mailButton;
+
+    mailInput = $template.getElementsByClassName("mail-input")[0];
+    mailButton = $template.getElementsByClassName("mail-button")[0];
+
+    mailButton.addEventListener("click", function(){
+      $courier.$send("new-mail", mailInput.value);
+      mailInput.value = "";
+    });
+  });
+
+  ctrl.action("Receiver", function($courier, $viewBag){
+    $courier.$receive("new-mail", function(message){
+      $viewBag.$push({newMsg: message});
+    });
+  });
+});
+```
+
 ##Behaviors
 With the `behavior` method you can create reusable behaviors that can be applyed in multiple components throughout you application. Or, you can add multiple behaviors to a same component. Those behaviors should only have the responsibility of adding visual interactions instead of doing data manipulations (which is the controller responsibility).
 
@@ -108,8 +135,6 @@ After a template is bound to any behavior it will get a new attribute signalling
 ```html
   <input class="bh-sparkle-input bh-some-other-behavior" data-behaviors="bh-sparkle-input bh-some-other-behavior" />
 ```
-
-**important** the only modules that can't be injected in a behavior are $context and $viewBag.
 
 ##Dependency Injection
 With Dependency Injection (DI), your dependencies are given to your object instead of your object creating or explicitly referencing them. This means the dependency injector can provide a different dependency based on the context of the situation. For example, in your tests it might pass a fake version of your services API that doesn't make requests but returns static objects instead, while in production it provides the actual services API.
@@ -231,16 +256,6 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
   <span data-bind="message"></span>
   <input data-bind="customNOOO"/>
 </div>
-```
-
-###$context
-Each controller can be bound to 1 or more templates and vice-versa. For each bind that Stik.js is able to perform, a `context` object will be created holding some basic information about the current execution. For day-to-day development you don't need this module. But it's there if you want to spy on some low level stuff.
-
-####Using it
-```javascript
-stik.controller("YourCtrl", "YourAction", function($context){
-  ...
-});
 ```
 
 ##Boundaries
@@ -367,6 +382,12 @@ If you found a repeatable bug then file an issue on [issues page](https://github
 For Feature requests or followup on current tasks and development status check our [Trello Board](https://trello.com/b/KKddbfdU/stik-js). Feel free to comment there or file issues.
 
 ##Development
+
+###Setup
+```shell
+npm install
+```
+
 ###Testing
 ```shell
 $ grunt test
