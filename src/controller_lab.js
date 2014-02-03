@@ -25,9 +25,9 @@
   }
 
   function parseAsDOM(template){
-    var element = document.createElement("div");
-    element.innerHTML = template;
-    return element.firstChild;
+    var tmp = document.implementation.createHTMLDocument();
+    tmp.body.innerHTML = template;
+    return tmp.body.firstChild;
   }
 
   ControllerLab.prototype.run = function(){
