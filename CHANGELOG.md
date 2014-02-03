@@ -1,3 +1,8 @@
+# 0.8.0 (2014-02-05)
+
+##Features
+- **New Controller/Action API** actions can be gruped inside the same controller declaration ([77c16ecc66](https://github.com/lukelex/stik.js/commit/77c16ecc6647a98892f601837c650f327f8ed80f))
+
 # 0.7.1 (2014-01-23)
 
 ##Bugs
