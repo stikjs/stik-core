@@ -80,13 +80,12 @@ stik.controller("BattleCtrl", "List", function($template){
 });
 ```
 
-###Multiple action per Controller
+###Multiple actions per Controller
 If you want to split responsibilities and compose your controller with multiple actions (and you should), you can declare multiple actions inside the same controller definition.
 
 ```javascript
 stik.controller("MailCtrl", function(ctrl){
   ctrl.action("Sender", function($template, $courier){
-    console.log(this);
     var mailInput, mailButton;
 
     mailInput = $template.getElementsByClassName("mail-input")[0];
