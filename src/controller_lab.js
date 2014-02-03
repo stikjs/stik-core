@@ -6,14 +6,15 @@
     this.$$template = parseAsDOM(env.template);
     this.$$context  = undefined;
 
-    var result = window.stik.$$manager.$bindExecutionUnitWithTemplate(
+    var result = window.stik.$$manager.$bindActionWithTemplate(
       this.$$env.name,
       this.$$env.action,
       this.$$template
     );
 
-    this.$$context = result[0];
-    this.$$modules = result[1];
+    this.$$context = result.context;
+    this.$$modules = result.modules;
+    this.$$executionUnit = result.executionUnit;
   }
 
   function validate(env){
@@ -24,13 +25,13 @@
   }
 
   function parseAsDOM(template){
-    var elmement = document.createElement("div");
-    elmement.innerHTML = template;
-    return elmement.firstChild;
+    var element = document.createElement("div");
+    element.innerHTML = template;
+    return element.firstChild;
   }
 
   ControllerLab.prototype.run = function(){
-    this.$$context.$load(this.$$modules);
+    this.$$context.$load(this.$$executionUnit, this.$$modules);
   };
 
   window.stik.labs.Controller = ControllerLab;

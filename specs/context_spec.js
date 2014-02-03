@@ -24,32 +24,6 @@ describe("Context", function(){
     elmDouble = null;
   });
 
-  describe("#initialize", function(){
-    it("should throw if controller is missing", function(){
-      expect(function(){
-        new stik.Context(null, 'application');
-      }).toThrow("controller is missing");
-    });
-
-    it("should throw if action is missing", function(){
-      expect(function(){
-        new stik.Context('AppCtrl');
-      }).toThrow("action is missing");
-    });
-
-    it("should throw if template is missing", function(){
-      expect(function(){
-        new stik.Context('AppCtrl', 'list');
-      }).toThrow("template is missing");
-    });
-
-    it("should throw if execution unit is missing", function(){
-      expect(function(){
-        new stik.Context("AppCtrl", "list", "<br>");
-      }).toThrow("execution unit is missing");
-    });
-  });
-
   describe("$load", function(){
     it("should run the execution unit it is bound to", function(){
       var template, modules, executionUnitDouble, injectedTemplate;
@@ -62,9 +36,9 @@ describe("Context", function(){
         injectedTemplate = $template;
       };
 
-      context = new stik.Context("AppCtrl", "list", template, executionUnitDouble);
+      context = new stik.Context("AppCtrl", "list", template);
 
-      context.$load(modulesDouble());
+      context.$load(executionUnitDouble, modulesDouble());
 
       expect(injectedTemplate).toEqual(template);
       expect(template.className).toEqual("stik-bound");

@@ -1,13 +1,7 @@
 (function(){
-  function Context(controller, action, template, executionUnit){
-    if (!controller)    { throw "controller is missing"; }
-    if (!action)        { throw "action is missing"; }
-    if (!template)      { throw "template is missing"; }
-    if (!executionUnit) { throw "execution unit is missing"; }
-
+  function Context(controller, action, template){
     this.$$controller    = controller;
     this.$$action        = action;
-    this.$$executionUnit = executionUnit;
 
     this.$$template = new window.stik.Injectable(
       template, false
@@ -17,18 +11,19 @@
     );
   }
 
-  Context.prototype.$load = function(modules){
+  Context.prototype.$load = function(executionUnit, modules){
     var dependencies = this.$resolveDependencies(
+      executionUnit,
       this.$mergeModules(modules)
     );
 
-    this.$$executionUnit.apply({}, dependencies);
+    executionUnit.apply(this, dependencies);
     this.$markAsBound();
   };
 
-  Context.prototype.$resolveDependencies = function(modules){
+  Context.prototype.$resolveDependencies = function(executionUnit, modules){
     var injector = new window.stik.Injector(
-      this.$$executionUnit, modules
+      executionUnit, modules
     );
 
     return injector.$resolveDependencies();

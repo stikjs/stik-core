@@ -1,18 +1,33 @@
 describe("Public", function(){
-  it(".controller", function(){
-    var controller, action, executionUnit;
+  describe(".controller", function(){
+    it("with action", function(){
+      var controller, action, executionUnit;
 
-    controller    = "AppCtrl";
-    action        = "Login";
-    executionUnit = function(){};
+      controller    = "AppCtrl";
+      action        = "Login";
+      executionUnit = function(){};
 
-    spyOn(stik.$$manager, "$addController");
+      spyOn(stik.$$manager, "$addControllerWithAction");
 
-    stik.controller(controller, action, executionUnit);
+      stik.controller(controller, action, executionUnit);
 
-    expect(
-      stik.$$manager.$addController
-    ).toHaveBeenCalledWith(controller, action, executionUnit);
+      expect(
+        stik.$$manager.$addControllerWithAction
+      ).toHaveBeenCalledWith(controller, action, executionUnit);
+    });
+
+    it("without action", function(){
+      var controller, executionUnit, ctrl;
+
+      controller    = "AppCtrl";
+      executionUnit = jasmine.createSpy("executionUnit");
+
+      ctrl = stik.controller(controller, executionUnit);
+
+      expect(
+        executionUnit
+      ).toHaveBeenCalledWith(ctrl);
+    });
   });
 
   it(".behavior", function(){
@@ -32,19 +47,16 @@ describe("Public", function(){
 
   describe(".bindLazy", function(){
     it("when ok", function(){
-      spyOn(stik.$$manager, "$buildContexts").andReturn(true);
       spyOn(stik.$$manager, "$applyBehaviors").andReturn(true);
 
       expect(function(){
         stik.bindLazy();
       }).not.toThrow();
 
-      expect(stik.$$manager.$buildContexts).toHaveBeenCalled();
       expect(stik.$$manager.$applyBehaviors).toHaveBeenCalled();
     });
 
-    it("when no controllers was bound", function(){
-      spyOn(stik.$$manager, "$buildContexts").andReturn(false);
+    it("when no controllers were bound", function(){
       spyOn(stik.$$manager, "$applyBehaviors").andReturn(true);
 
       expect(function(){
@@ -52,8 +64,8 @@ describe("Public", function(){
       }).not.toThrow();
     });
 
-    it("when no behaviors was bound", function(){
-      spyOn(stik.$$manager, "$buildContexts").andReturn(true);
+    it("when no behaviors were bound", function(){
+      spyOn(stik.$$manager, "$bindActions").andReturn(true);
       spyOn(stik.$$manager, "$applyBehaviors").andReturn(false);
 
       expect(function(){
@@ -62,7 +74,6 @@ describe("Public", function(){
     });
 
     it("when nothing was bound", function(){
-      spyOn(stik.$$manager, "$buildContexts").andReturn(false);
       spyOn(stik.$$manager, "$applyBehaviors").andReturn(false);
 
       expect(function(){

@@ -2,6 +2,8 @@ module.exports = function(grunt){
   var srcFiles = [
     'src/setup.js',
     'src/injectable.js',
+    'src/controller.js',
+    'src/action.js',
     'src/context.js',
     'src/behavior.js',
     'src/boundary.js',

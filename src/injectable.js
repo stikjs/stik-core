@@ -44,9 +44,7 @@
   }
 
   function callWithDependencies(module, context, dependencies){
-    return module.apply(
-      context, dependencies
-    );
+    return module.apply(context, dependencies);
   }
 
   window.stik.Injectable = Injectable;
