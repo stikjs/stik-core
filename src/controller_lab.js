@@ -18,7 +18,7 @@
   }
 
   function validate(env){
-    if (!env) { throw "Lab needs an environment to run" };
+    if (!env) { throw "Lab needs an environment to run"; }
     if (!env.name) { throw "name can't be empty"; }
     if (!env.action) { throw "action can't be empty"; }
     if (!env.template) { throw "template can't be empty"; }

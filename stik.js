@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.8.0 | From: 03-02-2014
+// Version: 0.8.0 | From: 05-02-2014
 
 window.stik = {
   labs: {}
@@ -65,7 +65,7 @@ window.stik = {
 
 (function(){
   function Controller(name){
-    if (!name) { console.warn(name) ; throw "Controller name can't be empty"; }
+    if (!name) { throw "Controller name can't be empty"; }
 
     this.$$name = name;
     this.$$actions = {};
@@ -80,7 +80,7 @@ window.stik = {
   };
 
   Controller.prototype.$bind = function(modules){
-    for (action in this.$$actions){
+    for (var action in this.$$actions){
       this.$$actions[action].$bind(modules);
     }
   };
@@ -107,7 +107,7 @@ window.stik = {
 
     while(i--){
       this.$bindWithTemplate(
-        templates[i], modules
+        templates[i]
       ).context.$load(this.$$executionUnit, modules);
     }
   };
@@ -449,7 +449,7 @@ window.stik = {
   };
 
   Manager.prototype.$bindActionWithTemplate = function(controller, action, template){
-    var modules, context;
+    var modules, result;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
@@ -464,7 +464,7 @@ window.stik = {
   Manager.prototype.$bindActions = function(){
     var modules = this.$extractBoundaries(this.$$boundaries.controller);
 
-    for (ctrl in this.$$controllers) {
+    for (var ctrl in this.$$controllers) {
       this.$$controllers[ctrl].$bind(modules);
     }
   };
@@ -616,7 +616,7 @@ window.stik = {
     } else {
       return element.textContent;
     }
-  };
+  }
 
   function updateElementValue(element, value){
     if (isInput(element)) {
@@ -624,7 +624,7 @@ window.stik = {
     } else {
       element.textContent = value;
     }
-  };
+  }
 
   function fieldsToBind(template){
     if (template.getAttribute(bindingKey)) {
@@ -634,10 +634,10 @@ window.stik = {
     return template.querySelectorAll(
       "[" + bindingKey + "]"
     );
-  };
+  }
 
   function isInput(element){
-    return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA"
+    return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA";
   }
 
   window.stik.ViewBag = ViewBag;
@@ -670,7 +670,7 @@ window.stik = {
   }
 
   function validate(env){
-    if (!env) { throw "Lab needs an environment to run" };
+    if (!env) { throw "Lab needs an environment to run"; }
     if (!env.name) { throw "name can't be empty"; }
     if (!env.action) { throw "action can't be empty"; }
     if (!env.template) { throw "template can't be empty"; }

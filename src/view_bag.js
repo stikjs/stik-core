@@ -43,7 +43,7 @@
     } else {
       return element.textContent;
     }
-  };
+  }
 
   function updateElementValue(element, value){
     if (isInput(element)) {
@@ -51,7 +51,7 @@
     } else {
       element.textContent = value;
     }
-  };
+  }
 
   function fieldsToBind(template){
     if (template.getAttribute(bindingKey)) {
@@ -61,10 +61,10 @@
     return template.querySelectorAll(
       "[" + bindingKey + "]"
     );
-  };
+  }
 
   function isInput(element){
-    return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA"
+    return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA";
   }
 
   window.stik.ViewBag = ViewBag;

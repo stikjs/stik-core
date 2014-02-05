@@ -1,6 +1,6 @@
 (function(){
   function Controller(name){
-    if (!name) { console.warn(name) ; throw "Controller name can't be empty"; }
+    if (!name) { throw "Controller name can't be empty"; }
 
     this.$$name = name;
     this.$$actions = {};
@@ -15,7 +15,7 @@
   };
 
   Controller.prototype.$bind = function(modules){
-    for (action in this.$$actions){
+    for (var action in this.$$actions){
       this.$$actions[action].$bind(modules);
     }
   };

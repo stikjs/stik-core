@@ -137,7 +137,7 @@
   };
 
   Manager.prototype.$bindActionWithTemplate = function(controller, action, template){
-    var modules, context;
+    var modules, result;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
@@ -152,7 +152,7 @@
   Manager.prototype.$bindActions = function(){
     var modules = this.$extractBoundaries(this.$$boundaries.controller);
 
-    for (ctrl in this.$$controllers) {
+    for (var ctrl in this.$$controllers) {
       this.$$controllers[ctrl].$bind(modules);
     }
   };

@@ -17,7 +17,7 @@
 
     while(i--){
       this.$bindWithTemplate(
-        templates[i], modules
+        templates[i]
       ).context.$load(this.$$executionUnit, modules);
     }
   };
