@@ -35,7 +35,7 @@
   "banner": {
     "divider": "// ==========================================================================\n",
     "project": "// Project:   Stik.js - JavaScript Separation Of Concerns\n",
-    "copyright": "// Copyright: Copyright 2011-2013 Lukas Alexandre\n",
+    "copyright": "// Copyright: Copyright 2013-2014 Lukas Alexandre\n",
     "license": "// License:   Licensed under MIT license\n",
     "licenseLink": "//            See https://github.com/stikjs/stik.js/blob/master/LICENSE\n"
   }

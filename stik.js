@@ -1,11 +1,11 @@
 // ==========================================================================
 // Project:   Stik.js - JavaScript Separation Of Concerns
-// Copyright: Copyright 2011-2013 Lukas Alexandre
+// Copyright: Copyright 2013-2014 Lukas Alexandre
 // License:   Licensed under MIT license
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.8.0 | From: 05-02-2014
+// Version: 0.8.0 | From: 12-02-2014
 
 window.stik = {
   labs: {}
