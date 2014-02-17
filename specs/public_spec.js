@@ -74,6 +74,7 @@ describe("Public", function(){
     });
 
     it("when nothing was bound", function(){
+      spyOn(stik.$$manager, "$bindActions").andReturn(false);
       spyOn(stik.$$manager, "$applyBehaviors").andReturn(false);
 
       expect(function(){

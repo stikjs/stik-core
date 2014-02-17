@@ -15,9 +15,15 @@
   };
 
   Controller.prototype.$bind = function(modules){
+    var boundAny = false;
+
     for (var action in this.$$actions){
-      this.$$actions[action].$bind(modules);
+      if (this.$$actions[action].$bind(modules)) {
+        boundAny = true;
+      }
     }
+
+    return boundAny;
   };
 
   window.stik.Controller = Controller;

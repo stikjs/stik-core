@@ -20,6 +20,8 @@
         templates[i]
       ).context.$load(this.$$executionUnit, modules);
     }
+
+    return templates.length > 0;
   };
 
   Action.prototype.$resolveDependencies = function(modules){

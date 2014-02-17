@@ -1,8 +1,8 @@
 (function(){
   function Manager(){
-    this.$$behaviors      = [];
-    this.$$controllers    = {};
-    this.$$boundaries     = {controller:{}, behavior:{}};
+    this.$$behaviors   = [];
+    this.$$controllers = {};
+    this.$$boundaries  = {controller:{}, behavior:{}};
   }
 
   Manager.prototype.$addControllerWithAction = function(controllerName, actionName, executionUnit){
@@ -150,11 +150,19 @@
   };
 
   Manager.prototype.$bindActions = function(){
-    var modules = this.$extractBoundaries(this.$$boundaries.controller);
+    var modules, boundAny;
+
+    modules = this.$extractBoundaries(this.$$boundaries.controller);
+
+    boundAny = false;
 
     for (var ctrl in this.$$controllers) {
-      this.$$controllers[ctrl].$bind(modules);
+      if (this.$$controllers[ctrl].$bind(modules)) {
+        boundAny = true;
+      }
     }
+
+    return boundAny;
   };
 
   Manager.prototype.$bindController = function(controller){

@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.8.0 | From: 12-02-2014
+// Version: 0.8.0 | From: 17-02-2014
 
 window.stik = {
   labs: {}
@@ -80,9 +80,15 @@ window.stik = {
   };
 
   Controller.prototype.$bind = function(modules){
+    var boundAny = false;
+
     for (var action in this.$$actions){
-      this.$$actions[action].$bind(modules);
+      if (this.$$actions[action].$bind(modules)) {
+        boundAny = true;
+      }
     }
+
+    return boundAny;
   };
 
   window.stik.Controller = Controller;
@@ -110,6 +116,8 @@ window.stik = {
         templates[i]
       ).context.$load(this.$$executionUnit, modules);
     }
+
+    return templates.length > 0;
   };
 
   Action.prototype.$resolveDependencies = function(modules){
@@ -312,9 +320,9 @@ window.stik = {
 
 (function(){
   function Manager(){
-    this.$$behaviors      = [];
-    this.$$controllers    = {};
-    this.$$boundaries     = {controller:{}, behavior:{}};
+    this.$$behaviors   = [];
+    this.$$controllers = {};
+    this.$$boundaries  = {controller:{}, behavior:{}};
   }
 
   Manager.prototype.$addControllerWithAction = function(controllerName, actionName, executionUnit){
@@ -462,11 +470,19 @@ window.stik = {
   };
 
   Manager.prototype.$bindActions = function(){
-    var modules = this.$extractBoundaries(this.$$boundaries.controller);
+    var modules, boundAny;
+
+    modules = this.$extractBoundaries(this.$$boundaries.controller);
+
+    boundAny = false;
 
     for (var ctrl in this.$$controllers) {
-      this.$$controllers[ctrl].$bind(modules);
+      if (this.$$controllers[ctrl].$bind(modules)) {
+        boundAny = true;
+      }
     }
+
+    return boundAny;
   };
 
   Manager.prototype.$bindController = function(controller){
