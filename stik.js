@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.8.0 | From: 17-02-2014
+// Version: 0.8.1 | From: 17-02-2014
 
 window.stik = {
   labs: {}
