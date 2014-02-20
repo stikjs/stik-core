@@ -5,11 +5,20 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.8.1 | From: 17-02-2014
+// Version: 0.8.1 | From: 20-02-2014
 
 window.stik = {
   labs: {}
 };
+
+(function(){
+  Function.prototype.method = function(name, func){
+    if (!this.hasOwnProperty(name)) {
+      this.prototype[name] = func;
+      return this;
+    }
+  }
+})();
 
 (function(){
   function TempConstructor(){}
@@ -20,7 +29,7 @@ window.stik = {
     this.$$callable     = callable || false;
   }
 
-  Injectable.prototype.$resolve = function(dependencies){
+  Injectable.method("$resolve", function(dependencies){
     if (this.$$instantiable) {
       return buildModule(
         this.$$module,
@@ -35,7 +44,7 @@ window.stik = {
     } else {
       return this.$$module;
     }
-  };
+  });
 
   function buildModule(module, dependencies){
     var newInstance, value;
@@ -71,15 +80,15 @@ window.stik = {
     this.$$actions = {};
   }
 
-  Controller.prototype.action = function(actionName, executionUnit){
+  Controller.method("action", function(actionName, executionUnit){
     var action = new window.stik.Action(
       actionName, this.$$name, executionUnit
     );
     this.$$actions[actionName] = action;
     return action;
-  };
+  });
 
-  Controller.prototype.$bind = function(modules){
+  Controller.method("$bind", function(modules){
     var boundAny = false;
 
     for (var action in this.$$actions){
@@ -89,7 +98,7 @@ window.stik = {
     }
 
     return boundAny;
-  };
+  });
 
   window.stik.Controller = Controller;
 })();
@@ -104,7 +113,7 @@ window.stik = {
     this.$$executionUnit = executionUnit;
   }
 
-  Action.prototype.$bind = function(modules){
+  Action.method("$bind", function(modules){
     var templates, i;
 
     templates = this.$findTemplates();
@@ -118,25 +127,25 @@ window.stik = {
     }
 
     return templates.length > 0;
-  };
+  });
 
-  Action.prototype.$resolveDependencies = function(modules){
+  Action.method("$resolveDependencies", function(modules){
     var injector = new window.stik.Injector(
       this.$$executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  };
+  });
 
-  Action.prototype.$mergeModules = function(template, modules){
+  Action.method("$mergeModules", function(template, modules){
     modules.$context  = this;
     modules.$template = template;
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
-  };
+  });
 
-  Action.prototype.$findTemplates = function(controller, DOMInjection){
+  Action.method("$findTemplates", function(controller, DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -144,9 +153,9 @@ window.stik = {
                    "[data-action=" + this.$$name + "]" +
                    ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
-  };
+  });
 
-  Action.prototype.$bindWithTemplate = function(template, modules){
+  Action.method("$bindWithTemplate", function(template, modules){
     return {
       context: new window.stik.Context(
         this.$$controller,
@@ -155,7 +164,7 @@ window.stik = {
       ),
       executionUnit: this.$$executionUnit
     };
-  };
+  });
 
   window.stik.Action = Action;
 })();
@@ -173,7 +182,7 @@ window.stik = {
     );
   }
 
-  Context.prototype.$load = function(executionUnit, modules){
+  Context.method("$load", function(executionUnit, modules){
     var dependencies = this.$resolveDependencies(
       executionUnit,
       this.$mergeModules(modules)
@@ -181,28 +190,28 @@ window.stik = {
 
     executionUnit.apply(this, dependencies);
     this.$markAsBound();
-  };
+  });
 
-  Context.prototype.$resolveDependencies = function(executionUnit, modules){
+  Context.method("$resolveDependencies", function(executionUnit, modules){
     var injector = new window.stik.Injector(
       executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  };
+  });
 
-  Context.prototype.$mergeModules = function(modules){
+  Context.method("$mergeModules", function(modules){
     modules.$context  = this;
     modules.$template = this.$$template;
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
-  };
+  });
 
-  Context.prototype.$markAsBound = function(){
+  Context.method("$markAsBound", function(){
     var template = this.$$template.$resolve();
     template.className = (template.className + ' stik-bound').trim();
-  };
+  });
 
   window.stik.Context = Context;
 })();
@@ -220,31 +229,31 @@ window.stik = {
     this.$$executionUnit = executionUnit;
   }
 
-  Behavior.prototype.$load = function(template, modules){
+  Behavior.method("$load", function(template, modules){
     modules.$template = new window.stik.Injectable(template);
 
     var dependencies = this.$resolveDependencies(modules);
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsApplyed(template);
-  };
+  });
 
-  Behavior.prototype.$resolveDependencies = function(modules){
+  Behavior.method("$resolveDependencies", function(modules){
     var injector = new window.stik.Injector(
       this.$$executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  };
+  });
 
-  Behavior.prototype.$markAsApplyed = function(template){
+  Behavior.method("$markAsApplyed", function(template){
     var behaviors;
 
     behaviors = template.getAttribute(behaviorKey);
     behaviors = ((behaviors || "") + " " + this.$$name).trim();
 
     template.setAttribute(behaviorKey, behaviors);
-  };
+  });
 
   window.stik.Behavior = Behavior;
 })();
@@ -269,13 +278,13 @@ window.stik = {
     this.$$modules       = modules;
   }
 
-  Injector.prototype.$resolveDependencies = function(){
+  Injector.method("$resolveDependencies", function(){
     var args = this.$extractArguments();
 
     return this.$grabModules(args);
-  };
+  });
 
-  Injector.prototype.$extractArguments = function(){
+  Injector.method("$extractArguments", function(){
     var argsPattern, funcString, args;
 
     argsPattern = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
@@ -285,17 +294,17 @@ window.stik = {
     args = funcString.match(argsPattern)[1].split(',');
 
     return this.$trimmedArgs(args);
-  };
+  });
 
-  Injector.prototype.$trimmedArgs = function(args){
+  Injector.method("$trimmedArgs", function(args){
     var result = [];
     args.forEach(function(arg){
       result.push(arg.trim());
     });
     return result;
-  };
+  });
 
-  Injector.prototype.$grabModules = function(args){
+  Injector.method("$grabModules", function(args){
     var module, dependencies;
 
     dependencies = [];
@@ -313,7 +322,7 @@ window.stik = {
     }
 
     return dependencies;
-  };
+  });
 
   window.stik.Injector = Injector;
 })();
@@ -325,7 +334,7 @@ window.stik = {
     this.$$boundaries  = {controller:{}, behavior:{}};
   }
 
-  Manager.prototype.$addControllerWithAction = function(controllerName, actionName, executionUnit){
+  Manager.method("$addControllerWithAction", function(controllerName, actionName, executionUnit){
     var ctrl, action;
     ctrl = this.$storeController(controllerName);
     action = ctrl.action(actionName, executionUnit);
@@ -333,22 +342,22 @@ window.stik = {
       this.$extractBoundaries(this.$$boundaries.controller)
     );
     return ctrl;
-  };
+  });
 
-  Manager.prototype.$addController = function(controllerName, executionUnit){
+  Manager.method("$addController", function(controllerName, executionUnit){
     var ctrl = this.$storeController(controllerName);
     executionUnit.apply({}, [ctrl]);
     this.$bindController(ctrl);
     return ctrl;
-  };
+  });
 
-  Manager.prototype.$storeController = function(controllerName){
+  Manager.method("$storeController", function(controllerName){
     var ctrl = new window.stik.Controller(controllerName);
     this.$$controllers[controllerName] = ctrl;
     return ctrl;
-  };
+  });
 
-  Manager.prototype.$addBehavior = function(name, executionUnit){
+  Manager.method("$addBehavior", function(name, executionUnit){
     var behavior;
 
     if (this.$isBehaviorRegistered(name)) {
@@ -360,9 +369,9 @@ window.stik = {
     this.$applyBehavior(behavior);
 
     return behavior;
-  };
+  });
 
-  Manager.prototype.$addBoundary = function(as, from, to, instantiable, callable){
+  Manager.method("$addBoundary", function(as, from, to, instantiable, callable){
     var boundary, that;
 
     that = this;
@@ -372,9 +381,9 @@ window.stik = {
     });
 
     return boundary;
-  };
+  });
 
-  Manager.prototype.$parseFrom = function(from, forEachFound){
+  Manager.method("$parseFrom", function(from, forEachFound){
     var targets, i;
 
     targets = from.toLowerCase().split("|");
@@ -387,9 +396,9 @@ window.stik = {
         forEachFound(targets[i]);
       }
     }
-  };
+  });
 
-  Manager.prototype.$isBehaviorRegistered = function(name){
+  Manager.method("$isBehaviorRegistered", function(name){
     var i = this.$$behaviors.length;
 
     while (i--) {
@@ -399,13 +408,13 @@ window.stik = {
     }
 
     return false;
-  };
+  });
 
-  Manager.prototype.$createBehavior = function(name, executionUnit){
+  Manager.method("$createBehavior", function(name, executionUnit){
     return new window.stik.Behavior(name, executionUnit);
-  };
+  });
 
-  Manager.prototype.$applyBehavior = function(behavior){
+  Manager.method("$applyBehavior", function(behavior){
     var templates, modules, i;
 
     templates = this.$findBehaviorTemplates(behavior);
@@ -417,9 +426,9 @@ window.stik = {
     }
 
     return templates.length > 0;
-  };
+  });
 
-  Manager.prototype.$applyBehaviors = function(){
+  Manager.method("$applyBehaviors", function(){
     var boundAny, i;
 
     boundAny = false;
@@ -432,9 +441,9 @@ window.stik = {
     }
 
     return boundAny;
-  };
+  });
 
-  Manager.prototype.$extractBoundaries = function(collection){
+  Manager.method("$extractBoundaries", function(collection){
     var modules, key;
 
     modules = {};
@@ -444,9 +453,9 @@ window.stik = {
     }
 
     return modules;
-  };
+  });
 
-  Manager.prototype.$findBehaviorTemplates = function(behavior, DOMInjection){
+  Manager.method("$findBehaviorTemplates", function(behavior, DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -454,9 +463,9 @@ window.stik = {
                    ":not([data-behaviors*=" + behavior.$$name + "])";
 
     return DOMHandler.querySelectorAll(selector);
-  };
+  });
 
-  Manager.prototype.$bindActionWithTemplate = function(controller, action, template){
+  Manager.method("$bindActionWithTemplate", function(controller, action, template){
     var modules, result;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
@@ -467,9 +476,9 @@ window.stik = {
 
     result.modules = modules;
     return result;
-  };
+  });
 
-  Manager.prototype.$bindActions = function(){
+  Manager.method("$bindActions", function(){
     var modules, boundAny;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
@@ -483,12 +492,12 @@ window.stik = {
     }
 
     return boundAny;
-  };
+  });
 
-  Manager.prototype.$bindController = function(controller){
+  Manager.method("$bindController", function(controller){
     var modules = this.$extractBoundaries(this.$$boundaries.controller);
     controller.$bind(modules);
-  };
+  });
 
   window.stik.Manager = Manager;
 })();
@@ -538,23 +547,23 @@ window.stik = {
     this.$$subscriptions = {};
   }
 
-  Courier.prototype.$receive = function(box, opener){
+  Courier.method("$receive", function(box, opener){
     var subscription = new Subscription(box, opener);
 
     this.$$subscriptions[box] = (this.$$subscriptions[box] || []);
     this.$$subscriptions[box].push(subscription);
 
     return this.$unsubscribe.bind(this, subscription);
-  };
+  });
 
-  Courier.prototype.$unsubscribe = function(subscription){
+  Courier.method("$unsubscribe", function(subscription){
     this.$$subscriptions[subscription.$$box] =
     this.$$subscriptions[subscription.$$box].filter(function(subs){
       return subs.$$id !== subscription.$$id;
     });
-  };
+  });
 
-  Courier.prototype.$send = function(box, message){
+  Courier.method("$send", function(box, message){
     var openers, i;
 
     openers = this.$$subscriptions[box];
@@ -567,7 +576,7 @@ window.stik = {
     while (i--) {
       openers[i].$$opener(message);
     }
-  };
+  });
 
   function Subscription(box, opener){
     this.$$id = '#' + Math.floor(
@@ -594,7 +603,7 @@ window.stik = {
     this.$$template = $template;
   }
 
-  ViewBag.prototype.$push = function(dataSet){
+  ViewBag.method("$push", function(dataSet){
     var fields, dataToBind, i;
 
     fields = fieldsToBind(this.$$template);
@@ -608,9 +617,9 @@ window.stik = {
         updateElementValue(fields[i], dataSet[dataToBind]);
       }
     }
-  };
+  });
 
-  ViewBag.prototype.$pull = function(){
+  ViewBag.method("$pull", function(){
     var fields, dataSet, key, i;
 
     dataSet = {};
@@ -624,7 +633,7 @@ window.stik = {
     }
 
     return dataSet;
-  };
+  });
 
   function extractValueOf(element){
     if (isInput(element)) {
@@ -698,9 +707,9 @@ window.stik = {
     return tmp.body.firstChild;
   }
 
-  ControllerLab.prototype.run = function(){
+  ControllerLab.method("run", function(){
     this.$$context.$load(this.$$executionUnit, this.$$modules);
-  };
+  });
 
   window.stik.labs.Controller = ControllerLab;
 })();

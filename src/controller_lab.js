@@ -30,9 +30,9 @@
     return tmp.body.firstChild;
   }
 
-  ControllerLab.prototype.run = function(){
+  ControllerLab.method("run", function(){
     this.$$context.$load(this.$$executionUnit, this.$$modules);
-  };
+  });
 
   window.stik.labs.Controller = ControllerLab;
 })();

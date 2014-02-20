@@ -5,7 +5,7 @@
     this.$$boundaries  = {controller:{}, behavior:{}};
   }
 
-  Manager.prototype.$addControllerWithAction = function(controllerName, actionName, executionUnit){
+  Manager.method("$addControllerWithAction", function(controllerName, actionName, executionUnit){
     var ctrl, action;
     ctrl = this.$storeController(controllerName);
     action = ctrl.action(actionName, executionUnit);
@@ -13,22 +13,22 @@
       this.$extractBoundaries(this.$$boundaries.controller)
     );
     return ctrl;
-  };
+  });
 
-  Manager.prototype.$addController = function(controllerName, executionUnit){
+  Manager.method("$addController", function(controllerName, executionUnit){
     var ctrl = this.$storeController(controllerName);
     executionUnit.apply({}, [ctrl]);
     this.$bindController(ctrl);
     return ctrl;
-  };
+  });
 
-  Manager.prototype.$storeController = function(controllerName){
+  Manager.method("$storeController", function(controllerName){
     var ctrl = new window.stik.Controller(controllerName);
     this.$$controllers[controllerName] = ctrl;
     return ctrl;
-  };
+  });
 
-  Manager.prototype.$addBehavior = function(name, executionUnit){
+  Manager.method("$addBehavior", function(name, executionUnit){
     var behavior;
 
     if (this.$isBehaviorRegistered(name)) {
@@ -40,9 +40,9 @@
     this.$applyBehavior(behavior);
 
     return behavior;
-  };
+  });
 
-  Manager.prototype.$addBoundary = function(as, from, to, instantiable, callable){
+  Manager.method("$addBoundary", function(as, from, to, instantiable, callable){
     var boundary, that;
 
     that = this;
@@ -52,9 +52,9 @@
     });
 
     return boundary;
-  };
+  });
 
-  Manager.prototype.$parseFrom = function(from, forEachFound){
+  Manager.method("$parseFrom", function(from, forEachFound){
     var targets, i;
 
     targets = from.toLowerCase().split("|");
@@ -67,9 +67,9 @@
         forEachFound(targets[i]);
       }
     }
-  };
+  });
 
-  Manager.prototype.$isBehaviorRegistered = function(name){
+  Manager.method("$isBehaviorRegistered", function(name){
     var i = this.$$behaviors.length;
 
     while (i--) {
@@ -79,13 +79,13 @@
     }
 
     return false;
-  };
+  });
 
-  Manager.prototype.$createBehavior = function(name, executionUnit){
+  Manager.method("$createBehavior", function(name, executionUnit){
     return new window.stik.Behavior(name, executionUnit);
-  };
+  });
 
-  Manager.prototype.$applyBehavior = function(behavior){
+  Manager.method("$applyBehavior", function(behavior){
     var templates, modules, i;
 
     templates = this.$findBehaviorTemplates(behavior);
@@ -97,9 +97,9 @@
     }
 
     return templates.length > 0;
-  };
+  });
 
-  Manager.prototype.$applyBehaviors = function(){
+  Manager.method("$applyBehaviors", function(){
     var boundAny, i;
 
     boundAny = false;
@@ -112,9 +112,9 @@
     }
 
     return boundAny;
-  };
+  });
 
-  Manager.prototype.$extractBoundaries = function(collection){
+  Manager.method("$extractBoundaries", function(collection){
     var modules, key;
 
     modules = {};
@@ -124,9 +124,9 @@
     }
 
     return modules;
-  };
+  });
 
-  Manager.prototype.$findBehaviorTemplates = function(behavior, DOMInjection){
+  Manager.method("$findBehaviorTemplates", function(behavior, DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -134,9 +134,9 @@
                    ":not([data-behaviors*=" + behavior.$$name + "])";
 
     return DOMHandler.querySelectorAll(selector);
-  };
+  });
 
-  Manager.prototype.$bindActionWithTemplate = function(controller, action, template){
+  Manager.method("$bindActionWithTemplate", function(controller, action, template){
     var modules, result;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
@@ -147,9 +147,9 @@
 
     result.modules = modules;
     return result;
-  };
+  });
 
-  Manager.prototype.$bindActions = function(){
+  Manager.method("$bindActions", function(){
     var modules, boundAny;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
@@ -163,12 +163,12 @@
     }
 
     return boundAny;
-  };
+  });
 
-  Manager.prototype.$bindController = function(controller){
+  Manager.method("$bindController", function(controller){
     var modules = this.$extractBoundaries(this.$$boundaries.controller);
     controller.$bind(modules);
-  };
+  });
 
   window.stik.Manager = Manager;
 })();

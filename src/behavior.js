@@ -11,31 +11,31 @@
     this.$$executionUnit = executionUnit;
   }
 
-  Behavior.prototype.$load = function(template, modules){
+  Behavior.method("$load", function(template, modules){
     modules.$template = new window.stik.Injectable(template);
 
     var dependencies = this.$resolveDependencies(modules);
 
     this.$$executionUnit.apply({}, dependencies);
     this.$markAsApplyed(template);
-  };
+  });
 
-  Behavior.prototype.$resolveDependencies = function(modules){
+  Behavior.method("$resolveDependencies", function(modules){
     var injector = new window.stik.Injector(
       this.$$executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  };
+  });
 
-  Behavior.prototype.$markAsApplyed = function(template){
+  Behavior.method("$markAsApplyed", function(template){
     var behaviors;
 
     behaviors = template.getAttribute(behaviorKey);
     behaviors = ((behaviors || "") + " " + this.$$name).trim();
 
     template.setAttribute(behaviorKey, behaviors);
-  };
+  });
 
   window.stik.Behavior = Behavior;
 })();

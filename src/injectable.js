@@ -7,7 +7,7 @@
     this.$$callable     = callable || false;
   }
 
-  Injectable.prototype.$resolve = function(dependencies){
+  Injectable.method("$resolve", function(dependencies){
     if (this.$$instantiable) {
       return buildModule(
         this.$$module,
@@ -22,7 +22,7 @@
     } else {
       return this.$$module;
     }
-  };
+  });
 
   function buildModule(module, dependencies){
     var newInstance, value;

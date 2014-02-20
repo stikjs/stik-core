@@ -11,7 +11,7 @@
     );
   }
 
-  Context.prototype.$load = function(executionUnit, modules){
+  Context.method("$load", function(executionUnit, modules){
     var dependencies = this.$resolveDependencies(
       executionUnit,
       this.$mergeModules(modules)
@@ -19,28 +19,28 @@
 
     executionUnit.apply(this, dependencies);
     this.$markAsBound();
-  };
+  });
 
-  Context.prototype.$resolveDependencies = function(executionUnit, modules){
+  Context.method("$resolveDependencies", function(executionUnit, modules){
     var injector = new window.stik.Injector(
       executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  };
+  });
 
-  Context.prototype.$mergeModules = function(modules){
+  Context.method("$mergeModules", function(modules){
     modules.$context  = this;
     modules.$template = this.$$template;
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
-  };
+  });
 
-  Context.prototype.$markAsBound = function(){
+  Context.method("$markAsBound", function(){
     var template = this.$$template.$resolve();
     template.className = (template.className + ' stik-bound').trim();
-  };
+  });
 
   window.stik.Context = Context;
 })();

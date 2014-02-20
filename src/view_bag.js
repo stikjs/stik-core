@@ -5,7 +5,7 @@
     this.$$template = $template;
   }
 
-  ViewBag.prototype.$push = function(dataSet){
+  ViewBag.method("$push", function(dataSet){
     var fields, dataToBind, i;
 
     fields = fieldsToBind(this.$$template);
@@ -19,9 +19,9 @@
         updateElementValue(fields[i], dataSet[dataToBind]);
       }
     }
-  };
+  });
 
-  ViewBag.prototype.$pull = function(){
+  ViewBag.method("$pull", function(){
     var fields, dataSet, key, i;
 
     dataSet = {};
@@ -35,7 +35,7 @@
     }
 
     return dataSet;
-  };
+  });
 
   function extractValueOf(element){
     if (isInput(element)) {

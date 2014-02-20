@@ -8,7 +8,7 @@
     this.$$executionUnit = executionUnit;
   }
 
-  Action.prototype.$bind = function(modules){
+  Action.method("$bind", function(modules){
     var templates, i;
 
     templates = this.$findTemplates();
@@ -22,25 +22,25 @@
     }
 
     return templates.length > 0;
-  };
+  });
 
-  Action.prototype.$resolveDependencies = function(modules){
+  Action.method("$resolveDependencies", function(modules){
     var injector = new window.stik.Injector(
       this.$$executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  };
+  });
 
-  Action.prototype.$mergeModules = function(template, modules){
+  Action.method("$mergeModules", function(template, modules){
     modules.$context  = this;
     modules.$template = template;
     modules.$viewBag  = this.$$viewBag;
 
     return modules;
-  };
+  });
 
-  Action.prototype.$findTemplates = function(controller, DOMInjection){
+  Action.method("$findTemplates", function(controller, DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -48,9 +48,9 @@
                    "[data-action=" + this.$$name + "]" +
                    ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
-  };
+  });
 
-  Action.prototype.$bindWithTemplate = function(template, modules){
+  Action.method("$bindWithTemplate", function(template, modules){
     return {
       context: new window.stik.Context(
         this.$$controller,
@@ -59,7 +59,7 @@
       ),
       executionUnit: this.$$executionUnit
     };
-  };
+  });
 
   window.stik.Action = Action;
 })();

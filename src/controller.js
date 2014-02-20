@@ -6,15 +6,15 @@
     this.$$actions = {};
   }
 
-  Controller.prototype.action = function(actionName, executionUnit){
+  Controller.method("action", function(actionName, executionUnit){
     var action = new window.stik.Action(
       actionName, this.$$name, executionUnit
     );
     this.$$actions[actionName] = action;
     return action;
-  };
+  });
 
-  Controller.prototype.$bind = function(modules){
+  Controller.method("$bind", function(modules){
     var boundAny = false;
 
     for (var action in this.$$actions){
@@ -24,7 +24,7 @@
     }
 
     return boundAny;
-  };
+  });
 
   window.stik.Controller = Controller;
 })();
