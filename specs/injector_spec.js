@@ -120,7 +120,7 @@ describe("Injector", function(){
 
       expect(function(){
         injector.$resolveDependencies();
-      }).toThrow("¿$absentModule? These are not the droids you are looking for! (e.g. this module does not exists)");
+      }).toThrow("Stik could not find this module ($absentModule)");
     });
   });
 

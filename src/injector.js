@@ -39,7 +39,7 @@
 
     for (var i = 0; i < args.length; i++) {
       if (!(module = this.$$modules[args[i]])) {
-        throw "¿" + args[i] + "? These are not the droids you are looking for! (e.g. this module does not exists)";
+        throw "Stik could not find this module (" + args[i] + ")";
       }
 
       dependencies.push(
