@@ -17,7 +17,7 @@
 
   Manager.method("$addController", function(controllerName, executionUnit){
     var ctrl = this.$storeController(controllerName);
-    executionUnit.apply({}, [ctrl]);
+    executionUnit.call({}, ctrl);
     this.$bindController(ctrl);
     return ctrl;
   });

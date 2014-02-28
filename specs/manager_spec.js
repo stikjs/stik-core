@@ -127,6 +127,8 @@ describe("Manager", function(){
     });
   });
 
+  describe("#$addHelper", function(){});
+
   describe("#$addBehavior", function(){
     it("should throw if trying to add a behavior with an existing name", function(){
       var manager, name, executionUnit;

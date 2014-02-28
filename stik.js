@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.8.1 | From: 20-02-2014
+// Version: 0.9.0 | From: 01-03-2014
 
 window.stik = {
   labs: {}
@@ -313,7 +313,7 @@ window.stik = {
 
     for (var i = 0; i < args.length; i++) {
       if (!(module = this.$$modules[args[i]])) {
-        throw "¿" + args[i] + "? These are not the droids you are looking for! (e.g. this module does not exists)";
+        throw "Stik could not find this module (" + args[i] + ")";
       }
 
       dependencies.push(
@@ -346,7 +346,7 @@ window.stik = {
 
   Manager.method("$addController", function(controllerName, executionUnit){
     var ctrl = this.$storeController(controllerName);
-    executionUnit.apply({}, [ctrl]);
+    executionUnit.call({}, ctrl);
     this.$bindController(ctrl);
     return ctrl;
   });
@@ -540,6 +540,27 @@ window.stik = {
       boundary.call
     );
   };
+})();
+
+(function(){
+  var helpers = {};
+
+  function helper(as, func){
+    if (!as) { throw "Stik helper needs a name"; }
+    if (!func || (typeof func !== 'function')) {
+      throw "Stik helper needs a function";
+    }
+
+    helpers[as] = func;
+  }
+
+  window.stik.boundary({
+    as: "$h",
+    from: "controller|behavior",
+    to: helpers
+  });
+
+  window.stik.helper = helper;
 })();
 
 (function(){

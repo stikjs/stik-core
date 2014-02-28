@@ -11,6 +11,7 @@ module.exports = function(grunt){
     'src/injector.js',
     'src/manager.js',
     'src/public.js',
+    'src/helper.js',
     'src/courier.js',
     'src/view_bag.js',
     'src/controller_lab.js'
