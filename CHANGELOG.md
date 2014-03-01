@@ -1,7 +1,17 @@
+# 0.9.0 (2014-03-01)
+
+##Features
+- **Helpers** Functional helpers can be defined to avoid fat-controllers ([61f8d4bdd9](https://github.com/lukelex/stik.js/commit/61f8d4bdd918f78465d942418834675b9c258629), [021984c26a](https://github.com/lukelex/stik.js/commit/021984c26a65001d088e940019cafbc2e1f32321))
+
+# 0.8.1 (2014-02-17)
+
+##Bugs
+- **lazyBind** Fixing lazyBind() evaluation ([ca301c8b84](https://github.com/lukelex/stik.js/commit/ca301c8b8491abf863315ed626067fe3f7b1673a))
+
 # 0.8.0 (2014-02-05)
 
 ##Features
-- **New Controller/Action API** actions can be gruped inside the same controller declaration ([77c16ecc66](https://github.com/lukelex/stik.js/commit/77c16ecc6647a98892f601837c650f327f8ed80f))
+- **New Controller/Action API** actions can be grouped inside the same controller declaration ([77c16ecc66](https://github.com/lukelex/stik.js/commit/77c16ecc6647a98892f601837c650f327f8ed80f))
 
 # 0.7.1 (2014-01-23)
 
