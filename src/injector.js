@@ -43,7 +43,7 @@
       }
 
       dependencies.push(
-        module.$resolve(this.$$modules)
+        module.resolve(this.$$modules)
       );
     }
 

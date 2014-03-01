@@ -3,9 +3,9 @@
     this.$$controller = controller;
     this.$$action     = action;
 
-    this.$$template = new window.stik.Injectable(
-      template, false
-    );
+    this.$$template = window.stik.injectable({
+      module: template
+    });
   }
 
   Context.method("$load", function(executionUnit, modules){
@@ -34,7 +34,7 @@
   });
 
   Context.method("$markAsBound", function(){
-    var template = this.$$template.$resolve();
+    var template = this.$$template.resolve();
     template.className = (template.className + ' stik-bound').trim();
   });
 

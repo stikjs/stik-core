@@ -1,9 +1,9 @@
 describe("Injector", function(){
   function modulesDouble(){
     return {
-      $template: new window.stik.Injectable(function(){}),
-      $messaging: new window.stik.Injectable(function(){}),
-      $viewBag: new window.stik.Injectable(function(){})
+      $template: window.stik.injectable(function(){}),
+      $messaging: window.stik.injectable(function(){}),
+      $viewBag: window.stik.injectable(function(){})
     };
   };
 
@@ -32,7 +32,7 @@ describe("Injector", function(){
 
       expect(
         subject.$resolveDependencies()
-      ).toEqual([modules.$template.$resolve()]);
+      ).toEqual([modules.$template.resolve()]);
     });
 
     it("with two params", function(){
@@ -46,8 +46,8 @@ describe("Injector", function(){
       expect(
         subject.$resolveDependencies()
       ).toEqual([
-        modules.$template.$resolve(),
-        modules.$messaging.$resolve()
+        modules.$template.resolve(),
+        modules.$messaging.resolve()
       ]);
     });
 
@@ -62,9 +62,9 @@ describe("Injector", function(){
       expect(
         subject.$resolveDependencies()
       ).toEqual([
-        modules.$template.$resolve(),
-        modules.$messaging.$resolve(),
-        modules.$viewBag.$resolve()
+        modules.$template.resolve(),
+        modules.$messaging.resolve(),
+        modules.$viewBag.resolve()
       ]);
     });
   });

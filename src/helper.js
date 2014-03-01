@@ -8,9 +8,12 @@
       throw "Stik helper needs a function";
     }
 
-    modules[as] = new window.stik.Injectable(func, false, true);
+    modules[as] = window.stik.injectable({
+      module: func,
+      callable: true
+    });
     helpers[as] = function(){
-      return modules[as].$resolve(modules).apply({}, arguments);
+      return modules[as].resolve(modules).apply({}, arguments);
     };
   }
 

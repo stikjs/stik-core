@@ -23,7 +23,9 @@ window.stik.createBehavior = function(spec){
   } spec.bind = bind;
 
   function load(template, modules){
-    modules.$template = new window.stik.Injectable(template);
+    modules.$template = window.stik.injectable({
+      module: template
+    });
 
     var dependencies = resolveDependencies(modules);
 

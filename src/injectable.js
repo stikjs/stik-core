@@ -1,51 +1,50 @@
 (function(){
   function TempConstructor(){}
 
-  function Injectable(module, instantiable, callable){
-    this.$$module       = module;
-    this.$$instantiable = instantiable || false;
-    this.$$callable     = callable || false;
-  }
+  window.stik.injectable = function(spec){
+    spec.instantiable = spec.instantiable || false;
+    spec.callable     = spec.callable || false;
 
-  Injectable.method("$resolve", function(dependencies){
-    if (this.$$instantiable === true) {
-      return buildModule(
-        this.$$module,
-        resolveDependencies(this.$$module, dependencies)
+    function resolve(dependencies){
+      if (spec.instantiable === true) {
+        return buildModule(
+          resolveDependencies(dependencies)
+        );
+      } else if (spec.callable === true) {
+        return callWithDependencies(
+          {},
+          resolveDependencies(dependencies)
+        );
+      } else {
+        return spec.module;
+      }
+    } spec.resolve = resolve;
+
+    function buildModule(dependencies){
+      var newInstance, value;
+
+      TempConstructor.prototype = spec.module.prototype;
+      newInstance = new TempConstructor();
+
+      value = callWithDependencies(
+        newInstance, dependencies
       );
-    } else if (this.$$callable === true) {
-      return callWithDependencies(
-        this.$$module,
-        {},
-        resolveDependencies(this.$$module, dependencies)
-      );
-    } else {
-      return this.$$module;
+
+      return Object(value) === value ? value : newInstance;
     }
-  });
 
-  function buildModule(module, dependencies){
-    var newInstance, value;
+    function resolveDependencies(dependencies){
+      var injector = new window.stik.Injector(
+        spec.module, dependencies
+      );
 
-    TempConstructor.prototype = module.prototype;
-    newInstance = new TempConstructor();
+      return injector.$resolveDependencies();
+    }
 
-    value = callWithDependencies(
-      module, newInstance, dependencies
-    );
+    function callWithDependencies(context, dependencies){
+      return spec.module.apply(context, dependencies);
+    }
 
-    return Object(value) === value ? value : newInstance;
+    return spec;
   }
-
-  function resolveDependencies(module, dependencies){
-    var injector = new window.stik.Injector(module, dependencies);
-
-    return injector.$resolveDependencies();
-  }
-
-  function callWithDependencies(module, context, dependencies){
-    return module.apply(context, dependencies);
-  }
-
-  window.stik.Injectable = Injectable;
 })();

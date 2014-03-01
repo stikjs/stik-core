@@ -4,9 +4,11 @@
     if (!to)                    { throw "Invalid 'to'. Can't be null"; }
 
     this.$$as = as;
-    this.$$to = new window.stik.Injectable(
-      to, instantiable, callable
-    );
+    this.$$to = window.stik.injectable({
+      module: to,
+      instantiable: instantiable,
+      callable: callable
+    });
   }
 
   window.stik.Boundary = Boundary;

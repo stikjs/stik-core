@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.9.0 | From: 01-03-2014
+// Version: 0.9.0 | From: 02-03-2014
 
 window.stik = {
   labs: {}
@@ -23,53 +23,52 @@ window.stik = {
 (function(){
   function TempConstructor(){}
 
-  function Injectable(module, instantiable, callable){
-    this.$$module       = module;
-    this.$$instantiable = instantiable || false;
-    this.$$callable     = callable || false;
-  }
+  window.stik.injectable = function(spec){
+    spec.instantiable = spec.instantiable || false;
+    spec.callable     = spec.callable || false;
 
-  Injectable.method("$resolve", function(dependencies){
-    if (this.$$instantiable === true) {
-      return buildModule(
-        this.$$module,
-        resolveDependencies(this.$$module, dependencies)
+    function resolve(dependencies){
+      if (spec.instantiable === true) {
+        return buildModule(
+          resolveDependencies(dependencies)
+        );
+      } else if (spec.callable === true) {
+        return callWithDependencies(
+          {},
+          resolveDependencies(dependencies)
+        );
+      } else {
+        return spec.module;
+      }
+    } spec.resolve = resolve;
+
+    function buildModule(dependencies){
+      var newInstance, value;
+
+      TempConstructor.prototype = spec.module.prototype;
+      newInstance = new TempConstructor();
+
+      value = callWithDependencies(
+        newInstance, dependencies
       );
-    } else if (this.$$callable === true) {
-      return callWithDependencies(
-        this.$$module,
-        {},
-        resolveDependencies(this.$$module, dependencies)
-      );
-    } else {
-      return this.$$module;
+
+      return Object(value) === value ? value : newInstance;
     }
-  });
 
-  function buildModule(module, dependencies){
-    var newInstance, value;
+    function resolveDependencies(dependencies){
+      var injector = new window.stik.Injector(
+        spec.module, dependencies
+      );
 
-    TempConstructor.prototype = module.prototype;
-    newInstance = new TempConstructor();
+      return injector.$resolveDependencies();
+    }
 
-    value = callWithDependencies(
-      module, newInstance, dependencies
-    );
+    function callWithDependencies(context, dependencies){
+      return spec.module.apply(context, dependencies);
+    }
 
-    return Object(value) === value ? value : newInstance;
+    return spec;
   }
-
-  function resolveDependencies(module, dependencies){
-    var injector = new window.stik.Injector(module, dependencies);
-
-    return injector.$resolveDependencies();
-  }
-
-  function callWithDependencies(module, context, dependencies){
-    return module.apply(context, dependencies);
-  }
-
-  window.stik.Injectable = Injectable;
 })();
 
 window.stik.createController = function(spec){
@@ -175,9 +174,9 @@ window.stik.action = function(spec){
     this.$$controller = controller;
     this.$$action     = action;
 
-    this.$$template = new window.stik.Injectable(
-      template, false
-    );
+    this.$$template = window.stik.injectable({
+      module: template
+    });
   }
 
   Context.method("$load", function(executionUnit, modules){
@@ -206,7 +205,7 @@ window.stik.action = function(spec){
   });
 
   Context.method("$markAsBound", function(){
-    var template = this.$$template.$resolve();
+    var template = this.$$template.resolve();
     template.className = (template.className + ' stik-bound').trim();
   });
 
@@ -238,7 +237,9 @@ window.stik.createBehavior = function(spec){
   } spec.bind = bind;
 
   function load(template, modules){
-    modules.$template = new window.stik.Injectable(template);
+    modules.$template = window.stik.injectable({
+      module: template
+    });
 
     var dependencies = resolveDependencies(modules);
 
@@ -280,9 +281,11 @@ window.stik.createBehavior = function(spec){
     if (!to)                    { throw "Invalid 'to'. Can't be null"; }
 
     this.$$as = as;
-    this.$$to = new window.stik.Injectable(
-      to, instantiable, callable
-    );
+    this.$$to = window.stik.injectable({
+      module: to,
+      instantiable: instantiable,
+      callable: callable
+    });
   }
 
   window.stik.Boundary = Boundary;
@@ -333,7 +336,7 @@ window.stik.createBehavior = function(spec){
       }
 
       dependencies.push(
-        module.$resolve(this.$$modules)
+        module.resolve(this.$$modules)
       );
     }
 
@@ -554,9 +557,12 @@ window.stik.boundary = function(boundary){
       throw "Stik helper needs a function";
     }
 
-    modules[as] = new window.stik.Injectable(func, false, true);
+    modules[as] = window.stik.injectable({
+      module: func,
+      callable: true
+    });
     helpers[as] = function(){
-      return modules[as].$resolve(modules).apply({}, arguments);
+      return modules[as].resolve(modules).apply({}, arguments);
     };
   }
 

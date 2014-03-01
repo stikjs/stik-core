@@ -1,5 +1,5 @@
 describe("Injectable", function(){
-  describe("#$resolve", function(){
+  describe("#resolve", function(){
     it("an instantiable module", function(){
       var templateCheck, customModuleCheck, dependencies;
 
@@ -9,37 +9,42 @@ describe("Injectable", function(){
       }
 
       dependencies = {
-        $template: new stik.Injectable({}),
-        customModule: new stik.Injectable({})
+        $template: stik.injectable({ module:{} }),
+        customModule: stik.injectable({ module: {} })
       };
 
-      injectable = new stik.Injectable(MockClass, true);
+      injectable = stik.injectable({
+        module: MockClass,
+        instantiable: true
+      });
 
       expect(
-        injectable.$resolve(dependencies).constructor.name
+        injectable.resolve(dependencies).constructor.name
       ).toEqual("MockClass");
       expect(
         templateCheck
-      ).toEqual(dependencies.$template.$resolve());
+      ).toEqual(dependencies.$template.resolve());
       expect(
         customModuleCheck
-      ).toEqual(dependencies.customModule.$resolve());
+      ).toEqual(dependencies.customModule.resolve());
     });
 
     it("a simple function module", function(){
       var dependencies, mockFunc;
 
       dependencies = {
-        $template: new stik.Injectable({}),
-        customModule: new stik.Injectable({})
+        $template: stik.injectable({ module: {} }),
+        customModule: stik.injectable({ module: {} })
       };
 
       mockFunc = function(){};
 
-      injectable = new stik.Injectable(mockFunc, false);
+      injectable = stik.injectable({
+        module: mockFunc
+      });
 
       expect(
-        injectable.$resolve(dependencies)
+        injectable.resolve(dependencies)
       ).toEqual(mockFunc);
     });
 
@@ -47,16 +52,19 @@ describe("Injectable", function(){
       var dependencies, mockFunc;
 
       dependencies = {
-        $template: new stik.Injectable("worked!"),
-        customModule: new stik.Injectable({})
+        $template: stik.injectable({ module: "worked!" }),
+        customModule: stik.injectable({ module: {} })
       };
 
       mockFunc = function($template){ return $template };
 
-      injectable = new stik.Injectable(mockFunc, false, true);
+      injectable = stik.injectable({
+        module: mockFunc,
+        callable: true
+      });
 
       expect(
-        injectable.$resolve(dependencies)
+        injectable.resolve(dependencies)
       ).toEqual("worked!");
     });
 
@@ -64,16 +72,18 @@ describe("Injectable", function(){
       var dependencies, mockObj;
 
       dependencies = {
-        $template: new stik.Injectable({}),
-        customModule: new stik.Injectable({})
+        $template: stik.injectable({ module: {} }),
+        customModule: stik.injectable({ module: {} })
       };
 
       mockObj = {};
 
-      injectable = new stik.Injectable(mockObj, false);
+      injectable = stik.injectable({
+        module: mockObj
+      });
 
       expect(
-        injectable.$resolve(dependencies)
+        injectable.resolve(dependencies)
       ).toEqual(mockObj);
     });
   });
