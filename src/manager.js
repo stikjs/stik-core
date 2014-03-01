@@ -37,7 +37,10 @@
       throw "behavior already exist with the specified name";
     }
 
-    behavior = this.$createBehavior(name, executionUnit);
+    behavior = this.$createBehavior({
+      name: name,
+      executionUnit: executionUnit
+    });
     this.$$behaviors.push(behavior);
     this.$applyBehavior(behavior);
 
@@ -75,7 +78,7 @@
     var i = this.$$behaviors.length;
 
     while (i--) {
-      if (this.$$behaviors[i].$$name === name) {
+      if (this.$$behaviors[i].name === name) {
         return true;
       }
     }
@@ -84,21 +87,14 @@
   });
 
   Manager.method("$createBehavior", function(name, executionUnit){
-    return new window.stik.Behavior(name, executionUnit);
+    return window.stik.createBehavior(name, executionUnit);
   });
 
   Manager.method("$applyBehavior", function(behavior){
-    var templates, modules, i;
-
-    templates = this.$findBehaviorTemplates(behavior);
-    modules   = this.$extractBoundaries(this.$$boundaries.behavior);
-    i         = templates.length;
-
-    while (i--) {
-      behavior.$load(templates[i], modules);
-    }
-
-    return templates.length > 0;
+    var modules = this.$extractBoundaries(
+      this.$$boundaries.behavior
+    );
+    return behavior.bind(modules);
   });
 
   Manager.method("$applyBehaviors", function(){
@@ -126,16 +122,6 @@
     }
 
     return modules;
-  });
-
-  Manager.method("$findBehaviorTemplates", function(behavior, DOMInjection){
-    var DOMHandler = document;
-    if (DOMInjection) { DOMHandler = DOMInjection; }
-
-    var selector = "[class*=" + behavior.$$className + "]" +
-                   ":not([data-behaviors*=" + behavior.$$name + "])";
-
-    return DOMHandler.querySelectorAll(selector);
   });
 
   Manager.method("$bindActionWithTemplate", function(controller, action, template){

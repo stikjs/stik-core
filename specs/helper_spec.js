@@ -17,8 +17,8 @@ describe("helper", function(){
     }).not.toThrow();
   });
 
-  it("should be injected in a behavior", function(){
-    var helperDouble, template;
+  it("should be injectable into behaviors", function(){
+    var helperDouble, template, behavior;
 
     helperDouble = jasmine.createSpy("hasClass");
 
@@ -27,16 +27,18 @@ describe("helper", function(){
     });
 
     template = document.createElement("div");
-    spyOn(stik.$$manager, "$findBehaviorTemplates").andReturn([template]);
 
-    stik.behavior("some-behavior", function($h){
+    behavior = stik.behavior("some-behavior", function($h){
       $h.hasClass();
     });
+    spyOn(behavior, "findTemplates").andReturn([template]);
+
+    stik.bindLazy();
 
     expect(helperDouble).toHaveBeenCalled();
   });
 
-  it("should be injected in a controller", function(){
+  it("should be injectable into controllers", function(){
     var helperDouble, template, ctrl;
 
     helperDouble = jasmine.createSpy("hasClass");
@@ -57,7 +59,7 @@ describe("helper", function(){
   });
 
   it("should allow injection of other helpers in itself", function(){
-    var template, hasClassCheck, toggleClassCheck;
+    var template, hasClassCheck, toggleClassCheck, behavior;
 
     hasClassCheck = jasmine.createSpy('hasClassCheck');
     toggleClassCheck = jasmine.createSpy('toggleClassCheck');
@@ -73,12 +75,15 @@ describe("helper", function(){
     });
 
     template = document.createElement("div");
-    spyOn(stik.$$manager, "$findBehaviorTemplates").andReturn([template]);
 
-    stik.behavior("my-behavior", function($template, $h){
+    behavior = stik.behavior("my-behavior", function($template, $h){
       $h.toggleClass($template, 'some-class');
       $h.hasClass($template, 'some-class');
     });
+
+    spyOn(behavior, "findTemplates").andReturn([template]);
+
+    stik.bindLazy();
 
     expect(
       hasClassCheck

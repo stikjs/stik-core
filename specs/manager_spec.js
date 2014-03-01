@@ -84,21 +84,22 @@ describe("Manager", function(){
       ).toBeDefined();
     });
 
-    it("should be injectable into a behavior", function(){
-      var manager, executionUnit, injectable, template, result;
+    it("should be injectable into behaviors", function(){
+      var manager, executionUnit, injectable, template, result, behavior;
 
       manager = new stik.Manager();
 
       injectable = function(){};
       manager.$addBoundary("CustomFunc", "behavior", injectable);
 
-      template = document.createElement("div");
-
-      spyOn(manager, "$findBehaviorTemplates").andReturn([template]);
-
-      manager.$addBehavior("new-behavior", function(CustomFunc){
+      behavior = manager.$addBehavior("new-behavior", function(CustomFunc){
         result = CustomFunc;
       });
+
+      template = document.createElement("div");
+      spyOn(behavior, "findTemplates").andReturn([template]);
+
+      manager.$applyBehaviors();
 
       expect(result).toEqual(injectable);
     });
@@ -126,8 +127,6 @@ describe("Manager", function(){
       expect(result).toEqual(injectable);
     });
   });
-
-  describe("#$addHelper", function(){});
 
   describe("#$addBehavior", function(){
     it("should throw if trying to add a behavior with an existing name", function(){
@@ -162,7 +161,10 @@ describe("Manager", function(){
 
       expect(
         manager.$createBehavior
-      ).toHaveBeenCalledWith(behavior, executionUnit);
+      ).toHaveBeenCalledWith({
+        name: behavior,
+        executionUnit: executionUnit
+      });
 
       expect(manager.$$behaviors.length).toBe(1);
     });
@@ -170,72 +172,18 @@ describe("Manager", function(){
 
   describe("$isBehaviorRegistered", function(){
     it("when it does not exist", function(){
-      var manager;
-
-      manager = new stik.Manager();
+      var manager = new stik.Manager();
 
       expect(manager.$isBehaviorRegistered("some-behavior")).toBeFalsy();
     });
 
     it("when it does exist", function(){
-      var manager;
-
-      manager = new stik.Manager();
+      var manager = new stik.Manager();
       spyOn(manager, "$applyBehavior");
 
       manager.$addBehavior("some-behavior", function(){});
 
-      expect(manager.$isBehaviorRegistered("bh-some-behavior")).toBeTruthy();
-    });
-  });
-
-  describe("#$applyBehavior", function(){
-    it("with one template", function(){
-      var manager, behavior, template, name;
-
-      name     = "some-behavior";
-      template = '<div id="item-1" class="some-behavior"></div>';
-
-      manager  = new stik.Manager();
-      behavior = new stik.Behavior(name, function(){});
-
-      spyOn(manager, "$findBehaviorTemplates").andReturn([template]);
-      spyOn(behavior, "$load");
-
-      manager.$applyBehavior(behavior);
-
-      expect(
-        manager.$findBehaviorTemplates
-      ).toHaveBeenCalledWith(behavior);
-
-      expect(
-        behavior.$load
-      ).toHaveBeenCalledWith(template, {});
-    });
-
-    it("with two template", function(){
-      var manager, behavior, template, name;
-
-      firstName  = "some-behavior-1";
-      secondName = "some-behavior-2";
-      template1  = '<div id="item-1" class="some-behavior"></div>';
-      template2  = '<div id="item-2" class="some-behavior"></div>';
-
-      manager  = new stik.Manager();
-      behavior = new stik.Behavior(firstName, function(){});
-
-      spyOn(manager, "$findBehaviorTemplates").andReturn([template1, template2]);
-      spyOn(behavior, "$load");
-
-      manager.$applyBehavior(behavior);
-
-      expect(
-        behavior.$load
-      ).toHaveBeenCalledWith(template1, {});
-
-      expect(
-        behavior.$load
-      ).toHaveBeenCalledWith(template2, {});
+      expect(manager.$isBehaviorRegistered("some-behavior")).toBeTruthy();
     });
   });
 
@@ -293,31 +241,6 @@ describe("Manager", function(){
       expect(
         manager.$applyBehavior
       ).toHaveBeenCalledWith(behavior3);
-    });
-  });
-
-  describe("#$findBehaviorTemplates", function(){
-    it("should look for templates in the DOM based on the className", function(){
-      var DOM, manager, behavior;
-
-      DOM  = DOMDouble();
-
-      manager = new stik.Manager();
-
-      behavior = new stik.Behavior("some-behavior", function(){});
-
-      spyOn(DOM, "querySelectorAll").andReturn([1,2,3]);
-
-      result = manager.$findBehaviorTemplates(behavior, DOM);
-
-      expect(
-        DOM.querySelectorAll
-      ).toHaveBeenCalledWith(
-        "[class*=" + behavior.$$className + "]" +
-        ":not([data-behaviors*=" + behavior.$$name + "])"
-      );
-
-      expect(result).toEqual([1,2,3]);
     });
   });
 });

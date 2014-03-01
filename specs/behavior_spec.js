@@ -1,114 +1,104 @@
 describe("Behavior", function(){
-  describe("#initialize", function(){
-    it("when ok", function(){
-      var behavior, name, executionUnit;
-
-      name          = "some-behavior";
-      executionUnit = function(){};
-
-      behavior = new stik.Behavior(name, executionUnit);
-
-      expect(behavior.$$className).toEqual(name);
-      expect(behavior.$$name).toEqual("bh-" + name);
-      expect(behavior.$$executionUnit).toEqual(executionUnit);
-    });
-
-    it("when not ok", function(){
-      expect(function(){
-        new stik.Behavior(null, function(){});
-      }).toThrow("name is missing");
-      expect(function(){
-        new stik.Behavior("some-behavior");
-      }).toThrow("executionUnit is missing");
-      expect(function(){
-        new stik.Behavior("some behavior");
-      }).toThrow("invalid name. Please use dash(-) instead of spaces");
-    });
+  it("#initializing", function(){
+    expect(function(){
+      stik.createBehavior({
+        name: null, executionUnit: function(){}
+      });
+    }).toThrow("name is missing");
+    expect(function(){
+      stik.createBehavior({
+        name: "some-behavior"
+      });
+    }).toThrow("executionUnit is missing");
+    expect(function(){
+      stik.createBehavior({
+        name: "some behavior"
+      });
+    }).toThrow("invalid name. Please use dash(-) instead of spaces");
   });
 
-  describe("#$load", function(){
-    it("should resolve its own dependencies", function(){
-      var behavior, modules;
-
-      modules = {
-        $some: "$module"
-      };
-
-      behavior = new stik.Behavior("some-behavior", function(){});
-
-      spyOn(behavior, "$resolveDependencies");
-      spyOn(behavior, "$markAsApplyed");
-
-      behavior.$load("div", modules);
-
-      expect(behavior.$resolveDependencies).toHaveBeenCalled();
-    });
-
-    it("should mark the template as applyed", function(){
-      var behavior, template;
-
-      template = document.createElement("div");
-      template.className += "some-behavior";
-
-      behavior = new stik.Behavior("some-behavior", function(){});
-
-      spyOn(behavior, "$markAsApplyed");
-
-      behavior.$load(template, {});
-
-      expect(
-        behavior.$markAsApplyed
-      ).toHaveBeenCalledWith(template);
-    });
+  describe("#load", function(){
+    // it("should resolve its own dependencies", function(){
+    //   var behavior, modules;
+    //
+    //   modules = {
+    //     $some: "$module"
+    //   };
+    //
+    //   behavior = stik.createBehavior({
+    //     name: "some-behavior",
+    //     executionUnit: function(){}
+    //   });
+    //
+    //   spyOn(behavior, "$resolveDependencies");
+    //   spyOn(behavior, "$markAsApplyed");
+    //
+    //   behavior.$load("div", modules);
+    //
+    //   expect(behavior.$resolveDependencies).toHaveBeenCalled();
+    // });
 
     it("should run its execution unit", function(){
-      var template, modules, executionUnitDouble, injectedTemplate;
+      var template, modules, executionUnitMock;
 
-      executionUnitDouble = function($template){
-        injectedTemplate = $template;
-      };
+      executionUnitMock = jasmine.createSpy('EUM');
 
       template = document.createElement("div");
       template.className += "some-behavior";
 
-      subject = new stik.Behavior('some-behavior', executionUnitDouble);
-      subject.$load(template, {});
+      behavior = stik.createBehavior({
+        name: 'some-behavior',
+        executionUnit: executionUnitMock
+      });
 
-      expect(injectedTemplate).toEqual(template);
+      spyOn(behavior, "findTemplates").andReturn([template]);
+
+      behavior.bind({});
+
+      expect(executionUnitMock).toHaveBeenCalled();
     });
   });
 
-  describe("#$markAsApplyed", function(){
-    it("with one behavior", function(){
+  describe("should mark the template as applyed", function(){
+    it("with one template", function(){
       var behavior, template;
 
       template = document.createElement("div");
+      template.className += "some-behavior";
 
-      behavior = new stik.Behavior("some-behavior", function(){});
+      behavior = stik.createBehavior({
+        name: "some-behavior",
+        executionUnit: function(){}
+      });
 
-      behavior.$markAsApplyed(template);
+      spyOn(behavior, "findTemplates").andReturn([template]);
+
+      behavior.bind(template, {});
 
       expect(
         template.getAttribute("data-behaviors")
-      ).toEqual(
-        "bh-some-behavior"
-      );
+      ).toEqual('some-behavior');
     });
 
     it("with two behavior", function(){
       var behavior, template;
 
       template = document.createElement("div");
-      template.setAttribute("data-behaviors", "bh-old-behavior");
+      template.setAttribute("data-behaviors", "old-behavior");
 
-      behavior = new stik.Behavior("some-behavior", function(){});
+      behavior = stik.createBehavior({
+        name: "some-behavior",
+        executionUnit: function(){}
+      });
 
-      behavior.$markAsApplyed(template);
+      spyOn(behavior, "findTemplates").andReturn([template]);
+
+      behavior.bind(template, {});
 
       expect(
         template.getAttribute("data-behaviors")
       ).toEqual(
-        "bh-old-behavior bh-some-behavior"
+        "old-behavior some-behavior"
       );
     });
 
@@ -116,16 +106,21 @@ describe("Behavior", function(){
       var behavior, template;
 
       template = document.createElement("div");
-      template.setAttribute("data-behaviors", "bh-old-behavior bh-wierd-behavior");
+      template.setAttribute("data-behaviors", "old-behavior wierd-behavior");
 
-      behavior = new stik.Behavior("some-behavior", function(){});
+      behavior = stik.createBehavior({
+        name: "some-behavior",
+        executionUnit: function(){}
+      });
 
-      behavior.$markAsApplyed(template);
+      spyOn(behavior, "findTemplates").andReturn([template]);
+
+      behavior.bind(template, {});
 
       expect(
         template.getAttribute("data-behaviors")
       ).toEqual(
-        "bh-old-behavior bh-wierd-behavior bh-some-behavior"
+        "old-behavior wierd-behavior some-behavior"
       );
     });
   });

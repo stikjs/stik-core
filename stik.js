@@ -213,47 +213,66 @@ window.stik.action = function(spec){
   window.stik.Context = Context;
 })();
 
-(function(){
-  var behaviorKey = "data-behaviors", namePrefix = "bh";
-
-  function Behavior(name, executionUnit){
-    if (!name)                    { throw "name is missing"; }
-    if (name.indexOf(" ") !== -1) { throw "invalid name. Please use dash(-) instead of spaces"; }
-    if (!executionUnit)           { throw "executionUnit is missing"; }
-
-    this.$$className     = name;
-    this.$$name          = namePrefix + "-" + name;
-    this.$$executionUnit = executionUnit;
+window.stik.createBehavior = function(spec){
+  if (!spec.name) {
+    throw "name is missing";
+  }
+  if (spec.name.indexOf(" ") !== -1) {
+    throw "invalid name. Please use dash(-) instead of spaces";
+  }
+  if (!spec.executionUnit) {
+    throw "executionUnit is missing";
   }
 
-  Behavior.method("$load", function(template, modules){
+  var behaviorKey = "data-behaviors"
+
+  function bind(modules){
+    var templates = spec.findTemplates(),
+        i = templates.length;
+
+    while (i--) {
+      load(templates[i], modules);
+    }
+
+    return templates.length > 0;
+  } spec.bind = bind;
+
+  function load(template, modules){
     modules.$template = new window.stik.Injectable(template);
 
-    var dependencies = this.$resolveDependencies(modules);
+    var dependencies = resolveDependencies(modules);
 
-    this.$$executionUnit.apply({}, dependencies);
-    this.$markAsApplyed(template);
-  });
+    spec.executionUnit.apply({}, dependencies);
+    markAsApplyed(template);
+  };
 
-  Behavior.method("$resolveDependencies", function(modules){
+  function findTemplates(DOMInjection){
+    var DOMHandler = document;
+    if (DOMInjection) { DOMHandler = DOMInjection; }
+
+    var selector = "[class*=" + spec.name + "]" +
+                   ":not([data-behaviors*=" + spec.name + "])";
+
+    return DOMHandler.querySelectorAll(selector);
+  } spec.findTemplates = findTemplates;
+
+  function resolveDependencies(modules){
     var injector = new window.stik.Injector(
-      this.$$executionUnit, modules
+      spec.executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  });
+  };
 
-  Behavior.method("$markAsApplyed", function(template){
-    var behaviors;
-
-    behaviors = template.getAttribute(behaviorKey);
-    behaviors = ((behaviors || "") + " " + this.$$name).trim();
+  function markAsApplyed(template){
+    var behaviors = template.getAttribute(behaviorKey);
+    behaviors = ((behaviors || "") + " " + spec.name).trim();
 
     template.setAttribute(behaviorKey, behaviors);
-  });
+  };
 
-  window.stik.Behavior = Behavior;
-})();
+  return spec;
+}
 
 (function(){
   function Boundary(as, to, instantiable, callable){
@@ -363,7 +382,10 @@ window.stik.action = function(spec){
       throw "behavior already exist with the specified name";
     }
 
-    behavior = this.$createBehavior(name, executionUnit);
+    behavior = this.$createBehavior({
+      name: name,
+      executionUnit: executionUnit
+    });
     this.$$behaviors.push(behavior);
     this.$applyBehavior(behavior);
 
@@ -401,7 +423,7 @@ window.stik.action = function(spec){
     var i = this.$$behaviors.length;
 
     while (i--) {
-      if (this.$$behaviors[i].$$name === name) {
+      if (this.$$behaviors[i].name === name) {
         return true;
       }
     }
@@ -410,21 +432,14 @@ window.stik.action = function(spec){
   });
 
   Manager.method("$createBehavior", function(name, executionUnit){
-    return new window.stik.Behavior(name, executionUnit);
+    return window.stik.createBehavior(name, executionUnit);
   });
 
   Manager.method("$applyBehavior", function(behavior){
-    var templates, modules, i;
-
-    templates = this.$findBehaviorTemplates(behavior);
-    modules   = this.$extractBoundaries(this.$$boundaries.behavior);
-    i         = templates.length;
-
-    while (i--) {
-      behavior.$load(templates[i], modules);
-    }
-
-    return templates.length > 0;
+    var modules = this.$extractBoundaries(
+      this.$$boundaries.behavior
+    );
+    return behavior.bind(modules);
   });
 
   Manager.method("$applyBehaviors", function(){
@@ -452,16 +467,6 @@ window.stik.action = function(spec){
     }
 
     return modules;
-  });
-
-  Manager.method("$findBehaviorTemplates", function(behavior, DOMInjection){
-    var DOMHandler = document;
-    if (DOMInjection) { DOMHandler = DOMInjection; }
-
-    var selector = "[class*=" + behavior.$$className + "]" +
-                   ":not([data-behaviors*=" + behavior.$$name + "])";
-
-    return DOMHandler.querySelectorAll(selector);
   });
 
   Manager.method("$bindActionWithTemplate", function(controller, action, template){
@@ -501,45 +506,43 @@ window.stik.action = function(spec){
   window.stik.Manager = Manager;
 })();
 
-(function() {
-  if (window.stik.$$manager){
-    throw "Stik is already loaded. Check your requires ;)";
-  }
+if (window.stik.$$manager){
+  throw "Stik is already loaded. Check your requires ;)";
+}
 
-  window.stik.$$manager = new window.stik.Manager();
+window.stik.$$manager = new window.stik.Manager();
 
-  window.stik.controller = function(controllerName, action, executionUnit){
-    if (typeof action === "string") {
-      return window.stik.$$manager.$addControllerWithAction(
-        controllerName, action, executionUnit
-      );
-    } else {
-      return window.stik.$$manager.$addController(
-        controllerName, action
-      );
-    }
-  };
-
-  window.stik.behavior = function(name, executionUnit){
-    return this.$$manager.$addBehavior(name, executionUnit);
-  };
-
-  window.stik.bindLazy = function(){
-    if (!this.$$manager.$bindActions() & !this.$$manager.$applyBehaviors()) {
-      throw "nothing to bind!";
-    }
-  };
-
-  window.stik.boundary = function(boundary){
-    return this.$$manager.$addBoundary(
-      boundary.as,
-      boundary.from,
-      boundary.to,
-      boundary.inst,
-      boundary.call
+window.stik.controller = function(controllerName, action, executionUnit){
+  if (typeof action === "string") {
+    return window.stik.$$manager.$addControllerWithAction(
+      controllerName, action, executionUnit
     );
-  };
-})();
+  } else {
+    return window.stik.$$manager.$addController(
+      controllerName, action
+    );
+  }
+};
+
+window.stik.behavior = function(name, executionUnit){
+  return this.$$manager.$addBehavior(name, executionUnit);
+};
+
+window.stik.bindLazy = function(){
+  if (!this.$$manager.$bindActions() & !this.$$manager.$applyBehaviors()) {
+    throw "nothing to bind!";
+  }
+};
+
+window.stik.boundary = function(boundary){
+  return this.$$manager.$addBoundary(
+    boundary.as,
+    boundary.from,
+    boundary.to,
+    boundary.inst,
+    boundary.call
+  );
+};
 
 (function(){
   var helpers = {},
