@@ -56,11 +56,12 @@ window.stik = {
     }
 
     function resolveDependencies(dependencies){
-      var injector = new window.stik.Injector(
-        spec.module, dependencies
-      );
+      var injector = window.stik.injector({
+        executionUnit: spec.module,
+        modules: dependencies
+      });
 
-      return injector.$resolveDependencies();
+      return injector.resolveDependencies();
     }
 
     function callWithDependencies(context, dependencies){
@@ -131,7 +132,7 @@ window.stik.action = function(spec){
   } spec.bind = bind;
 
   function $resolveDependencies(modules){
-    var injector = new window.stik.Injector(
+    var injector = window.stik.injector(
       this.$$executionUnit, modules
     );
 
@@ -190,11 +191,12 @@ window.stik.action = function(spec){
   });
 
   Context.method("$resolveDependencies", function(executionUnit, modules){
-    var injector = new window.stik.Injector(
-      executionUnit, modules
-    );
+    var injector = window.stik.injector({
+      executionUnit: executionUnit,
+      modules: modules
+    });
 
-    return injector.$resolveDependencies();
+    return injector.resolveDependencies();
   });
 
   Context.method("$mergeModules", function(modules){
@@ -258,11 +260,12 @@ window.stik.createBehavior = function(spec){
   } spec.findTemplates = findTemplates;
 
   function resolveDependencies(modules){
-    var injector = new window.stik.Injector(
-      spec.executionUnit, modules
-    );
+    var injector = window.stik.injector({
+      executionUnit: spec.executionUnit,
+      modules: modules
+    });
 
-    return injector.$resolveDependencies();
+    return injector.resolveDependencies();
   };
 
   function markAsApplyed(template){
@@ -291,39 +294,38 @@ window.stik.createBehavior = function(spec){
   window.stik.Boundary = Boundary;
 })();
 
-(function(){
-  function Injector(executionUnit, modules){
-    this.$$executionUnit = executionUnit;
-    this.$$modules       = modules;
+window.stik.injector = function(spec){
+  if (!spec.executionUnit) {
+    throw "Injector needs an execution unit to run against";
   }
 
-  Injector.method("$resolveDependencies", function(){
-    var args = this.$extractArguments();
+  function resolveDependencies(){
+    var args = extractArguments();
 
-    return this.$grabModules(args);
-  });
+    return grabModules(args);
+  } spec.resolveDependencies = resolveDependencies;
 
-  Injector.method("$extractArguments", function(){
+  function extractArguments(){
     var argsPattern, funcString, args;
 
     argsPattern = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 
-    funcString = this.$$executionUnit.toString();
+    funcString = spec.executionUnit.toString();
 
     args = funcString.match(argsPattern)[1].split(',');
 
-    return this.$trimmedArgs(args);
-  });
+    return trimmedArgs(args);
+  }
 
-  Injector.method("$trimmedArgs", function(args){
+  function trimmedArgs(args){
     var result = [];
     args.forEach(function(arg){
       result.push(arg.trim());
     });
     return result;
-  });
+  }
 
-  Injector.method("$grabModules", function(args){
+  function grabModules(args){
     var module, dependencies;
 
     dependencies = [];
@@ -331,20 +333,20 @@ window.stik.createBehavior = function(spec){
     if (args.length === 1 && args[0] === "") { return []; }
 
     for (var i = 0; i < args.length; i++) {
-      if (!(module = this.$$modules[args[i]])) {
+      if (!(module = spec.modules[args[i]])) {
         throw "Stik could not find this module (" + args[i] + ")";
       }
 
       dependencies.push(
-        module.resolve(this.$$modules)
+        module.resolve(spec.modules)
       );
     }
 
     return dependencies;
-  });
+  }
 
-  window.stik.Injector = Injector;
-})();
+  return spec;
+}
 
 (function(){
   function Manager(){

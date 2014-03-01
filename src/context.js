@@ -19,11 +19,12 @@
   });
 
   Context.method("$resolveDependencies", function(executionUnit, modules){
-    var injector = new window.stik.Injector(
-      executionUnit, modules
-    );
+    var injector = window.stik.injector({
+      executionUnit: executionUnit,
+      modules: modules
+    });
 
-    return injector.$resolveDependencies();
+    return injector.resolveDependencies();
   });
 
   Context.method("$mergeModules", function(modules){

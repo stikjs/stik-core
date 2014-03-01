@@ -34,11 +34,12 @@
     }
 
     function resolveDependencies(dependencies){
-      var injector = new window.stik.Injector(
-        spec.module, dependencies
-      );
+      var injector = window.stik.injector({
+        executionUnit: spec.module,
+        modules: dependencies
+      });
 
-      return injector.$resolveDependencies();
+      return injector.resolveDependencies();
     }
 
     function callWithDependencies(context, dependencies){

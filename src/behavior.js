@@ -44,11 +44,12 @@ window.stik.createBehavior = function(spec){
   } spec.findTemplates = findTemplates;
 
   function resolveDependencies(modules){
-    var injector = new window.stik.Injector(
-      spec.executionUnit, modules
-    );
+    var injector = window.stik.injector({
+      executionUnit: spec.executionUnit,
+      modules: modules
+    });
 
-    return injector.$resolveDependencies();
+    return injector.resolveDependencies();
   };
 
   function markAsApplyed(template){

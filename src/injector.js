@@ -1,36 +1,35 @@
-(function(){
-  function Injector(executionUnit, modules){
-    this.$$executionUnit = executionUnit;
-    this.$$modules       = modules;
+window.stik.injector = function(spec){
+  if (!spec.executionUnit) {
+    throw "Injector needs an execution unit to run against";
   }
 
-  Injector.method("$resolveDependencies", function(){
-    var args = this.$extractArguments();
+  function resolveDependencies(){
+    var args = extractArguments();
 
-    return this.$grabModules(args);
-  });
+    return grabModules(args);
+  } spec.resolveDependencies = resolveDependencies;
 
-  Injector.method("$extractArguments", function(){
+  function extractArguments(){
     var argsPattern, funcString, args;
 
     argsPattern = /^function\s*[^\(]*\(\s*([^\)]*)\)/m;
 
-    funcString = this.$$executionUnit.toString();
+    funcString = spec.executionUnit.toString();
 
     args = funcString.match(argsPattern)[1].split(',');
 
-    return this.$trimmedArgs(args);
-  });
+    return trimmedArgs(args);
+  }
 
-  Injector.method("$trimmedArgs", function(args){
+  function trimmedArgs(args){
     var result = [];
     args.forEach(function(arg){
       result.push(arg.trim());
     });
     return result;
-  });
+  }
 
-  Injector.method("$grabModules", function(args){
+  function grabModules(args){
     var module, dependencies;
 
     dependencies = [];
@@ -38,17 +37,17 @@
     if (args.length === 1 && args[0] === "") { return []; }
 
     for (var i = 0; i < args.length; i++) {
-      if (!(module = this.$$modules[args[i]])) {
+      if (!(module = spec.modules[args[i]])) {
         throw "Stik could not find this module (" + args[i] + ")";
       }
 
       dependencies.push(
-        module.resolve(this.$$modules)
+        module.resolve(spec.modules)
       );
     }
 
     return dependencies;
-  });
+  }
 
-  window.stik.Injector = Injector;
-})();
+  return spec;
+}

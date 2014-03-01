@@ -18,26 +18,6 @@ describe("Behavior", function(){
   });
 
   describe("#load", function(){
-    // it("should resolve its own dependencies", function(){
-    //   var behavior, modules;
-    //
-    //   modules = {
-    //     $some: "$module"
-    //   };
-    //
-    //   behavior = stik.createBehavior({
-    //     name: "some-behavior",
-    //     executionUnit: function(){}
-    //   });
-    //
-    //   spyOn(behavior, "$resolveDependencies");
-    //   spyOn(behavior, "$markAsApplyed");
-    //
-    //   behavior.$load("div", modules);
-    //
-    //   expect(behavior.$resolveDependencies).toHaveBeenCalled();
-    // });
-
     it("should run its execution unit", function(){
       var template, modules, executionUnitMock;
 

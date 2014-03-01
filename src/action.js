@@ -25,7 +25,7 @@ window.stik.action = function(spec){
   } spec.bind = bind;
 
   function $resolveDependencies(modules){
-    var injector = new window.stik.Injector(
+    var injector = window.stik.injector(
       this.$$executionUnit, modules
     );
 
