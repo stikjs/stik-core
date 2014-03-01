@@ -30,12 +30,12 @@ window.stik = {
   }
 
   Injectable.method("$resolve", function(dependencies){
-    if (this.$$instantiable) {
+    if (this.$$instantiable === true) {
       return buildModule(
         this.$$module,
         resolveDependencies(this.$$module, dependencies)
       );
-    } else if (this.$$callable) {
+    } else if (this.$$callable === true) {
       return callWithDependencies(
         this.$$module,
         {},
@@ -543,15 +543,19 @@ window.stik = {
 })();
 
 (function(){
-  var helpers = {};
+  var helpers = {},
+      modules = {};
 
   function helper(as, func){
     if (!as) { throw "Stik helper needs a name"; }
-    if (!func || (typeof func !== 'function')) {
+    if (!func || typeof func !== "function") {
       throw "Stik helper needs a function";
     }
 
-    helpers[as] = func;
+    modules[as] = new window.stik.Injectable(func, false, true);
+    helpers[as] = function(){
+      return modules[as].$resolve(modules).apply({}, arguments);
+    };
   }
 
   window.stik.boundary({

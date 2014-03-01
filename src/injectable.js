@@ -8,12 +8,12 @@
   }
 
   Injectable.method("$resolve", function(dependencies){
-    if (this.$$instantiable) {
+    if (this.$$instantiable === true) {
       return buildModule(
         this.$$module,
         resolveDependencies(this.$$module, dependencies)
       );
-    } else if (this.$$callable) {
+    } else if (this.$$callable === true) {
       return callWithDependencies(
         this.$$module,
         {},

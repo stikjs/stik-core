@@ -1,5 +1,5 @@
 describe("helper", function(){
-  describe("initializing", function(){
+  it("initializing", function(){
     expect(function(){
       stik.helper();
     }).toThrow("Stik helper needs a name");
@@ -22,7 +22,9 @@ describe("helper", function(){
 
     helperDouble = jasmine.createSpy("hasClass");
 
-    stik.helper("hasClass", helperDouble);
+    stik.helper("hasClass", function(){
+      return helperDouble;
+    });
 
     template = document.createElement("div");
     spyOn(stik.$$manager, "$findBehaviorTemplates").andReturn([template]);
@@ -39,7 +41,9 @@ describe("helper", function(){
 
     helperDouble = jasmine.createSpy("hasClass");
 
-    stik.helper("hasClass", helperDouble);
+    stik.helper("hasClass", function(){
+      return helperDouble;
+    });
 
     ctrl = stik.controller("AppCtrl", "List", function($h){
       $h.hasClass();
@@ -50,5 +54,42 @@ describe("helper", function(){
     stik.bindLazy();
 
     expect(helperDouble).toHaveBeenCalled();
+  });
+
+  it("should allow injection of other helpers in itself", function(){
+    var template, hasClassCheck, toggleClassCheck;
+
+    hasClassCheck = jasmine.createSpy('hasClassCheck');
+    toggleClassCheck = jasmine.createSpy('toggleClassCheck');
+
+    stik.helper("hasClass", function(){
+      return hasClassCheck;
+    });
+    stik.helper("toggleClass", function(hasClass){
+      return function(elm, className){
+        hasClass(elm, className);
+        toggleClassCheck(elm, className);
+      };
+    });
+
+    template = document.createElement("div");
+    spyOn(stik.$$manager, "$findBehaviorTemplates").andReturn([template]);
+
+    stik.behavior("my-behavior", function($template, $h){
+      $h.toggleClass($template, 'some-class');
+      $h.hasClass($template, 'some-class');
+    });
+
+    expect(
+      hasClassCheck
+    ).toHaveBeenCalledWith(
+      jasmine.any(Object), jasmine.any(String)
+    );
+
+    expect(
+      toggleClassCheck
+    ).toHaveBeenCalledWith(
+      jasmine.any(Object), jasmine.any(String)
+    );
   });
 });
