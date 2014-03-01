@@ -1,6 +1,6 @@
 (function() {
   if (window.stik.$$manager){
-    throw "Stik.js is already loaded. Check your requires ;)";
+    throw "Stik is already loaded. Check your requires ;)";
   }
 
   window.stik.$$manager = new window.stik.Manager();

@@ -1,4 +1,4 @@
-function viewBag($template){
+window.stik.viewBag = function($template){
   var obj = {},
       bindingKey = "data-bind";
 
@@ -67,11 +67,9 @@ function viewBag($template){
   return obj;
 }
 
-window.stik.viewBag = viewBag;
-
 window.stik.boundary({
   as: "$viewBag",
   from: "controller|behavior",
   call: true,
-  to: viewBag
+  to: window.stik.viewBag
 });

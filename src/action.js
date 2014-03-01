@@ -1,4 +1,4 @@
-function action(spec){
+window.stik.action = function(spec){
   if (!spec.controller) {
     throw "Action needs an controller name";
   }
@@ -61,6 +61,4 @@ function action(spec){
   } spec.bindWithTemplate = bindWithTemplate;
 
   return spec;
-}
-
-window.stik.action = action;
+};

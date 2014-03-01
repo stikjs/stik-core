@@ -11,7 +11,7 @@ describe("Manager", function(){
 
       expect(function(){
         manager.$addControllerWithAction("", "detail", function(){})
-      }).toThrow("Controller name can't be empty");
+      }).toThrow("Controller needs a name");
 
       expect(function(){
         manager.$addControllerWithAction("ItemCtrl", "", function(){})

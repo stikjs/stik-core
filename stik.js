@@ -72,101 +72,103 @@ window.stik = {
   window.stik.Injectable = Injectable;
 })();
 
-(function(){
-  function Controller(name){
-    if (!name) { throw "Controller name can't be empty"; }
-
-    this.$$name = name;
-    this.$$actions = {};
+window.stik.createController = function(spec){
+  if (!spec.name) {
+    throw "Controller needs a name";
   }
 
-  Controller.method("action", function(actionName, executionUnit){
-    var action = new window.stik.Action(
-      actionName, this.$$name, executionUnit
-    );
-    this.$$actions[actionName] = action;
-    return action;
-  });
+  spec.$$actions = {};
 
-  Controller.method("$bind", function(modules){
-    var boundAny = false;
+  function action(actionName, executionUnit){
+    var newAction = window.stik.action({
+      name: actionName,
+      controller: spec.name,
+      executionUnit: executionUnit
+    });
+    spec.$$actions[actionName] = newAction;
+    return newAction;
+  } spec.action = action;
 
-    for (var action in this.$$actions){
-      if (this.$$actions[action].$bind(modules)) {
+  function bind(modules){
+    var act,
+        boundAny = false;
+
+    for (act in spec.$$actions){
+      if (spec.$$actions[act].bind(modules)) {
         boundAny = true;
       }
     }
 
     return boundAny;
-  });
+  } spec.bind = bind;
 
-  window.stik.Controller = Controller;
-})();
+  return spec;
+};
 
-(function(){
-  function Action(name, controller, executionUnit){
-    if (!name)          { throw "Action name can't be empty"; }
-    if (!executionUnit) { throw "Execution Unit is missing"; }
-
-    this.$$name = name;
-    this.$$controller = controller;
-    this.$$executionUnit = executionUnit;
+window.stik.action = function(spec){
+  if (!spec.controller) {
+    throw "Action needs an controller name";
+  }
+  if (!spec.name) {
+    throw "Action name can't be empty";
+  }
+  if (!spec.executionUnit) {
+    throw "Action needs an execution unit";
   }
 
-  Action.method("$bind", function(modules){
+  function bind(modules){
     var templates, i;
 
-    templates = this.$findTemplates();
+    templates = spec.findTemplates();
 
     i = templates.length;
-
     while(i--){
-      this.$bindWithTemplate(
+      bindWithTemplate(
         templates[i]
-      ).context.$load(this.$$executionUnit, modules);
+      ).context.$load(spec.executionUnit, modules);
     }
 
     return templates.length > 0;
-  });
+  } spec.bind = bind;
 
-  Action.method("$resolveDependencies", function(modules){
+  function $resolveDependencies(modules){
     var injector = new window.stik.Injector(
       this.$$executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  });
+  } spec.$resolveDependencies = $resolveDependencies;
 
-  Action.method("$mergeModules", function(template, modules){
+  function mergeModules(template, modules){
     modules.$context  = this;
     modules.$template = template;
 
     return modules;
-  });
+  }
 
-  Action.method("$findTemplates", function(controller, DOMInjection){
+  function findTemplates(DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
-    var selector = "[data-controller=" + this.$$controller + "]" +
-                   "[data-action=" + this.$$name + "]" +
+    var selector = "[data-controller=" + spec.controller + "]" +
+                   "[data-action=" + spec.name + "]" +
                    ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
-  });
+  } spec.findTemplates = findTemplates;
 
-  Action.method("$bindWithTemplate", function(template, modules){
+  function bindWithTemplate(template, modules){
     return {
       context: new window.stik.Context(
-        this.$$controller,
-        this.$$name,
+        spec.controller,
+        spec.name,
         template
       ),
-      executionUnit: this.$$executionUnit
+      executionUnit: spec.executionUnit
     };
-  });
+  } spec.bindWithTemplate = bindWithTemplate;
 
-  window.stik.Action = Action;
-})();
+  return spec;
+};
 
 (function(){
   function Context(controller, action, template){
@@ -333,7 +335,7 @@ window.stik = {
     var ctrl, action;
     ctrl = this.$storeController(controllerName);
     action = ctrl.action(actionName, executionUnit);
-    action.$bind(
+    action.bind(
       this.$extractBoundaries(this.$$boundaries.controller)
     );
     return ctrl;
@@ -347,7 +349,9 @@ window.stik = {
   });
 
   Manager.method("$storeController", function(controllerName){
-    var ctrl = new window.stik.Controller(controllerName);
+    var ctrl = window.stik.createController({
+      name: controllerName
+    });
     this.$$controllers[controllerName] = ctrl;
     return ctrl;
   });
@@ -465,7 +469,7 @@ window.stik = {
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
-    result = this.$$controllers[controller].$$actions[action].$bindWithTemplate(
+    result = this.$$controllers[controller].$$actions[action].bindWithTemplate(
       template, modules
     );
 
@@ -474,14 +478,14 @@ window.stik = {
   });
 
   Manager.method("$bindActions", function(){
-    var modules, boundAny;
+    var modules, boundAny, ctrl;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
     boundAny = false;
 
-    for (var ctrl in this.$$controllers) {
-      if (this.$$controllers[ctrl].$bind(modules)) {
+    for (ctrl in this.$$controllers) {
+      if (this.$$controllers[ctrl].bind(modules)) {
         boundAny = true;
       }
     }
@@ -491,7 +495,7 @@ window.stik = {
 
   Manager.method("$bindController", function(controller){
     var modules = this.$extractBoundaries(this.$$boundaries.controller);
-    controller.$bind(modules);
+    controller.bind(modules);
   });
 
   window.stik.Manager = Manager;
@@ -499,7 +503,7 @@ window.stik = {
 
 (function() {
   if (window.stik.$$manager){
-    throw "Stik.js is already loaded. Check your requires ;)";
+    throw "Stik is already loaded. Check your requires ;)";
   }
 
   window.stik.$$manager = new window.stik.Manager();
@@ -616,7 +620,7 @@ window.stik = {
   });
 })();
 
-function viewBag($template){
+window.stik.viewBag = function($template){
   var obj = {},
       bindingKey = "data-bind";
 
@@ -685,13 +689,11 @@ function viewBag($template){
   return obj;
 }
 
-window.stik.viewBag = viewBag;
-
 window.stik.boundary({
   as: "$viewBag",
   from: "controller|behavior",
   call: true,
-  to: viewBag
+  to: window.stik.viewBag
 });
 
 (function(){

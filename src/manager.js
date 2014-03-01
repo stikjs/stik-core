@@ -23,7 +23,9 @@
   });
 
   Manager.method("$storeController", function(controllerName){
-    var ctrl = new window.stik.Controller(controllerName);
+    var ctrl = window.stik.createController({
+      name: controllerName
+    });
     this.$$controllers[controllerName] = ctrl;
     return ctrl;
   });
@@ -157,7 +159,7 @@
     boundAny = false;
 
     for (ctrl in this.$$controllers) {
-      if (this.$$controllers[ctrl].$bind(modules)) {
+      if (this.$$controllers[ctrl].bind(modules)) {
         boundAny = true;
       }
     }
@@ -167,7 +169,7 @@
 
   Manager.method("$bindController", function(controller){
     var modules = this.$extractBoundaries(this.$$boundaries.controller);
-    controller.$bind(modules);
+    controller.bind(modules);
   });
 
   window.stik.Manager = Manager;

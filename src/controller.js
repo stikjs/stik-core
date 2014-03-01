@@ -1,32 +1,32 @@
-(function(){
-  function Controller(name){
-    if (!name) { throw "Controller name can't be empty"; }
-
-    this.$$name = name;
-    this.$$actions = {};
+window.stik.createController = function(spec){
+  if (!spec.name) {
+    throw "Controller needs a name";
   }
 
-  Controller.method("action", function(actionName, executionUnit){
-    var action = window.stik.action({
+  spec.$$actions = {};
+
+  function action(actionName, executionUnit){
+    var newAction = window.stik.action({
       name: actionName,
-      controller: this.$$name,
+      controller: spec.name,
       executionUnit: executionUnit
     });
-    this.$$actions[actionName] = action;
-    return action;
-  });
+    spec.$$actions[actionName] = newAction;
+    return newAction;
+  } spec.action = action;
 
-  Controller.method("$bind", function(modules){
-    var boundAny = false;
+  function bind(modules){
+    var act,
+        boundAny = false;
 
-    for (var action in this.$$actions){
-      if (this.$$actions[action].bind(modules)) {
+    for (act in spec.$$actions){
+      if (spec.$$actions[act].bind(modules)) {
         boundAny = true;
       }
     }
 
     return boundAny;
-  });
+  } spec.bind = bind;
 
-  window.stik.Controller = Controller;
-})();
+  return spec;
+};
