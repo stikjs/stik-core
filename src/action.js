@@ -35,7 +35,6 @@
   Action.method("$mergeModules", function(template, modules){
     modules.$context  = this;
     modules.$template = template;
-    modules.$viewBag  = this.$$viewBag;
 
     return modules;
   });

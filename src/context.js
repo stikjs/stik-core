@@ -6,9 +6,6 @@
     this.$$template = new window.stik.Injectable(
       template, false
     );
-    this.$$viewBag = new window.stik.Injectable(
-      window.stik.viewBag(template), false
-    );
   }
 
   Context.method("$load", function(executionUnit, modules){
@@ -32,7 +29,6 @@
   Context.method("$mergeModules", function(modules){
     modules.$context  = this;
     modules.$template = this.$$template;
-    modules.$viewBag  = this.$$viewBag;
 
     return modules;
   });

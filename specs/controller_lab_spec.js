@@ -24,7 +24,7 @@ describe("ControllerLab", function(){
     });
   });
 
-  describe("in and out data", function(){
+  it("in and out data", function(){
     var template, lab;
 
     stik.controller("StarWarsCtrl", "Dialog", function($viewBag){

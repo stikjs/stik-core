@@ -17,7 +17,7 @@ describe("Controller", function(){
         ctrl.$$actions["Revelation"], "$findTemplates"
       ).andReturn([template]);
 
-      ctrl.$bind({});
+      stik.bindLazy();
 
       expect(result).toEqual("Father!!!!!!");
     });
@@ -39,7 +39,7 @@ describe("Controller", function(){
 
       spyOn(action, "$findTemplates").andReturn([template]);
 
-      action.$bind({});
+      stik.bindLazy();
 
       expect(result).toEqual("NNNOOOOOOO!!!!!!");
     });
