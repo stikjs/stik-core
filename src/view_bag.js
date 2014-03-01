@@ -1,16 +1,15 @@
-(function(){
-  var bindingKey = "data-bind";
+function viewBag($template){
+  var obj = {},
+      bindingKey = "data-bind";
 
-  function ViewBag($template){
-    this.$$template = $template;
+  if (!$template) {
+    throw "Stik viewBag needs to a view to be attached to";
   }
 
-  ViewBag.method("$push", function(dataSet){
-    var fields, dataToBind, i;
-
-    fields = fieldsToBind(this.$$template);
-
-    i = fields.length;
+  function $push(dataSet){
+    var fields = fieldsToBind(),
+        i = fields.length,
+        dataToBind;
 
     while(i--) {
       dataToBind = fields[i].getAttribute(bindingKey);
@@ -19,15 +18,13 @@
         updateElementValue(fields[i], dataSet[dataToBind]);
       }
     }
-  });
+  } obj.$push = $push;
 
-  ViewBag.method("$pull", function(){
-    var fields, dataSet, key, i;
-
-    dataSet = {};
-    fields = fieldsToBind(this.$$template);
-
-    i = fields.length;
+  function $pull(){
+    var fields = fieldsToBind($template),
+        dataSet = {},
+        i = fields.length,
+        key;
 
     while(i--) {
       key = fields[i].getAttribute(bindingKey);
@@ -35,7 +32,7 @@
     }
 
     return dataSet;
-  });
+  } obj.$pull = $pull;
 
   function extractValueOf(element){
     if (isInput(element)) {
@@ -53,12 +50,12 @@
     }
   }
 
-  function fieldsToBind(template){
-    if (template.getAttribute(bindingKey)) {
-      return [template];
+  function fieldsToBind(){
+    if ($template.getAttribute(bindingKey)) {
+      return [$template];
     }
 
-    return template.querySelectorAll(
+    return $template.querySelectorAll(
       "[" + bindingKey + "]"
     );
   }
@@ -67,12 +64,14 @@
     return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA";
   }
 
-  window.stik.ViewBag = ViewBag;
+  return obj;
+}
 
-  window.stik.boundary({
-    as: "$viewBag",
-    from: "controller|behavior",
-    inst: true,
-    to: ViewBag
-  });
-})();
+window.stik.viewBag = viewBag;
+
+window.stik.boundary({
+  as: "$viewBag",
+  from: "controller|behavior",
+  call: true,
+  to: viewBag
+});

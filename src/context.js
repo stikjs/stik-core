@@ -1,13 +1,13 @@
 (function(){
   function Context(controller, action, template){
-    this.$$controller    = controller;
-    this.$$action        = action;
+    this.$$controller = controller;
+    this.$$action     = action;
 
     this.$$template = new window.stik.Injectable(
       template, false
     );
     this.$$viewBag = new window.stik.Injectable(
-      new window.stik.ViewBag(template), false
+      window.stik.viewBag(template), false
     );
   }
 

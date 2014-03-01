@@ -1,14 +1,8 @@
 describe("ViewBag", function(){
-  describe("#initialize", function(){
-    it("when ok", function(){
-      var template, viewBag;
-
-      template = '<div></div>';
-
-      viewBag = new stik.ViewBag(template);
-
-      expect(viewBag.$$template).toEqual(template);
-    });
+  it("#initializing", function(){
+    expect(function(){
+      stik.viewBag()
+    }).toThrow("Stik viewBag needs to a view to be attached to");
   });
 
   describe("#$push", function(){
@@ -19,7 +13,7 @@ describe("ViewBag", function(){
         '<div><span data-bind="userName"></span></div>', "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       data = {userName: 'Luke Skywalker'};
 
@@ -41,7 +35,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       data = {
         userName: 'Luke Skywalker',
@@ -67,7 +61,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       data = {userName: 'Luke Skywalker'};
 
@@ -89,7 +83,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       data = {
         speaker: "Darth Vader",
@@ -119,7 +113,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       data = {userName: 'Luke Skywalker'};
 
@@ -142,7 +136,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       viewBag.$push({userName: ""});
 
@@ -159,7 +153,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       dataSet = viewBag.$pull();
 
@@ -177,7 +171,7 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = new stik.ViewBag(template);
+      viewBag = stik.viewBag(template);
 
       dataSet = viewBag.$pull();
 

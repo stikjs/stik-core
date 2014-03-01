@@ -21,4 +21,4 @@
   });
 
   window.stik.helper = helper;
-})();
+}());
