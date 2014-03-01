@@ -1,64 +1,66 @@
-(function(){
-  function Action(name, controller, executionUnit){
-    if (!name)          { throw "Action name can't be empty"; }
-    if (!executionUnit) { throw "Execution Unit is missing"; }
-
-    this.$$name = name;
-    this.$$controller = controller;
-    this.$$executionUnit = executionUnit;
+function action(spec){
+  if (!spec.controller) {
+    throw "Action needs an controller name";
+  }
+  if (!spec.name) {
+    throw "Action name can't be empty";
+  }
+  if (!spec.executionUnit) {
+    throw "Action needs an execution unit";
   }
 
-  Action.method("$bind", function(modules){
+  function bind(modules){
     var templates, i;
 
-    templates = this.$findTemplates();
+    templates = spec.findTemplates();
 
     i = templates.length;
-
     while(i--){
-      this.$bindWithTemplate(
+      bindWithTemplate(
         templates[i]
-      ).context.$load(this.$$executionUnit, modules);
+      ).context.$load(spec.executionUnit, modules);
     }
 
     return templates.length > 0;
-  });
+  } spec.bind = bind;
 
-  Action.method("$resolveDependencies", function(modules){
+  function $resolveDependencies(modules){
     var injector = new window.stik.Injector(
       this.$$executionUnit, modules
     );
 
     return injector.$resolveDependencies();
-  });
+  } spec.$resolveDependencies = $resolveDependencies;
 
-  Action.method("$mergeModules", function(template, modules){
+  function mergeModules(template, modules){
     modules.$context  = this;
     modules.$template = template;
 
     return modules;
-  });
+  }
 
-  Action.method("$findTemplates", function(controller, DOMInjection){
+  function findTemplates(DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
-    var selector = "[data-controller=" + this.$$controller + "]" +
-                   "[data-action=" + this.$$name + "]" +
+    var selector = "[data-controller=" + spec.controller + "]" +
+                   "[data-action=" + spec.name + "]" +
                    ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
-  });
+  } spec.findTemplates = findTemplates;
 
-  Action.method("$bindWithTemplate", function(template, modules){
+  function bindWithTemplate(template, modules){
     return {
       context: new window.stik.Context(
-        this.$$controller,
-        this.$$name,
+        spec.controller,
+        spec.name,
         template
       ),
-      executionUnit: this.$$executionUnit
+      executionUnit: spec.executionUnit
     };
-  });
+  } spec.bindWithTemplate = bindWithTemplate;
 
-  window.stik.Action = Action;
-})();
+  return spec;
+}
+
+window.stik.action = action;

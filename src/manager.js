@@ -9,7 +9,7 @@
     var ctrl, action;
     ctrl = this.$storeController(controllerName);
     action = ctrl.action(actionName, executionUnit);
-    action.$bind(
+    action.bind(
       this.$extractBoundaries(this.$$boundaries.controller)
     );
     return ctrl;
@@ -141,7 +141,7 @@
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
-    result = this.$$controllers[controller].$$actions[action].$bindWithTemplate(
+    result = this.$$controllers[controller].$$actions[action].bindWithTemplate(
       template, modules
     );
 
@@ -150,13 +150,13 @@
   });
 
   Manager.method("$bindActions", function(){
-    var modules, boundAny;
+    var modules, boundAny, ctrl;
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
     boundAny = false;
 
-    for (var ctrl in this.$$controllers) {
+    for (ctrl in this.$$controllers) {
       if (this.$$controllers[ctrl].$bind(modules)) {
         boundAny = true;
       }

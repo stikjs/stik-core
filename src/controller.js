@@ -7,9 +7,11 @@
   }
 
   Controller.method("action", function(actionName, executionUnit){
-    var action = new window.stik.Action(
-      actionName, this.$$name, executionUnit
-    );
+    var action = window.stik.action({
+      name: actionName,
+      controller: this.$$name,
+      executionUnit: executionUnit
+    });
     this.$$actions[actionName] = action;
     return action;
   });
@@ -18,7 +20,7 @@
     var boundAny = false;
 
     for (var action in this.$$actions){
-      if (this.$$actions[action].$bind(modules)) {
+      if (this.$$actions[action].bind(modules)) {
         boundAny = true;
       }
     }

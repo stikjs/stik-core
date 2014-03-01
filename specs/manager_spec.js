@@ -10,7 +10,7 @@ describe("Manager", function(){
       var manager = new stik.Manager();
 
       expect(function(){
-        manager.$addControllerWithAction("", "detal", function(){})
+        manager.$addControllerWithAction("", "detail", function(){})
       }).toThrow("Controller name can't be empty");
 
       expect(function(){
@@ -19,7 +19,7 @@ describe("Manager", function(){
 
       expect(function(){
         manager.$addControllerWithAction("ItemCtrl", "detail");
-      }).toThrow("Execution Unit is missing");
+      }).toThrow("Action needs an execution unit");
     });
 
     it("should register and bind the new execution unit", function(){
@@ -103,7 +103,7 @@ describe("Manager", function(){
       expect(result).toEqual(injectable);
     });
 
-    it("should be injectable into a controller", function(){
+    it("should be injectable into an action", function(){
       var manager, injectable, elm, template, result, ctrl;
 
       manager = new stik.Manager();
@@ -111,14 +111,14 @@ describe("Manager", function(){
       injectable = {};
       manager.$addBoundary("CustomObj", "controller", injectable);
 
-      template = {};
+      template = 'div';
 
       ctrl = manager.$addControllerWithAction("AppCtrl", "List", function(CustomObj){
         result = CustomObj;
       });
 
       spyOn(
-         ctrl.$$actions["List"], "$findTemplates"
+         ctrl.$$actions["List"], "findTemplates"
       ).andReturn([template]);
 
       manager.$bindActions();
