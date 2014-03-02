@@ -329,14 +329,14 @@ stik.behavior("fade-input", function($template, fadeIn){
 });
 ```
 
-###resolvable Boundaries
+###Resolvable Boundaries
 resolvable Boundaries are functions that might depend on Stik modules or other boundaries. They will be called with the required dependencies and their returned value will be passed on to whichever controller or behavior requiring it.
 
 ```javascript
 stik.boundary({
   as: "SomeFunkyFunc",
   from: "controller",
-  call: true,
+  resolvable: true,
   to: function($template){
     return doSomethingFunky($template);
   }
@@ -354,7 +354,7 @@ Instantiable boundaries can be used when you might have dependencies on Stik mod
 stik.boundary({
   as: "TwoWayDataBinding",
   from: "controller",
-  inst: true,
+  instantiable: true,
   to: function($template, $viewBag, GetTwitterFeed){
     // this should be the obj constructor
     // that will receive whichever dependency you declare
@@ -419,7 +419,7 @@ stik.behavior("shine-on-focus", function($template, $h){
 stik.boundary({
   as: "myAwesomeExternalLibraryBoundary",
   from: "controller",
-  call: true,
+  resolvable: true,
   to: function($h, $template){
     var http = new SomeHttpLibrary();
 	if ($h.hasClass($template, 'not-loaded')) {
