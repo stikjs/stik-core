@@ -70,6 +70,6 @@ window.stik.viewBag = function($template){
 window.stik.boundary({
   as: "$viewBag",
   from: "controller|behavior",
-  call: true,
+  resolvable: true,
   to: window.stik.viewBag
 });

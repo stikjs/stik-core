@@ -88,8 +88,8 @@ describe("Public", function(){
       as: "AwesomeFunc",
       from: "Controller",
       to: function(){},
-      inst: false,
-      call: false
+      instiable: false,
+      resolvable: false
     };
 
     spyOn(stik.$$manager, "$addBoundary");
@@ -98,12 +98,6 @@ describe("Public", function(){
 
     expect(
       stik.$$manager.$addBoundary
-    ).toHaveBeenCalledWith(
-      myBoundary.as,
-      myBoundary.from,
-      myBoundary.to,
-      myBoundary.inst,
-      myBoundary.call
-    );
+    ).toHaveBeenCalledWith(myBoundary);
   });
 });

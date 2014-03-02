@@ -50,4 +50,4 @@ window.stik.injector = function(spec){
   }
 
   return spec;
-}
+};

@@ -1,15 +1,18 @@
-(function(){
-  function Boundary(as, to, instantiable, callable){
-    if (as.indexOf(" ") !== -1) { throw "Invalid 'as'. Can't have spaces"; }
-    if (!to)                    { throw "Invalid 'to'. Can't be null"; }
-
-    this.$$as = as;
-    this.$$to = window.stik.injectable({
-      module: to,
-      instantiable: instantiable,
-      callable: callable
-    });
+window.stik.createBoundary = function(spec){
+  if (spec.as.indexOf(" ") !== -1) {
+    throw "Invalid 'as'. Can't have spaces";
+  }
+  if (!spec.to) {
+    throw "Invalid 'to'. Can't be null";
   }
 
-  window.stik.Boundary = Boundary;
-})();
+  var obj = {};
+
+  obj.to = window.stik.injectable({
+    module: spec.to,
+    instantiable: spec.instantiable,
+    resolvable: spec.resolvable
+  });
+
+  return obj;
+};

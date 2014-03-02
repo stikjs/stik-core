@@ -60,15 +60,27 @@ describe("Manager", function(){
       var manager = new stik.Manager();
 
       expect(function(){
-        manager.$addBoundary("CustomObj", "different", {});
+        manager.$addBoundary({
+          as: "CustomObj",
+          from: "different",
+          to: {}
+        });
       }).toThrow("Invalid 'from'. Needs to be 'controller' or 'behavior'");
 
       expect(function(){
-        manager.$addBoundary("with space", "controller", {});
+        manager.$addBoundary({
+          as: "with space",
+          from: "controller",
+          to: {}
+        });
       }).toThrow("Invalid 'as'. Can't have spaces");
 
       expect(function(){
-        manager.$addBoundary("CustomObj", "controller", null);
+        manager.$addBoundary({
+          as: "CustomObj",
+          from: "controller",
+          to: null
+        });
       }).toThrow("Invalid 'to'. Can't be null");
     });
 
@@ -77,7 +89,11 @@ describe("Manager", function(){
 
       manager = new stik.Manager();
 
-      manager.$addBoundary("CustomObj", "controller", function(){});
+      manager.$addBoundary({
+        as: "CustomObj",
+        from: "controller",
+        to: function(){}
+      });
 
       expect(
         manager.$$boundaries.controller["CustomObj"]
@@ -90,7 +106,11 @@ describe("Manager", function(){
       manager = new stik.Manager();
 
       injectable = function(){};
-      manager.$addBoundary("CustomFunc", "behavior", injectable);
+      manager.$addBoundary({
+        as: "CustomFunc",
+        from: "behavior",
+        to: injectable
+      });
 
       behavior = manager.$addBehavior("new-behavior", function(CustomFunc){
         result = CustomFunc;
@@ -110,7 +130,11 @@ describe("Manager", function(){
       manager = new stik.Manager();
 
       injectable = {};
-      manager.$addBoundary("CustomObj", "controller", injectable);
+      manager.$addBoundary({
+        as: "CustomObj",
+        from: "controller",
+        to: injectable
+      });
 
       template = 'div';
 

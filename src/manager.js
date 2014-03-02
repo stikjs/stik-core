@@ -47,13 +47,13 @@
     return behavior;
   });
 
-  Manager.method("$addBoundary", function(as, from, to, instantiable, callable){
+  Manager.method("$addBoundary", function(spec){
     var boundary, that;
 
     that = this;
-    this.$parseFrom(from, function(parsedFrom){
-      boundary = new window.stik.Boundary(as, to, instantiable, callable);
-      that.$$boundaries[parsedFrom][as] = boundary;
+    this.$parseFrom(spec.from, function(parsedFrom){
+      boundary = window.stik.createBoundary(spec);
+      that.$$boundaries[parsedFrom][spec.as] = boundary;
     });
 
     return boundary;
@@ -118,7 +118,7 @@
     modules = {};
 
     for (key in collection) {
-      modules[key] = collection[key].$$to;
+      modules[key] = collection[key].to;
     }
 
     return modules;

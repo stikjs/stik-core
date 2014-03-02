@@ -48,7 +48,7 @@ describe("Injectable", function(){
       ).toEqual(mockFunc);
     });
 
-    it("a callable function module", function(){
+    it("a resolvable function module", function(){
       var dependencies, mockFunc;
 
       dependencies = {
@@ -60,7 +60,7 @@ describe("Injectable", function(){
 
       injectable = stik.injectable({
         module: mockFunc,
-        callable: true
+        resolvable: true
       });
 
       expect(

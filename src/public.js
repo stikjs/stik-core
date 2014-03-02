@@ -1,7 +1,3 @@
-if (window.stik.$$manager){
-  throw "Stik is already loaded. Check your requires ;)";
-}
-
 window.stik.$$manager = new window.stik.Manager();
 
 window.stik.controller = function(controllerName, action, executionUnit){
@@ -26,12 +22,6 @@ window.stik.bindLazy = function(){
   }
 };
 
-window.stik.boundary = function(boundary){
-  return this.$$manager.$addBoundary(
-    boundary.as,
-    boundary.from,
-    boundary.to,
-    boundary.inst,
-    boundary.call
-  );
+window.stik.boundary = function(spec){
+  return this.$$manager.$addBoundary(spec);
 };

@@ -2,7 +2,7 @@
   var helpers = {},
       modules = {};
 
-  function helper(as, func){
+  window.stik.helper = function(as, func){
     if (!as) { throw "Stik helper needs a name"; }
     if (!func || typeof func !== "function") {
       throw "Stik helper needs a function";
@@ -10,11 +10,13 @@
 
     modules[as] = window.stik.injectable({
       module: func,
-      callable: true
+      resolvable: true
     });
     helpers[as] = function(){
       return modules[as].resolve(modules).apply({}, arguments);
     };
+
+    return helpers[as];
   }
 
   window.stik.boundary({
@@ -22,6 +24,4 @@
     from: "controller|behavior",
     to: helpers
   });
-
-  window.stik.helper = helper;
 }());

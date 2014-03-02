@@ -7,6 +7,10 @@
 
 // Version: 0.9.0 | From: 02-03-2014
 
+if (window.stik){
+  throw "Stik is already loaded. Check your requires ;)";
+}
+
 window.stik = {
   labs: {}
 };
@@ -25,14 +29,14 @@ window.stik = {
 
   window.stik.injectable = function(spec){
     spec.instantiable = spec.instantiable || false;
-    spec.callable     = spec.callable || false;
+    spec.resolvable = spec.resolvable || false;
 
     function resolve(dependencies){
       if (spec.instantiable === true) {
         return buildModule(
           resolveDependencies(dependencies)
         );
-      } else if (spec.callable === true) {
+      } else if (spec.resolvable === true) {
         return callWithDependencies(
           {},
           resolveDependencies(dependencies)
@@ -70,7 +74,7 @@ window.stik = {
 
     return spec;
   }
-})();
+}());
 
 window.stik.createController = function(spec){
   if (!spec.name) {
@@ -278,21 +282,24 @@ window.stik.createBehavior = function(spec){
   return spec;
 }
 
-(function(){
-  function Boundary(as, to, instantiable, callable){
-    if (as.indexOf(" ") !== -1) { throw "Invalid 'as'. Can't have spaces"; }
-    if (!to)                    { throw "Invalid 'to'. Can't be null"; }
-
-    this.$$as = as;
-    this.$$to = window.stik.injectable({
-      module: to,
-      instantiable: instantiable,
-      callable: callable
-    });
+window.stik.createBoundary = function(spec){
+  if (spec.as.indexOf(" ") !== -1) {
+    throw "Invalid 'as'. Can't have spaces";
+  }
+  if (!spec.to) {
+    throw "Invalid 'to'. Can't be null";
   }
 
-  window.stik.Boundary = Boundary;
-})();
+  var obj = {};
+
+  obj.to = window.stik.injectable({
+    module: spec.to,
+    instantiable: spec.instantiable,
+    resolvable: spec.resolvable
+  });
+
+  return obj;
+};
 
 window.stik.injector = function(spec){
   if (!spec.executionUnit) {
@@ -346,7 +353,7 @@ window.stik.injector = function(spec){
   }
 
   return spec;
-}
+};
 
 (function(){
   function Manager(){
@@ -397,13 +404,13 @@ window.stik.injector = function(spec){
     return behavior;
   });
 
-  Manager.method("$addBoundary", function(as, from, to, instantiable, callable){
+  Manager.method("$addBoundary", function(spec){
     var boundary, that;
 
     that = this;
-    this.$parseFrom(from, function(parsedFrom){
-      boundary = new window.stik.Boundary(as, to, instantiable, callable);
-      that.$$boundaries[parsedFrom][as] = boundary;
+    this.$parseFrom(spec.from, function(parsedFrom){
+      boundary = window.stik.createBoundary(spec);
+      that.$$boundaries[parsedFrom][spec.as] = boundary;
     });
 
     return boundary;
@@ -468,7 +475,7 @@ window.stik.injector = function(spec){
     modules = {};
 
     for (key in collection) {
-      modules[key] = collection[key].$$to;
+      modules[key] = collection[key].to;
     }
 
     return modules;
@@ -511,10 +518,6 @@ window.stik.injector = function(spec){
   window.stik.Manager = Manager;
 })();
 
-if (window.stik.$$manager){
-  throw "Stik is already loaded. Check your requires ;)";
-}
-
 window.stik.$$manager = new window.stik.Manager();
 
 window.stik.controller = function(controllerName, action, executionUnit){
@@ -539,21 +542,15 @@ window.stik.bindLazy = function(){
   }
 };
 
-window.stik.boundary = function(boundary){
-  return this.$$manager.$addBoundary(
-    boundary.as,
-    boundary.from,
-    boundary.to,
-    boundary.inst,
-    boundary.call
-  );
+window.stik.boundary = function(spec){
+  return this.$$manager.$addBoundary(spec);
 };
 
 (function(){
   var helpers = {},
       modules = {};
 
-  function helper(as, func){
+  window.stik.helper = function(as, func){
     if (!as) { throw "Stik helper needs a name"; }
     if (!func || typeof func !== "function") {
       throw "Stik helper needs a function";
@@ -561,11 +558,13 @@ window.stik.boundary = function(boundary){
 
     modules[as] = window.stik.injectable({
       module: func,
-      callable: true
+      resolvable: true
     });
     helpers[as] = function(){
       return modules[as].resolve(modules).apply({}, arguments);
     };
+
+    return helpers[as];
   }
 
   window.stik.boundary({
@@ -573,8 +572,6 @@ window.stik.boundary = function(boundary){
     from: "controller|behavior",
     to: helpers
   });
-
-  window.stik.helper = helper;
 }());
 
 (function(){
@@ -703,7 +700,7 @@ window.stik.viewBag = function($template){
 window.stik.boundary({
   as: "$viewBag",
   from: "controller|behavior",
-  call: true,
+  resolvable: true,
   to: window.stik.viewBag
 });
 

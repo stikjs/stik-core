@@ -3,14 +3,14 @@
 
   window.stik.injectable = function(spec){
     spec.instantiable = spec.instantiable || false;
-    spec.callable     = spec.callable || false;
+    spec.resolvable = spec.resolvable || false;
 
     function resolve(dependencies){
       if (spec.instantiable === true) {
         return buildModule(
           resolveDependencies(dependencies)
         );
-      } else if (spec.callable === true) {
+      } else if (spec.resolvable === true) {
         return callWithDependencies(
           {},
           resolveDependencies(dependencies)
@@ -48,4 +48,4 @@
 
     return spec;
   }
-})();
+}());
