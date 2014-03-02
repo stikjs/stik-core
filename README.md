@@ -348,7 +348,7 @@ stik.controller("AppCtrl", "List", function(SomeFunkyFunc){
 ```
 
 ###Instantiable Boundaries:
-Instantiable boundaries can be used when you might have dependencies on Stik modules but mostly other boundaries and you need to maintain separate states between your controllers and/or behaviors.
+Instantiable boundaries can be used when you might have dependencies on Stik modules but mostly other boundaries and you need to maintain separate state between your controllers and/or behaviors.
 
 ```javascript
 stik.boundary({
@@ -358,9 +358,8 @@ stik.boundary({
   to: function($template, $viewBag, GetTwitterFeed){
     // this should be the obj constructor
     // that will receive whichever dependency you declare
-    this.template = template;
 
-    this.bindTo = function(myDataObj){
+    this.prototype.bindTo = function(myDataObj){
       // do your binding stuff
     };
   }
@@ -409,10 +408,10 @@ stik.controller("AppCtrl", "List", function($template, $h){
 
 stik.behavior("shine-on-focus", function($template, $h){
   $template.addEventListener("focus", function(){
-	$h.toggleClass($template, "shining")
+    $h.toggleClass($template, "shining")
   });
   $template.addEventListener('blur', function(){
-	$h.toggleClass($template, "shining")
+    $h.toggleClass($template, "shining")
   });
 });
 
@@ -422,8 +421,8 @@ stik.boundary({
   resolvable: true,
   to: function($h, $template){
     var http = new SomeHttpLibrary();
-	if ($h.hasClass($template, 'not-loaded')) {
-	  http.get('/load-app.html').wheDone(function(res){
+    if ($h.hasClass($template, 'not-loaded')) {
+      http.get('/load-app.html').wheDone(function(res){
         $h.toggleClass($template, 'loading-done');
       });
     }
