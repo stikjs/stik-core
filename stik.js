@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.9.0 | From: 02-03-2014
+// Version: 0.10.0 | From: 03-03-2014
 
 if (window.stik){
   throw "Stik is already loaded. Check your requires ;)";
@@ -129,7 +129,7 @@ window.stik.action = function(spec){
     while(i--){
       bindWithTemplate(
         templates[i]
-      ).context.$load(spec.executionUnit, modules);
+      ).context.load(spec.executionUnit, modules);
     }
 
     return templates.length > 0;
@@ -162,11 +162,11 @@ window.stik.action = function(spec){
 
   function bindWithTemplate(template, modules){
     return {
-      context: new window.stik.Context(
-        spec.controller,
-        spec.name,
-        template
-      ),
+      context: window.stik.context({
+        controller: spec.controller,
+        action: spec.name,
+        template: template
+      }),
       executionUnit: spec.executionUnit
     };
   } spec.bindWithTemplate = bindWithTemplate;
@@ -174,49 +174,43 @@ window.stik.action = function(spec){
   return spec;
 };
 
-(function(){
-  function Context(controller, action, template){
-    this.$$controller = controller;
-    this.$$action     = action;
-
-    this.$$template = window.stik.injectable({
-      module: template
-    });
-  }
-
-  Context.method("$load", function(executionUnit, modules){
-    var dependencies = this.$resolveDependencies(
-      executionUnit,
-      this.$mergeModules(modules)
-    );
-
-    executionUnit.apply(this, dependencies);
-    this.$markAsBound();
+window.stik.context = function(spec){
+  spec.template = window.stik.injectable({
+    module: spec.template
   });
 
-  Context.method("$resolveDependencies", function(executionUnit, modules){
+  function load(executionUnit, modules){
+    var dependencies = resolveDependencies(
+      executionUnit,
+      mergeModules(modules)
+    );
+
+    executionUnit.apply(spec, dependencies);
+    markAsBound();
+  } spec.load = load;
+
+  function resolveDependencies(executionUnit, modules){
     var injector = window.stik.injector({
       executionUnit: executionUnit,
       modules: modules
     });
 
     return injector.resolveDependencies();
-  });
+  }
 
-  Context.method("$mergeModules", function(modules){
-    modules.$context  = this;
-    modules.$template = this.$$template;
+  function mergeModules(modules){
+    modules.$template = spec.template;
 
     return modules;
-  });
+  }
 
-  Context.method("$markAsBound", function(){
-    var template = this.$$template.resolve();
+  function markAsBound(){
+    var template = spec.template.resolve();
     template.className = (template.className + ' stik-bound').trim();
-  });
+  }
 
-  window.stik.Context = Context;
-})();
+  return spec;
+};
 
 window.stik.createBehavior = function(spec){
   if (!spec.name) {
@@ -737,7 +731,7 @@ window.stik.boundary({
   }
 
   ControllerLab.method("run", function(){
-    this.$$context.$load(this.$$executionUnit, this.$$modules);
+    this.$$context.load(this.$$executionUnit, this.$$modules);
   });
 
   window.stik.labs.Controller = ControllerLab;

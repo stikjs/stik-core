@@ -18,7 +18,7 @@ window.stik.action = function(spec){
     while(i--){
       bindWithTemplate(
         templates[i]
-      ).context.$load(spec.executionUnit, modules);
+      ).context.load(spec.executionUnit, modules);
     }
 
     return templates.length > 0;
@@ -51,11 +51,11 @@ window.stik.action = function(spec){
 
   function bindWithTemplate(template, modules){
     return {
-      context: new window.stik.Context(
-        spec.controller,
-        spec.name,
-        template
-      ),
+      context: window.stik.context({
+        controller: spec.controller,
+        action: spec.name,
+        template: template
+      }),
       executionUnit: spec.executionUnit
     };
   } spec.bindWithTemplate = bindWithTemplate;

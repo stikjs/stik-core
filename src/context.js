@@ -1,43 +1,37 @@
-(function(){
-  function Context(controller, action, template){
-    this.$$controller = controller;
-    this.$$action     = action;
-
-    this.$$template = window.stik.injectable({
-      module: template
-    });
-  }
-
-  Context.method("$load", function(executionUnit, modules){
-    var dependencies = this.$resolveDependencies(
-      executionUnit,
-      this.$mergeModules(modules)
-    );
-
-    executionUnit.apply(this, dependencies);
-    this.$markAsBound();
+window.stik.context = function(spec){
+  spec.template = window.stik.injectable({
+    module: spec.template
   });
 
-  Context.method("$resolveDependencies", function(executionUnit, modules){
+  function load(executionUnit, modules){
+    var dependencies = resolveDependencies(
+      executionUnit,
+      mergeModules(modules)
+    );
+
+    executionUnit.apply(spec, dependencies);
+    markAsBound();
+  } spec.load = load;
+
+  function resolveDependencies(executionUnit, modules){
     var injector = window.stik.injector({
       executionUnit: executionUnit,
       modules: modules
     });
 
     return injector.resolveDependencies();
-  });
+  }
 
-  Context.method("$mergeModules", function(modules){
-    modules.$context  = this;
-    modules.$template = this.$$template;
+  function mergeModules(modules){
+    modules.$template = spec.template;
 
     return modules;
-  });
+  }
 
-  Context.method("$markAsBound", function(){
-    var template = this.$$template.resolve();
+  function markAsBound(){
+    var template = spec.template.resolve();
     template.className = (template.className + ' stik-bound').trim();
-  });
+  }
 
-  window.stik.Context = Context;
-})();
+  return spec;
+};

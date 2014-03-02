@@ -31,7 +31,7 @@
   }
 
   ControllerLab.method("run", function(){
-    this.$$context.$load(this.$$executionUnit, this.$$modules);
+    this.$$context.load(this.$$executionUnit, this.$$modules);
   });
 
   window.stik.labs.Controller = ControllerLab;

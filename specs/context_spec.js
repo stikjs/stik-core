@@ -24,7 +24,7 @@ describe("Context", function(){
     elmDouble = null;
   });
 
-  describe("$load", function(){
+  describe("#load", function(){
     it("should run the execution unit it is bound to", function(){
       var template, modules, executionUnitDouble, injectedTemplate;
 
@@ -36,39 +36,16 @@ describe("Context", function(){
         injectedTemplate = $template;
       };
 
-      context = new stik.Context("AppCtrl", "list", template);
+      context = stik.context({
+        controller: "AppCtrl",
+        action: "list",
+        template: template
+      });
 
-      context.$load(executionUnitDouble, modulesDouble());
+      context.load(executionUnitDouble, modulesDouble());
 
       expect(injectedTemplate).toEqual(template);
       expect(template.className).toEqual("stik-bound");
-    });
-  });
-
-  describe("$markAsBound", function(){
-    it("being to only class", function(){
-      var context, template, attribute;
-
-      template = document.createElement("div");
-
-      context = new stik.Context("AppCtrl", "List", template, function(){});
-
-      context.$markAsBound();
-
-      expect(template.className).toEqual("stik-bound");
-    });
-
-    it("having another class in the template", function(){
-      var context, template, attribute;
-
-      template = document.createElement("div");
-      template.className += "wierd-class"
-
-      context = new stik.Context("AppCtrl", "List", template, function(){});
-
-      context.$markAsBound();
-
-      expect(template.className).toEqual("wierd-class stik-bound");
     });
   });
 });

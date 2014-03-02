@@ -147,19 +147,19 @@ stik.controller("BattleCtrl", "List", function($template){
   // ...
 });
 
-stik.controller("BattleCtrl", "List", function($context){
+stik.controller("BattleCtrl", "List", function($viewBag){
   // ...
 });
 
 // two
 
-stik.controller("BattleCtrl", "List", function($context, $template){
+stik.controller("BattleCtrl", "List", function($viewBag, $template){
   // ...
 });
 
 // three
 
-stik.controller("BattleCtrl", "List", function($courier, $template, $context){
+stik.controller("BattleCtrl", "List", function($courier, $template, $viewBag){
   // ...
 });
 
