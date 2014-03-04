@@ -24,7 +24,7 @@ describe("ControllerLab", function(){
     });
   });
 
-  it("in and out data", function(){
+  it("should push data to the template", function(){
     var template, lab;
 
     stik.controller("StarWarsCtrl", "Dialog", function($viewBag){
@@ -47,11 +47,46 @@ describe("ControllerLab", function(){
     lab.run();
 
     expect(
-      lab.template.getElementsByClassName("luke")[0].value
-    ).toEqual(null);
+      lab.template.getElementsByClassName("luke")[0].textContent
+    ).toEqual("You killed my father");
 
     expect(
-      lab.template.getElementsByClassName("vader")[0].value
-    ).toEqual(null);
+      lab.template.getElementsByClassName("vader")[0].textContent
+    ).toEqual("Luke, I'm your father");
+  });
+
+  it("mocking dependencies", function(){
+    var template, lab, viewBagDoubleMock;
+
+    stik.controller("StarWarsCtrl", "LightsaberDuel", function($viewBag){
+      $viewBag.$push({
+        luke: "You killed my father",
+        vader: "Luke, I'm your father"
+      });
+    });
+
+    template = "<div data-controller=\"StarWarsCtrl\" data-action=\"LightsaberDuel\">" +
+      "<span class=\"luke\" data-bind=\"luke\"></span>" +
+      "<span class=\"vader\" data-bind=\"vader\"></span>" +
+    "</div>";
+
+    viewBagDoubleMock = jasmine.createSpyObj("viewBag", ["$push"])
+
+    lab = stik.labs.controller({
+      name: "StarWarsCtrl",
+      action: "LightsaberDuel",
+      template: template
+    });
+    lab.run({
+      $viewBag: viewBagDoubleMock
+    });
+
+    expect(viewBagDoubleMock.$push).toHaveBeenCalledWith({
+      luke: "You killed my father", vader: "Luke, I'm your father"
+    });
+
+    expect(
+      lab.template.getElementsByClassName("vader")[0].textContent
+    ).toEqual('');
   });
 });

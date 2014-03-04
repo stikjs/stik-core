@@ -19,9 +19,18 @@ window.stik.labs.controller = function controllerLab(spec){
     return container.body.firstChild;
   }
 
-  function run(){
-    context.load(result.executionUnit, result.modules);
+  function run(doubles){
+    result.context.load(result.executionUnit, mergeModules(doubles));
   } env.run = run;
+
+  function mergeModules(doubles){
+    for (dbl in doubles) {
+      result.modules[dbl] = window.stik.injectable({
+        module: doubles[dbl]
+      });
+    }
+    return result.modules;
+  }
 
   return env;
 }

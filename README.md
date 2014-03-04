@@ -430,6 +430,72 @@ stik.boundary({
 });
 ```
 
+###Labs
+Stik comes with a collection of utilities that allows you to write tests automated tests for your components.
+
+Labs are framework agnostic, which means that they can be written using jasmine, QUnit, or any other assertion library out there.
+
+####Controller Lab
+
+```javascript
+// this controller might be defined in your star_wars_ctrl.js file
+stik.controller("StarWarsCtrl", "Dialog", function($viewBag){
+  $viewBag.$push({
+    luke: "You killed my father",
+    vader: "Luke, I'm your father"
+  });
+});
+
+// and this in your specs/controllers/star_wars_ctrl_spec.js
+it("should push data to the template", function(){
+  var template, lab;
+
+  template = "<div data-controller=\"StarWarsCtrl\" data-action=\"Dialog\">" +
+    "<span class=\"luke\" data-bind=\"luke\"></span>" +
+    "<span class=\"vader\" data-bind=\"vader\"></span>" +
+  "</div>";
+
+  lab = stik.labs.controller({
+    name: "StarWarsCtrl",
+    action: "Dialog",
+    template: template
+  });
+  lab.run();
+
+  expect(
+    lab.template.getElementsByClassName("luke")[0].textContent
+  ).toEqual("You killed my father");
+
+  expect(
+    lab.template.getElementsByClassName("vader")[0].textContent
+  ).toEqual("Luke, I'm your father");
+});
+```
+
+####Mocks and Stubs
+Eventually your components might depend on external services or have expensive operations. For those situations every Lab provides an interfaces for you to inject doubles instead of the real entities.
+
+For more information on Mocks and Stubs please read [Mocks Aren't Stubs](http://martinfowler.com/articles/mocksArentStubs.html). And for a more in depth look at how to write testable software be sure to read this awesome book [Growing Object-Oriented Software, Guided by Tests](http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?ie=UTF8&qid=1393900349&sr=8-1&keywords=growing+object-oriented+software+guided+by+tests)
+
+```javascript
+// create your mock that will be injected
+var viewBagMock = jasmine.createObjSpy('viewBagMock', ['$push']);
+// this can be created with any mocking library
+
+lab = stik.labs.controller({
+  name: "StarWarsCtrl",
+  action: "Dialog",
+  template: template
+});
+lab.run({
+  // here you can specify all your mocks and/or stubs
+  // that should replace the real entity
+  $viewBag: viewBagMock
+});
+
+expect(viewBagMock.$push).toHaveBeenCalledWith({/* ... */})
+```
+
 ##Helping Stik.js
 ###I found a bug!
 If you found a repeatable bug then file an issue on [issues page](https://github.com/lukelex/stik.js/issues), preferably with a working example or repo.
