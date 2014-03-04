@@ -14,7 +14,7 @@ describe("Controller", function(){
       });
 
       spyOn(
-        ctrl.$$actions["Revelation"], "findTemplates"
+        ctrl.actions["Revelation"], "findTemplates"
       ).andReturn([template]);
 
       stik.bindLazy();

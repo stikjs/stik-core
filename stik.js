@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.0 | From: 03-03-2014
+// Version: 0.10.0 | From: 04-03-2014
 
 if (window.stik){
   throw "Stik is already loaded. Check your requires ;)";
@@ -81,7 +81,7 @@ window.stik.createController = function(spec){
     throw "Controller needs a name";
   }
 
-  spec.$$actions = {};
+  spec.actions = {};
 
   function action(actionName, executionUnit){
     var newAction = window.stik.action({
@@ -89,16 +89,16 @@ window.stik.createController = function(spec){
       controller: spec.name,
       executionUnit: executionUnit
     });
-    spec.$$actions[actionName] = newAction;
+    spec.actions[actionName] = newAction;
     return newAction;
   } spec.action = action;
 
   function bind(modules){
-    var act,
+    var name,
         boundAny = false;
 
-    for (act in spec.$$actions){
-      if (spec.$$actions[act].bind(modules)) {
+    for (name in spec.actions){
+      if (spec.actions[name].bind(modules)) {
         boundAny = true;
       }
     }
@@ -247,14 +247,11 @@ window.stik.createBehavior = function(spec){
     markAsApplyed(template);
   };
 
-  function findTemplates(DOMInjection){
-    var DOMHandler = document;
-    if (DOMInjection) { DOMHandler = DOMInjection; }
-
+  function findTemplates(){
     var selector = "[class*=" + spec.name + "]" +
                    ":not([data-behaviors*=" + spec.name + "])";
 
-    return DOMHandler.querySelectorAll(selector);
+    return document.querySelectorAll(selector);
   } spec.findTemplates = findTemplates;
 
   function resolveDependencies(modules){
@@ -480,7 +477,7 @@ window.stik.injector = function(spec){
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
-    result = this.$$controllers[controller].$$actions[action].bindWithTemplate(
+    result = this.$$controllers[controller].actions[action].bindWithTemplate(
       template, modules
     );
 

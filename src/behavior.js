@@ -33,14 +33,11 @@ window.stik.createBehavior = function(spec){
     markAsApplyed(template);
   };
 
-  function findTemplates(DOMInjection){
-    var DOMHandler = document;
-    if (DOMInjection) { DOMHandler = DOMInjection; }
-
+  function findTemplates(){
     var selector = "[class*=" + spec.name + "]" +
                    ":not([data-behaviors*=" + spec.name + "])";
 
-    return DOMHandler.querySelectorAll(selector);
+    return document.querySelectorAll(selector);
   } spec.findTemplates = findTemplates;
 
   function resolveDependencies(modules){

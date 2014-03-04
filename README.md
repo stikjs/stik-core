@@ -408,10 +408,10 @@ stik.controller("AppCtrl", "List", function($template, $h){
 
 stik.behavior("shine-on-focus", function($template, $h){
   $template.addEventListener("focus", function(){
-    $h.toggleClass($template, "shining")
+    $h.toggleClass($template, "shining");
   });
   $template.addEventListener('blur', function(){
-    $h.toggleClass($template, "shining")
+    $h.toggleClass($template, "shining");
   });
 });
 

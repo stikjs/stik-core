@@ -129,7 +129,7 @@
 
     modules = this.$extractBoundaries(this.$$boundaries.controller);
 
-    result = this.$$controllers[controller].$$actions[action].bindWithTemplate(
+    result = this.$$controllers[controller].actions[action].bindWithTemplate(
       template, modules
     );
 

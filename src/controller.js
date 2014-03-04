@@ -3,7 +3,7 @@ window.stik.createController = function(spec){
     throw "Controller needs a name";
   }
 
-  spec.$$actions = {};
+  spec.actions = {};
 
   function action(actionName, executionUnit){
     var newAction = window.stik.action({
@@ -11,16 +11,16 @@ window.stik.createController = function(spec){
       controller: spec.name,
       executionUnit: executionUnit
     });
-    spec.$$actions[actionName] = newAction;
+    spec.actions[actionName] = newAction;
     return newAction;
   } spec.action = action;
 
   function bind(modules){
-    var act,
+    var name,
         boundAny = false;
 
-    for (act in spec.$$actions){
-      if (spec.$$actions[act].bind(modules)) {
+    for (name in spec.actions){
+      if (spec.actions[name].bind(modules)) {
         boundAny = true;
       }
     }

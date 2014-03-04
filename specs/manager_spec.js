@@ -143,7 +143,7 @@ describe("Manager", function(){
       });
 
       spyOn(
-         ctrl.$$actions["List"], "findTemplates"
+         ctrl.actions["List"], "findTemplates"
       ).andReturn([template]);
 
       manager.$bindActions();

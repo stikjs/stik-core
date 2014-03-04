@@ -52,7 +52,7 @@ describe("helper", function(){
     });
 
     template = document.createElement("div");
-    spyOn(ctrl.$$actions.List, "findTemplates").andReturn([template]);
+    spyOn(ctrl.actions.List, "findTemplates").andReturn([template]);
     stik.bindLazy();
 
     expect(helperDouble).toHaveBeenCalled();
