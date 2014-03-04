@@ -79,7 +79,7 @@ describe("Public", function(){
 
       expect(function(){
         stik.bindLazy()
-      }).toThrow("nothing to bind!");
+      }).toThrow("Stik: Nothing new to bind!");
     });
   });
 

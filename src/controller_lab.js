@@ -1,8 +1,8 @@
 window.stik.labs.controller = function controllerLab(spec){
-  if (!spec) { throw "Lab needs an environment to run"; }
-  if (!spec.name) { throw "name can't be empty"; }
-  if (!spec.action) { throw "action can't be empty"; }
-  if (!spec.template) { throw "template can't be empty"; }
+  if (!spec) { throw "Stik: Controller Lab needs an environment to run"; }
+  if (!spec.name) { throw "Stik: Controller Lab needs a name"; }
+  if (!spec.action) { throw "Stik: Controller Lab needs the action name"; }
+  if (!spec.template) { throw "Stik: Controller Lab needs a template"; }
 
   var env = {},
       result;

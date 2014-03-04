@@ -2,15 +2,15 @@ describe("helper", function(){
   it("initializing", function(){
     expect(function(){
       stik.helper();
-    }).toThrow("Stik helper needs a name");
+    }).toThrow("Stik: Helper needs a name");
 
     expect(function(){
       stik.helper("myHelper");
-    }).toThrow("Stik helper needs a function");
+    }).toThrow("Stik: Helper needs a function");
 
     expect(function(){
       stik.helper("myHelper", {});
-    }).toThrow("Stik helper needs a function");
+    }).toThrow("Stik: Helper needs a function");
 
     expect(function(){
       stik.helper("myHelper", function(){});

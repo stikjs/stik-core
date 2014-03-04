@@ -1,10 +1,8 @@
 window.stik.createBoundary = function(spec){
   if (spec.as.indexOf(" ") !== -1) {
-    throw "Invalid 'as'. Can't have spaces";
+    throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')";
   }
-  if (!spec.to) {
-    throw "Invalid 'to'. Can't be null";
-  }
+  if (!spec.to) { throw "Stik: Boundary needs an object or function as 'to'"; }
 
   var obj = {};
 

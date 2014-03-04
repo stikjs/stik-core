@@ -1,13 +1,7 @@
 window.stik.createBehavior = function(spec){
-  if (!spec.name) {
-    throw "name is missing";
-  }
-  if (spec.name.indexOf(" ") !== -1) {
-    throw "invalid name. Please use dash(-) instead of spaces";
-  }
-  if (!spec.executionUnit) {
-    throw "executionUnit is missing";
-  }
+  if (!spec.name) { throw "Stik: Behavior name is missing"; }
+  if (spec.name.indexOf(" ") !== -1) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
+  if (!spec.executionUnit) { throw "Stik: Behavior needs a function to use as its execution unit"; }
 
   var behaviorKey = "data-behaviors"
 

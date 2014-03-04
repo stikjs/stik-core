@@ -78,7 +78,7 @@ window.stik = {
 
 window.stik.createController = function(spec){
   if (!spec.name) {
-    throw "Controller needs a name";
+    throw "Stik: Controller needs a name";
   }
 
   spec.actions = {};
@@ -110,15 +110,9 @@ window.stik.createController = function(spec){
 };
 
 window.stik.action = function(spec){
-  if (!spec.controller) {
-    throw "Action needs an controller name";
-  }
-  if (!spec.name) {
-    throw "Action name can't be empty";
-  }
-  if (!spec.executionUnit) {
-    throw "Action needs an execution unit";
-  }
+  if (!spec.controller) { throw "Stik: Action needs an controller name"; }
+  if (!spec.name) { throw "Stik: Action name can't be empty"; }
+  if (!spec.executionUnit) { throw "Stik: Action needs a function to use as its execution unit"; }
 
   function bind(modules){
     var templates, i;
@@ -213,15 +207,9 @@ window.stik.context = function(spec){
 };
 
 window.stik.createBehavior = function(spec){
-  if (!spec.name) {
-    throw "name is missing";
-  }
-  if (spec.name.indexOf(" ") !== -1) {
-    throw "invalid name. Please use dash(-) instead of spaces";
-  }
-  if (!spec.executionUnit) {
-    throw "executionUnit is missing";
-  }
+  if (!spec.name) { throw "Stik: Behavior name is missing"; }
+  if (spec.name.indexOf(" ") !== -1) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
+  if (!spec.executionUnit) { throw "Stik: Behavior needs a function to use as its execution unit"; }
 
   var behaviorKey = "data-behaviors"
 
@@ -275,11 +263,9 @@ window.stik.createBehavior = function(spec){
 
 window.stik.createBoundary = function(spec){
   if (spec.as.indexOf(" ") !== -1) {
-    throw "Invalid 'as'. Can't have spaces";
+    throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')";
   }
-  if (!spec.to) {
-    throw "Invalid 'to'. Can't be null";
-  }
+  if (!spec.to) { throw "Stik: Boundary needs an object or function as 'to'"; }
 
   var obj = {};
 
@@ -293,9 +279,7 @@ window.stik.createBoundary = function(spec){
 };
 
 window.stik.injector = function(spec){
-  if (!spec.executionUnit) {
-    throw "Injector needs an execution unit to run against";
-  }
+  if (!spec.executionUnit) { throw "Stik: Injector needs a function to use as its execution unit"; }
 
   function resolveDependencies(){
     var args = extractArguments();
@@ -382,7 +366,7 @@ window.stik.injector = function(spec){
     var behavior;
 
     if (this.$isBehaviorRegistered(name)) {
-      throw "behavior already exist with the specified name";
+      throw "Stik: Another behavior already exist with name '" + name + "'";
     }
 
     behavior = this.$createBehavior({
@@ -415,7 +399,7 @@ window.stik.injector = function(spec){
     i = targets.length;
     while (i--) {
       if (targets[i] !== "controller" && targets[i] !== "behavior") {
-        throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
+        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
       } else {
         forEachFound(targets[i]);
       }
@@ -529,7 +513,7 @@ window.stik.behavior = function(name, executionUnit){
 
 window.stik.bindLazy = function(){
   if (!this.$$manager.$bindActions() & !this.$$manager.$applyBehaviors()) {
-    throw "nothing to bind!";
+    throw "Stik: Nothing new to bind!";
   }
 };
 
@@ -542,10 +526,8 @@ window.stik.boundary = function(spec){
       modules = {};
 
   window.stik.helper = function(as, func){
-    if (!as) { throw "Stik helper needs a name"; }
-    if (!func || typeof func !== "function") {
-      throw "Stik helper needs a function";
-    }
+    if (!as) { throw "Stik: Helper needs a name"; }
+    if (!func || typeof func !== "function") { throw "Stik: Helper needs a function"; }
 
     modules[as] = window.stik.injectable({
       module: func,
@@ -592,7 +574,7 @@ window.stik.boundary = function(spec){
     openers = this.$$subscriptions[box];
 
     if (!openers || openers.length === 0) {
-      throw "no one is waiting for this message";
+      throw "Stik: No receiver registered for " + box;
     }
 
     i = openers.length;
@@ -620,12 +602,10 @@ window.stik.boundary = function(spec){
 })();
 
 window.stik.viewBag = function($template){
+  if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
+
   var obj = {},
       bindingKey = "data-bind";
-
-  if (!$template) {
-    throw "Stik viewBag needs to a view to be attached to";
-  }
 
   function $push(dataSet){
     var fields = fieldsToBind(),
@@ -696,10 +676,10 @@ window.stik.boundary({
 });
 
 window.stik.labs.controller = function controllerLab(spec){
-  if (!spec) { throw "Lab needs an environment to run"; }
-  if (!spec.name) { throw "name can't be empty"; }
-  if (!spec.action) { throw "action can't be empty"; }
-  if (!spec.template) { throw "template can't be empty"; }
+  if (!spec) { throw "Stik: Controller Lab needs an environment to run"; }
+  if (!spec.name) { throw "Stik: Controller Lab needs a name"; }
+  if (!spec.action) { throw "Stik: Controller Lab needs the action name"; }
+  if (!spec.template) { throw "Stik: Controller Lab needs a template"; }
 
   var env = {},
       result;

@@ -3,10 +3,8 @@
       modules = {};
 
   window.stik.helper = function(as, func){
-    if (!as) { throw "Stik helper needs a name"; }
-    if (!func || typeof func !== "function") {
-      throw "Stik helper needs a function";
-    }
+    if (!as) { throw "Stik: Helper needs a name"; }
+    if (!func || typeof func !== "function") { throw "Stik: Helper needs a function"; }
 
     modules[as] = window.stik.injectable({
       module: func,

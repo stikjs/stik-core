@@ -2,7 +2,7 @@ describe("ViewBag", function(){
   it("#initializing", function(){
     expect(function(){
       stik.viewBag()
-    }).toThrow("Stik viewBag needs to a view to be attached to");
+    }).toThrow("Stik: ViewBag needs a template to be attached to");
   });
 
   describe("#$push", function(){

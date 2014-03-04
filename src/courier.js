@@ -25,7 +25,7 @@
     openers = this.$$subscriptions[box];
 
     if (!openers || openers.length === 0) {
-      throw "no one is waiting for this message";
+      throw "Stik: No receiver registered for " + box;
     }
 
     i = openers.length;

@@ -7,6 +7,12 @@ describe("Injector", function(){
     };
   };
 
+  it("should not allow empty execution units", function(){
+    expect(function(){
+      stik.injector({});
+    }).toThrow("Stik: Injector needs a function to use as its execution unit");
+  });
+
   describe("#resolveDependencies", function(){
     it("without params", function(){
       var subject, contextDouble, modules;

@@ -34,7 +34,7 @@
     var behavior;
 
     if (this.$isBehaviorRegistered(name)) {
-      throw "behavior already exist with the specified name";
+      throw "Stik: Another behavior already exist with name '" + name + "'";
     }
 
     behavior = this.$createBehavior({
@@ -67,7 +67,7 @@
     i = targets.length;
     while (i--) {
       if (targets[i] !== "controller" && targets[i] !== "behavior") {
-        throw "Invalid 'from'. Needs to be 'controller' or 'behavior'";
+        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
       } else {
         forEachFound(targets[i]);
       }

@@ -4,17 +4,17 @@ describe("Behavior", function(){
       stik.createBehavior({
         name: null, executionUnit: function(){}
       });
-    }).toThrow("name is missing");
+    }).toThrow("Stik: Behavior name is missing");
     expect(function(){
       stik.createBehavior({
         name: "some-behavior"
       });
-    }).toThrow("executionUnit is missing");
+    }).toThrow("Stik: Behavior needs a function to use as its execution unit");
     expect(function(){
       stik.createBehavior({
         name: "some behavior"
       });
-    }).toThrow("invalid name. Please use dash(-) instead of spaces");
+    }).toThrow("Stik: 'some behavior' is not a valid Behavior name. Please replace empty spaces with dashes ('-')");
   });
 
   describe("#load", function(){

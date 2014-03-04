@@ -11,15 +11,15 @@ describe("Manager", function(){
 
       expect(function(){
         manager.$addControllerWithAction("", "detail", function(){})
-      }).toThrow("Controller needs a name");
+      }).toThrow("Stik: Controller needs a name");
 
       expect(function(){
         manager.$addControllerWithAction("ItemCtrl", "", function(){})
-      }).toThrow("Action name can't be empty");
+      }).toThrow("Stik: Action name can't be empty");
 
       expect(function(){
         manager.$addControllerWithAction("ItemCtrl", "detail");
-      }).toThrow("Action needs an execution unit");
+      }).toThrow("Stik: Action needs a function to use as its execution unit");
     });
 
     it("should register and bind the new execution unit", function(){
@@ -65,7 +65,7 @@ describe("Manager", function(){
           from: "different",
           to: {}
         });
-      }).toThrow("Invalid 'from'. Needs to be 'controller' or 'behavior'");
+      }).toThrow("Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both");
 
       expect(function(){
         manager.$addBoundary({
@@ -73,7 +73,7 @@ describe("Manager", function(){
           from: "controller",
           to: {}
         });
-      }).toThrow("Invalid 'as'. Can't have spaces");
+      }).toThrow("Stik: 'with space' is not a valid Boundary name. Please replace empty spaces with dashes ('-')");
 
       expect(function(){
         manager.$addBoundary({
@@ -81,7 +81,7 @@ describe("Manager", function(){
           from: "controller",
           to: null
         });
-      }).toThrow("Invalid 'to'. Can't be null");
+      }).toThrow("Stik: Boundary needs an object or function as 'to'");
     });
 
     it("should create a new controller boundary", function(){
@@ -166,7 +166,7 @@ describe("Manager", function(){
 
       expect(function(){
         manager.$addBehavior(name, executionUnit);
-      }).toThrow("behavior already exist with the specified name");
+      }).toThrow("Stik: Another behavior already exist with name 'some-behavior'");
     });
 
     it("should store the new behavior", function(){

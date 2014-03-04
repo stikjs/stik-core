@@ -3,24 +3,24 @@ describe("ControllerLab", function(){
     it("missing environment inputs", function(){
       expect(function(){
         stik.labs.controller();
-      }).toThrow("Lab needs an environment to run");
+      }).toThrow("Stik: Controller Lab needs an environment to run");
 
       expect(function(){
         stik.labs.controller({});
-      }).toThrow("name can't be empty");
+      }).toThrow("Stik: Controller Lab needs a name");
 
       expect(function(){
         stik.labs.controller({
           name: "AppCtrl"
         });
-      }).toThrow("action can't be empty");
+      }).toThrow("Stik: Controller Lab needs the action name");
 
       expect(function(){
         stik.labs.controller({
           name: "AppCtrl",
           action: "List"
         });
-      }).toThrow("template can't be empty");
+      }).toThrow("Stik: Controller Lab needs a template");
     });
   });
 

@@ -75,7 +75,7 @@ describe("Courier", function(){
 
       expect(function(){
         courier.$send('new-item', {some: "data"});
-      }).toThrow("no one is waiting for this message");
+      }).toThrow("Stik: No receiver registered for new-item");
     });
   });
 
@@ -87,7 +87,7 @@ describe("Courier", function(){
 
       expect(function(){
         courier.$send('new-item', {some: "data"});
-      }).toThrow("no one is waiting for this message");
+      }).toThrow("Stik: No receiver registered for new-item");
     });
 
     it("a text message", function(){

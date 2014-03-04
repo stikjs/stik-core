@@ -1,10 +1,8 @@
 window.stik.viewBag = function($template){
+  if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
+
   var obj = {},
       bindingKey = "data-bind";
-
-  if (!$template) {
-    throw "Stik viewBag needs to a view to be attached to";
-  }
 
   function $push(dataSet){
     var fields = fieldsToBind(),

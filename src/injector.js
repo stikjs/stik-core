@@ -1,7 +1,5 @@
 window.stik.injector = function(spec){
-  if (!spec.executionUnit) {
-    throw "Injector needs an execution unit to run against";
-  }
+  if (!spec.executionUnit) { throw "Stik: Injector needs a function to use as its execution unit"; }
 
   function resolveDependencies(){
     var args = extractArguments();

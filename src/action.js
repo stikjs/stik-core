@@ -1,13 +1,7 @@
 window.stik.action = function(spec){
-  if (!spec.controller) {
-    throw "Action needs an controller name";
-  }
-  if (!spec.name) {
-    throw "Action name can't be empty";
-  }
-  if (!spec.executionUnit) {
-    throw "Action needs an execution unit";
-  }
+  if (!spec.controller) { throw "Stik: Action needs an controller name"; }
+  if (!spec.name) { throw "Stik: Action name can't be empty"; }
+  if (!spec.executionUnit) { throw "Stik: Action needs a function to use as its execution unit"; }
 
   function bind(modules){
     var templates, i;
