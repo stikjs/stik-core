@@ -1,102 +1,92 @@
 describe("Courier", function(){
-  it("#initialize", function(){
-    var courier = new stik.Courier();
-
-    expect(courier.$$subscriptions).toEqual({});
-  });
-
   describe("#$receive", function(){
-    it("should store one", function(){
-      var courier, box, opener;
-
-      box    = "new-item";
-      opener = function(){};
-
-      courier = new stik.Courier();
+    it("should be able to send to one box", function(){
+      var courier = stik.courier(),
+          box = "create-item",
+          opener = jasmine.createSpy('createBoxOpener');
 
       courier.$receive(box, opener);
 
-      expect(
-        Object.keys(courier.$$subscriptions)[0]
-      ).toEqual(box);
+      expect(opener).not.toHaveBeenCalled();
 
-      expect(
-        courier.$$subscriptions[box].length
-      ).toEqual(1);
-
-      expect(
-        courier.$$subscriptions[box][0].$$opener
-      ).toEqual(opener);
+      courier.$send(box);
+      expect(opener).toHaveBeenCalled();
     });
 
-    it("should store multiple boxes", function(){
-      var courier, createBox, updateBox, opener;
+    it("should be able to send to multiple boxes", function(){
+      var courier = stik.courier(),
+          createBox = "create-item",
+          updateBox = "updated-item",
+          createBoxOpener = jasmine.createSpy('createBoxOpener'),
+          updateBoxOpener = jasmine.createSpy('updateBoxOpener');
 
-      createBox    = "create-item";
-      updateBox    = "updated-item";
-      opener       = function(){};
+      courier.$receive(createBox, createBoxOpener);
+      courier.$receive(updateBox, updateBoxOpener);
 
-      courier = new stik.Courier();
+      expect(createBoxOpener).not.toHaveBeenCalled();
+      expect(updateBoxOpener).not.toHaveBeenCalled();
 
-      courier.$receive(createBox, opener);
-      courier.$receive(updateBox, opener);
+      courier.$send(createBox);
+      expect(createBoxOpener).toHaveBeenCalled();
+      expect(updateBoxOpener).not.toHaveBeenCalled();
 
-      expect(
-        Object.keys(courier.$$subscriptions)
-      ).toEqual([createBox, updateBox]);
-
-      expect(
-        courier.$$subscriptions[createBox].length
-      ).toEqual(1);
-
-      expect(
-        courier.$$subscriptions[updateBox].length
-      ).toEqual(1);
-
-      expect(
-        courier.$$subscriptions[createBox][0].$$opener
-      ).toEqual(opener);
-
-      expect(
-        courier.$$subscriptions[updateBox][0].$$opener
-      ).toEqual(opener);
+      courier.$send(updateBox);
+      expect(updateBoxOpener).toHaveBeenCalled();
     });
 
     it("should return a function to allow removing the receiver", function(){
-      var courier, box, opener, unsubscribe;
+      var courier = stik.courier(),
+          box = "new-item",
+          unsubscribe;
 
-      box    = "new-item";
-      opener = function(){};
-
-      courier = new stik.Courier();
-
-      unsubscribe = courier.$receive(box, opener);
+      unsubscribe = courier.$receive(box, function(){});
       unsubscribe();
 
       expect(function(){
         courier.$send('new-item', {some: "data"});
-      }).toThrow("Stik: No receiver registered for new-item");
+      }).toThrow("Stik: No receiver registered for 'new-item'");
+    });
+
+    it("while unsubscribing should maintain the other boxes intact", function(){
+      var courier = stik.courier(),
+          newItemBox = "new-item",
+          changeItemBox = "change-item",
+          changeItemOpener = jasmine.createSpy("opener"),
+          newItemUnsubscribe, changeItemUnsubscribe;
+
+      newItemUnsubscribe = courier.$receive(newItemBox, function(){});
+      changeItemUnsubscribe = courier.$receive(changeItemBox, changeItemOpener);
+
+      newItemUnsubscribe();
+
+      expect(function(){
+        courier.$send(newItemBox, {});
+      }).toThrow("Stik: No receiver registered for 'new-item'");
+
+      expect(changeItemOpener).not.toHaveBeenCalled();
+
+      expect(function(){
+        courier.$send(changeItemBox, {});
+      }).not.toThrow();
+
+      expect(changeItemOpener).toHaveBeenCalled();
     });
   });
 
   describe("#$send", function(){
     it("should throw if no $receiver is register", function(){
-      var courier;
-
-      courier = new stik.Courier();
+      var courier = stik.courier();
 
       expect(function(){
-        courier.$send('new-item', {some: "data"});
-      }).toThrow("Stik: No receiver registered for new-item");
+        courier.$send('new-item', {});
+      }).toThrow("Stik: No receiver registered for 'new-item'");
     });
 
     it("a text message", function(){
-      var courier, message, receiver;
+      var courier = stik.courier(),
+          message = "some message",
+          receiver = jasmine.createSpy("receiver");
 
-      message = "some message";
-      receiver = jasmine.createSpy("receiver");
-
-      courier = new stik.Courier();
       courier.$receive("new-message", receiver)
       courier.$send("new-message", message);
 
@@ -104,7 +94,9 @@ describe("Courier", function(){
     });
 
     it("an object message", function(){
-      var courier, message, receiver;
+      var courier = stik.courier(),
+          receiver = jasmine.createSpy("receiver"),
+          message;
 
       message = {
         some: "super",
@@ -112,9 +104,7 @@ describe("Courier", function(){
           nested: "message"
         }
       };
-      receiver = jasmine.createSpy("receiver");
 
-      courier = new stik.Courier();
       courier.$receive("new-message", receiver)
       courier.$send("new-message", message);
 

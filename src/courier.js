@@ -1,53 +1,52 @@
-(function(){
-  function Courier(){
-    this.$$subscriptions = {};
+window.stik.courier = function courier(){
+  var obj = {},
+      subscriptions = {};
+
+  obj.$receive = function $receive(box, opener){
+    var subscription = createSubscription({
+      box: box, opener: opener
+    });
+
+    subscriptions[box] = (subscriptions[box] || []);
+    subscriptions[box].push(subscription);
+
+    return unsubscribe.bind({}, subscription);
+  };
+
+  function unsubscribe(subscription){
+    subscriptions[subscription.box] =
+    subscriptions[subscription.box].filter(function(subs){
+      return subs.id !== subscription.id;
+    });
   }
 
-  Courier.method("$receive", function(box, opener){
-    var subscription = new Subscription(box, opener);
-
-    this.$$subscriptions[box] = (this.$$subscriptions[box] || []);
-    this.$$subscriptions[box].push(subscription);
-
-    return this.$unsubscribe.bind(this, subscription);
-  });
-
-  Courier.method("$unsubscribe", function(subscription){
-    this.$$subscriptions[subscription.$$box] =
-    this.$$subscriptions[subscription.$$box].filter(function(subs){
-      return subs.$$id !== subscription.$$id;
-    });
-  });
-
-  Courier.method("$send", function(box, message){
-    var openers, i;
-
-    openers = this.$$subscriptions[box];
+  obj.$send = function $send(box, message){
+    var openers = subscriptions[box],
+        i;
 
     if (!openers || openers.length === 0) {
-      throw "Stik: No receiver registered for " + box;
+      throw "Stik: No receiver registered for '" + box + "'";
     }
 
     i = openers.length;
     while (i--) {
-      openers[i].$$opener(message);
+      openers[i].opener(message);
     }
-  });
+  };
 
-  function Subscription(box, opener){
-    this.$$id = '#' + Math.floor(
+  function createSubscription(spec){
+    spec.id = '#' + Math.floor(
       Math.random()*16777215
     ).toString(16);
 
-    this.$$box    = box;
-    this.$$opener = opener;
+    return spec;
   }
 
-  window.stik.Courier = Courier;
+  return obj;
+};
 
-  window.stik.boundary({
-    as: "$courier",
-    from: "controller|behavior",
-    to: new Courier()
-  });
-})();
+window.stik.boundary({
+  as: "$courier",
+  from: "controller|behavior",
+  to: window.stik.courier()
+});
