@@ -260,6 +260,8 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
 ##Boundaries
 External libraries, objects and functions can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
 
+Boundaries can be injectable in both controllers and behaviors. Unless, otherwise stated through the **from** parameter.
+
 ###Object Boundaries:
 
 ```javascript
