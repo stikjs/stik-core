@@ -695,41 +695,30 @@ window.stik.boundary({
   to: window.stik.viewBag
 });
 
-(function(){
-  function ControllerLab(env){
-    validate(env);
+window.stik.labs.controller = function controllerLab(spec){
+  if (!spec) { throw "Lab needs an environment to run"; }
+  if (!spec.name) { throw "name can't be empty"; }
+  if (!spec.action) { throw "action can't be empty"; }
+  if (!spec.template) { throw "template can't be empty"; }
 
-    this.$$env      = env;
-    this.$$template = parseAsDOM(env.template);
-    this.$$context  = undefined;
+  var env = {},
+      result;
 
-    var result = window.stik.$$manager.$bindActionWithTemplate(
-      this.$$env.name,
-      this.$$env.action,
-      this.$$template
-    );
+  env.template = parseAsDOM();
 
-    this.$$context = result.context;
-    this.$$modules = result.modules;
-    this.$$executionUnit = result.executionUnit;
+  result = window.stik.$$manager.$bindActionWithTemplate(
+    spec.name, spec.action, env.template
+  );
+
+  function parseAsDOM(){
+    var container = document.implementation.createHTMLDocument();
+    container.body.innerHTML = spec.template;
+    return container.body.firstChild;
   }
 
-  function validate(env){
-    if (!env) { throw "Lab needs an environment to run"; }
-    if (!env.name) { throw "name can't be empty"; }
-    if (!env.action) { throw "action can't be empty"; }
-    if (!env.template) { throw "template can't be empty"; }
-  }
+  function run(){
+    context.load(result.executionUnit, result.modules);
+  } env.run = run;
 
-  function parseAsDOM(template){
-    var tmp = document.implementation.createHTMLDocument();
-    tmp.body.innerHTML = template;
-    return tmp.body.firstChild;
-  }
-
-  ControllerLab.method("run", function(){
-    this.$$context.load(this.$$executionUnit, this.$$modules);
-  });
-
-  window.stik.labs.Controller = ControllerLab;
-})();
+  return env;
+}

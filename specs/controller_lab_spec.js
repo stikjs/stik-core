@@ -2,21 +2,21 @@ describe("ControllerLab", function(){
   describe("when not ok", function(){
     it("missing environment inputs", function(){
       expect(function(){
-        new stik.labs.Controller();
+        stik.labs.controller();
       }).toThrow("Lab needs an environment to run");
 
       expect(function(){
-        new stik.labs.Controller({});
+        stik.labs.controller({});
       }).toThrow("name can't be empty");
 
       expect(function(){
-        new stik.labs.Controller({
+        stik.labs.controller({
           name: "AppCtrl"
         });
       }).toThrow("action can't be empty");
 
       expect(function(){
-        new stik.labs.Controller({
+        stik.labs.controller({
           name: "AppCtrl",
           action: "List"
         });
@@ -39,7 +39,7 @@ describe("ControllerLab", function(){
       "<span class=\"vader\" data-bind=\"vader\"></span>" +
     "</div>";
 
-    lab = new stik.labs.Controller({
+    lab = stik.labs.controller({
       name: "StarWarsCtrl",
       action: "Dialog",
       template: template
@@ -47,11 +47,11 @@ describe("ControllerLab", function(){
     lab.run();
 
     expect(
-      lab.$$template.getElementsByClassName("luke")[0].value
+      lab.template.getElementsByClassName("luke")[0].value
     ).toEqual(null);
 
     expect(
-      lab.$$template.getElementsByClassName("vader")[0].value
+      lab.template.getElementsByClassName("vader")[0].value
     ).toEqual(null);
   });
 });
