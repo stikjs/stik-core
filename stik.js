@@ -380,9 +380,11 @@ window.stik.injector = function(spec){
   });
 
   Manager.method("$addBoundary", function(spec){
-    var boundary, that;
+    var boundary,
+        that = this;
 
-    that = this;
+    spec.from = spec.from || 'controller|behavior';
+
     this.$parseFrom(spec.from, function(parsedFrom){
       boundary = window.stik.createBoundary(spec);
       that.$$boundaries[parsedFrom][spec.as] = boundary;
@@ -542,7 +544,6 @@ window.stik.boundary = function(spec){
 
   window.stik.boundary({
     as: "$h",
-    from: "controller|behavior",
     to: helpers
   });
 }());
@@ -596,7 +597,6 @@ window.stik.courier = function courier(){
 
 window.stik.boundary({
   as: "$courier",
-  from: "controller|behavior",
   to: window.stik.courier()
 });
 
@@ -669,7 +669,6 @@ window.stik.viewBag = function($template){
 
 window.stik.boundary({
   as: "$viewBag",
-  from: "controller|behavior",
   resolvable: true,
   to: window.stik.viewBag
 });

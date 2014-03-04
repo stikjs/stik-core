@@ -47,6 +47,5 @@ window.stik.courier = function courier(){
 
 window.stik.boundary({
   as: "$courier",
-  from: "controller|behavior",
   to: window.stik.courier()
 });

@@ -48,9 +48,11 @@
   });
 
   Manager.method("$addBoundary", function(spec){
-    var boundary, that;
+    var boundary,
+        that = this;
 
-    that = this;
+    spec.from = spec.from || 'controller|behavior';
+
     this.$parseFrom(spec.from, function(parsedFrom){
       boundary = window.stik.createBoundary(spec);
       that.$$boundaries[parsedFrom][spec.as] = boundary;

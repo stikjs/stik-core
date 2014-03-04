@@ -19,7 +19,6 @@
 
   window.stik.boundary({
     as: "$h",
-    from: "controller|behavior",
     to: helpers
   });
 }());

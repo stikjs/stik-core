@@ -84,10 +84,25 @@ describe("Manager", function(){
       }).toThrow("Stik: Boundary needs an object or function as 'to'");
     });
 
-    it("should create a new controller boundary", function(){
-      var manager;
+    it("should default to both controller and behavior", function(){
+      var manager = new stik.Manager();
 
-      manager = new stik.Manager();
+      manager.$addBoundary({
+        as: "CustomObj",
+        to: function(){}
+      });
+
+      expect(
+        manager.$$boundaries.controller["CustomObj"]
+      ).toBeDefined();
+
+      expect(
+        manager.$$boundaries.behavior["CustomObj"]
+      ).toBeDefined();
+    });
+
+    it("should create a new controller boundary", function(){
+      var manager = new stik.Manager();
 
       manager.$addBoundary({
         as: "CustomObj",
