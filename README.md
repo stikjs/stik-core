@@ -431,9 +431,9 @@ stik.boundary({
 ```
 
 ###Labs
-Stik comes with a collection of utilities that allows you to write tests automated tests for your components.
+Stik comes with a collection of utilities, called Labs, that allows you to write automated tests for your components.
 
-Labs are framework agnostic, which means that they can be written using jasmine, QUnit, or any other assertion library out there.
+Labs are framework agnostic, which means that they can be written using [jasmine](http://jasmine.github.io/edge/introduction.html), [QUnit](https://qunitjs.com/), or any other assertion library out there.
 
 ####Controller Lab
 
