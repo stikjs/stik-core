@@ -332,7 +332,7 @@ stik.behavior("fade-input", function($template, fadeIn){
 ```
 
 ###Resolvable Boundaries
-resolvable Boundaries are functions that might depend on Stik modules or other boundaries. They will be called with the required dependencies and their returned value will be passed on to whichever controller or behavior requiring it.
+Resolvable Boundaries are functions that might depend on Stik modules or other boundaries. They will be called with the required dependencies and their returned value will be passed on to whichever controller or behavior requiring it.
 
 ```javascript
 stik.boundary({
