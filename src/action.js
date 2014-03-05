@@ -1,4 +1,4 @@
-window.stik.action = function(spec){
+window.stik.action = function action(spec){
   if (!spec.controller) { throw "Stik: Action needs an controller name"; }
   if (!spec.name) { throw "Stik: Action name can't be empty"; }
   if (!spec.executionUnit) { throw "Stik: Action needs a function to use as its execution unit"; }

@@ -2,7 +2,7 @@
   var helpers = {},
       modules = {};
 
-  window.stik.helper = function(as, func){
+  window.stik.helper = function helper(as, func){
     if (!as) { throw "Stik: Helper needs a name"; }
     if (!func || typeof func !== "function") { throw "Stik: Helper needs a function"; }
 
@@ -17,8 +17,5 @@
     return helpers[as];
   }
 
-  window.stik.boundary({
-    as: "$h",
-    to: helpers
-  });
+  window.stik.boundary({ as: "$h", to: helpers });
 }());

@@ -1,4 +1,4 @@
-window.stik.viewBag = function($template){
+window.stik.viewBag = function viewBag($template){
   if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
 
   var obj = {},

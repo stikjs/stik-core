@@ -1,4 +1,4 @@
-window.stik.context = function(spec){
+window.stik.context = function context(spec){
   spec.template = window.stik.injectable({
     module: spec.template
   });

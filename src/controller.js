@@ -1,4 +1,4 @@
-window.stik.createController = function(spec){
+window.stik.createController = function controller(spec){
   if (!spec.name) {
     throw "Stik: Controller needs a name";
   }

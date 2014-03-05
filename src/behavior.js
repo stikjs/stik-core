@@ -1,4 +1,4 @@
-window.stik.createBehavior = function(spec){
+window.stik.createBehavior = function behavior(spec){
   if (!spec.name) { throw "Stik: Behavior name is missing"; }
   if (spec.name.indexOf(" ") !== -1) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
   if (!spec.executionUnit) { throw "Stik: Behavior needs a function to use as its execution unit"; }

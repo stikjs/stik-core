@@ -46,6 +46,5 @@ window.stik.courier = function courier(){
 };
 
 window.stik.boundary({
-  as: "$courier",
-  to: window.stik.courier()
+  as: "$courier", to: window.stik.courier()
 });

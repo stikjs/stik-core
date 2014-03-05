@@ -1,4 +1,4 @@
-window.stik.createBoundary = function(spec){
+window.stik.createBoundary = function boundary(spec){
   if (spec.as.indexOf(" ") !== -1) {
     throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')";
   }
