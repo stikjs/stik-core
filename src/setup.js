@@ -1,4 +1,4 @@
-if (window.stik){
+if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
 }
 

@@ -7,7 +7,7 @@
 
 // Version: 0.10.0 | From: 06-03-2014
 
-if (window.stik){
+if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
 }
 
@@ -15,26 +15,26 @@ window.stik = {
   labs: {}
 };
 
-window.stik.injectable = function injectable(spec){
+window.stik.injectable = function injectable( spec ){
   spec.instantiable = spec.instantiable || false;
   spec.resolvable = spec.resolvable || false;
 
-  function resolve(dependencies){
-    if (spec.instantiable === true) {
+  function resolve( dependencies ){
+    if ( spec.instantiable === true ) {
       return buildModule(
-        resolveDependencies(dependencies)
+        resolveDependencies( dependencies )
       );
-    } else if (spec.resolvable === true) {
+    } else if ( spec.resolvable === true ) {
       return callWithDependencies(
         {},
-        resolveDependencies(dependencies)
+        resolveDependencies( dependencies )
       );
     } else {
       return spec.module;
     }
   } spec.resolve = resolve;
 
-  function buildModule(dependencies){
+  function buildModule( dependencies ){
     var newInstance, value;
 
     function TempConstructor(){}
@@ -45,10 +45,10 @@ window.stik.injectable = function injectable(spec){
       newInstance, dependencies
     );
 
-    return Object(value) === value ? value : newInstance;
+    return Object( value ) === value ? value : newInstance;
   }
 
-  function resolveDependencies(dependencies){
+  function resolveDependencies( dependencies ){
     var injector = window.stik.injector({
       executionUnit: spec.module,
       modules: dependencies
@@ -57,8 +57,8 @@ window.stik.injectable = function injectable(spec){
     return injector.resolveDependencies();
   }
 
-  function callWithDependencies(context, dependencies){
-    return spec.module.apply(context, dependencies);
+  function callWithDependencies( context, dependencies ){
+    return spec.module.apply( context, dependencies );
   }
 
   return spec;
@@ -114,14 +114,14 @@ window.stik.action = function action( spec ){
     return templates.length > 0;
   };
 
-  spec.findTemplates = function(DOMInjection){
+  spec.findTemplates = function( DOMInjection ){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
     var selector = "[data-controller=" + spec.controller + "]" +
                    "[data-action=" + spec.name + "]" +
                    ":not([class*=stik-bound])";
-    return DOMHandler.querySelectorAll(selector);
+    return DOMHandler.querySelectorAll( selector );
   };
 
   function bindWithTemplate( template ){
@@ -195,7 +195,7 @@ window.stik.createBehavior = function behavior( spec ){
     return templates.length > 0;
   };
 
-  function bindWithTemplate(template){
+  function bindWithTemplate( template ){
     return {
       context: window.stik.context({
         behavior: spec.behavior,
@@ -209,10 +209,10 @@ window.stik.createBehavior = function behavior( spec ){
     var selector = "[class*=" + spec.name + "]" +
                    ":not([data-behaviors*=" + spec.name + "])";
 
-    return document.querySelectorAll(selector);
+    return document.querySelectorAll( selector );
   } spec.findTemplates = findTemplates;
 
-  function resolveDependencies(modules){
+  function resolveDependencies( modules ){
     var injector = window.stik.injector({
       executionUnit: spec.executionUnit,
       modules: modules
@@ -221,21 +221,19 @@ window.stik.createBehavior = function behavior( spec ){
     return injector.resolveDependencies();
   };
 
-  function markAsApplyed(template){
-    var behaviors = template.getAttribute(behaviorKey);
-    behaviors = ((behaviors || "") + " " + spec.name).trim();
+  function markAsApplyed( template ){
+    var behaviors = template.getAttribute( behaviorKey );
+    behaviors = ( ( behaviors || "" ) + " " + spec.name ).trim();
 
-    template.setAttribute(behaviorKey, behaviors);
+    template.setAttribute( behaviorKey, behaviors );
   };
 
   return spec;
 }
 
-window.stik.createBoundary = function boundary(spec){
-  if (spec.as.indexOf(" ") !== -1) {
-    throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')";
-  }
-  if (!spec.to) { throw "Stik: Boundary needs an object or function as 'to'"; }
+window.stik.createBoundary = function boundary( spec ){
+  if ( spec.as.indexOf(" ") !== -1 ) { throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')"; }
+  if ( !spec.to ) { throw "Stik: Boundary needs an object or function as 'to'"; }
 
   var obj = {};
 
@@ -442,7 +440,7 @@ window.stik.manager = function manager(){
         key;
 
     for ( key in collection ) {
-      modules[key] = collection[key].to;
+      modules[ key ] = collection[ key ].to;
     }
 
     return modules;
@@ -488,64 +486,62 @@ window.stik.boundary = function( spec ){
   var helpers = {},
       modules = {};
 
-  window.stik.helper = function helper(as, func){
-    if (!as) { throw "Stik: Helper needs a name"; }
-    if (!func || typeof func !== "function") { throw "Stik: Helper needs a function"; }
+  window.stik.helper = function helper( as, func ){
+    if ( !as ) { throw "Stik: Helper needs a name"; }
+    if ( !func || typeof func !== "function" ) { throw "Stik: Helper needs a function"; }
 
     modules[as] = window.stik.injectable({
       module: func,
       resolvable: true
     });
-    helpers[as] = function(){
-      return modules[as].resolve(modules).apply({}, arguments);
+    helpers[ as ] = function(){
+      return modules[ as ].resolve( modules ).apply( {}, arguments );
     };
 
-    return helpers[as];
+    return helpers[ as ];
   }
 
-  window.stik.boundary({ as: "$h", to: helpers });
+  window.stik.boundary( { as: "$h", to: helpers } );
 }());
 
 window.stik.courier = function courier(){
   var obj = {},
       subscriptions = {};
 
-  obj.$receive = function $receive(box, opener){
+  obj.$receive = function( box, opener ){
     var subscription = createSubscription({
       box: box, opener: opener
     });
 
-    subscriptions[box] = (subscriptions[box] || []);
-    subscriptions[box].push(subscription);
+    subscriptions[ box ] = ( subscriptions[ box ] || [] );
+    subscriptions[ box ].push( subscription );
 
-    return unsubscribe.bind({}, subscription);
+    return unsubscribe.bind( {}, subscription );
   };
 
-  function unsubscribe(subscription){
-    subscriptions[subscription.box] =
-    subscriptions[subscription.box].filter(function(subs){
+  function unsubscribe( subscription ){
+    subscriptions[ subscription.box ] =
+    subscriptions[ subscription.box ].filter( function( subs ){
       return subs.id !== subscription.id;
     });
   }
 
-  obj.$send = function $send(box, message){
-    var openers = subscriptions[box],
+  obj.$send = function $send( box, message ){
+    var openers = subscriptions[ box ],
         i;
 
-    if (!openers || openers.length === 0) {
-      throw "Stik: No receiver registered for '" + box + "'";
-    }
+    if ( !openers || openers.length === 0 ) { throw "Stik: No receiver registered for '" + box + "'"; }
 
     i = openers.length;
-    while (i--) {
-      openers[i].opener(message);
+    while ( i-- ) {
+      openers[ i ].opener( message );
     }
   };
 
-  function createSubscription(spec){
+  function createSubscription( spec ){
     spec.id = '#' + Math.floor(
       Math.random()*16777215
-    ).toString(16);
+    ).toString( 16 );
 
     return spec;
   }
@@ -557,50 +553,50 @@ window.stik.boundary({
   as: "$courier", to: window.stik.courier()
 });
 
-window.stik.viewBag = function viewBag($template){
+window.stik.viewBag = function viewBag( $template ){
   if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
 
   var obj = {},
       bindingKey = "data-bind";
 
-  function $push(dataSet){
+  obj.$push = function( dataSet ){
     var fields = fieldsToBind(),
         i = fields.length,
         dataToBind;
 
-    while(i--) {
-      dataToBind = fields[i].getAttribute(bindingKey);
+    while( i-- ) {
+      dataToBind = fields[ i ].getAttribute( bindingKey );
 
-      if (dataSet[dataToBind] !== undefined) {
-        updateElementValue(fields[i], dataSet[dataToBind]);
+      if ( dataSet[ dataToBind ] !== undefined ) {
+        updateElementValue( fields[ i ], dataSet[ dataToBind ] );
       }
     }
-  } obj.$push = $push;
+  };
 
-  function $pull(){
-    var fields = fieldsToBind($template),
+  obj.$pull = function(){
+    var fields = fieldsToBind( $template ),
         dataSet = {},
         i = fields.length,
         key;
 
-    while(i--) {
-      key = fields[i].getAttribute(bindingKey);
-      dataSet[key] = extractValueOf(fields[i]);
+    while( i-- ) {
+      key = fields[ i ].getAttribute( bindingKey );
+      dataSet[ key ] = extractValueOf( fields[ i ] );
     }
 
     return dataSet;
-  } obj.$pull = $pull;
+  };
 
-  function extractValueOf(element){
-    if (isInput(element)) {
+  function extractValueOf( element ){
+    if ( isInput( element ) ) {
       return element.value;
     } else {
       return element.textContent;
     }
   }
 
-  function updateElementValue(element, value){
-    if (isInput(element)) {
+  function updateElementValue( element, value ){
+    if ( isInput( element ) ) {
       element.value = value;
     } else {
       element.textContent = value;
@@ -608,8 +604,8 @@ window.stik.viewBag = function viewBag($template){
   }
 
   function fieldsToBind(){
-    if ($template.getAttribute(bindingKey)) {
-      return [$template];
+    if ( $template.getAttribute( bindingKey ) ) {
+      return [ $template ];
     }
 
     return $template.querySelectorAll(
@@ -617,7 +613,7 @@ window.stik.viewBag = function viewBag($template){
     );
   }
 
-  function isInput(element){
+  function isInput( element ){
     return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA";
   }
 

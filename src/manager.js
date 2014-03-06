@@ -140,7 +140,7 @@ window.stik.manager = function manager(){
         key;
 
     for ( key in collection ) {
-      modules[key] = collection[key].to;
+      modules[ key ] = collection[ key ].to;
     }
 
     return modules;

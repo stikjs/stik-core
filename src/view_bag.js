@@ -1,47 +1,47 @@
-window.stik.viewBag = function viewBag($template){
+window.stik.viewBag = function viewBag( $template ){
   if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
 
   var obj = {},
       bindingKey = "data-bind";
 
-  function $push(dataSet){
+  obj.$push = function( dataSet ){
     var fields = fieldsToBind(),
         i = fields.length,
         dataToBind;
 
-    while(i--) {
-      dataToBind = fields[i].getAttribute(bindingKey);
+    while( i-- ) {
+      dataToBind = fields[ i ].getAttribute( bindingKey );
 
-      if (dataSet[dataToBind] !== undefined) {
-        updateElementValue(fields[i], dataSet[dataToBind]);
+      if ( dataSet[ dataToBind ] !== undefined ) {
+        updateElementValue( fields[ i ], dataSet[ dataToBind ] );
       }
     }
-  } obj.$push = $push;
+  };
 
-  function $pull(){
-    var fields = fieldsToBind($template),
+  obj.$pull = function(){
+    var fields = fieldsToBind( $template ),
         dataSet = {},
         i = fields.length,
         key;
 
-    while(i--) {
-      key = fields[i].getAttribute(bindingKey);
-      dataSet[key] = extractValueOf(fields[i]);
+    while( i-- ) {
+      key = fields[ i ].getAttribute( bindingKey );
+      dataSet[ key ] = extractValueOf( fields[ i ] );
     }
 
     return dataSet;
-  } obj.$pull = $pull;
+  };
 
-  function extractValueOf(element){
-    if (isInput(element)) {
+  function extractValueOf( element ){
+    if ( isInput( element ) ) {
       return element.value;
     } else {
       return element.textContent;
     }
   }
 
-  function updateElementValue(element, value){
-    if (isInput(element)) {
+  function updateElementValue( element, value ){
+    if ( isInput( element ) ) {
       element.value = value;
     } else {
       element.textContent = value;
@@ -49,8 +49,8 @@ window.stik.viewBag = function viewBag($template){
   }
 
   function fieldsToBind(){
-    if ($template.getAttribute(bindingKey)) {
-      return [$template];
+    if ( $template.getAttribute( bindingKey ) ) {
+      return [ $template ];
     }
 
     return $template.querySelectorAll(
@@ -58,7 +58,7 @@ window.stik.viewBag = function viewBag($template){
     );
   }
 
-  function isInput(element){
+  function isInput( element ){
     return element.nodeName.toUpperCase() === "INPUT" || element.nodeName.toUpperCase() === "TEXTAREA";
   }
 

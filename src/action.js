@@ -17,14 +17,14 @@ window.stik.action = function action( spec ){
     return templates.length > 0;
   };
 
-  spec.findTemplates = function(DOMInjection){
+  spec.findTemplates = function( DOMInjection ){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
     var selector = "[data-controller=" + spec.controller + "]" +
                    "[data-action=" + spec.name + "]" +
                    ":not([class*=stik-bound])";
-    return DOMHandler.querySelectorAll(selector);
+    return DOMHandler.querySelectorAll( selector );
   };
 
   function bindWithTemplate( template ){

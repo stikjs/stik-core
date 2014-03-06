@@ -19,7 +19,7 @@ window.stik.createBehavior = function behavior( spec ){
     return templates.length > 0;
   };
 
-  function bindWithTemplate(template){
+  function bindWithTemplate( template ){
     return {
       context: window.stik.context({
         behavior: spec.behavior,
@@ -33,10 +33,10 @@ window.stik.createBehavior = function behavior( spec ){
     var selector = "[class*=" + spec.name + "]" +
                    ":not([data-behaviors*=" + spec.name + "])";
 
-    return document.querySelectorAll(selector);
+    return document.querySelectorAll( selector );
   } spec.findTemplates = findTemplates;
 
-  function resolveDependencies(modules){
+  function resolveDependencies( modules ){
     var injector = window.stik.injector({
       executionUnit: spec.executionUnit,
       modules: modules
@@ -45,11 +45,11 @@ window.stik.createBehavior = function behavior( spec ){
     return injector.resolveDependencies();
   };
 
-  function markAsApplyed(template){
-    var behaviors = template.getAttribute(behaviorKey);
-    behaviors = ((behaviors || "") + " " + spec.name).trim();
+  function markAsApplyed( template ){
+    var behaviors = template.getAttribute( behaviorKey );
+    behaviors = ( ( behaviors || "" ) + " " + spec.name ).trim();
 
-    template.setAttribute(behaviorKey, behaviors);
+    template.setAttribute( behaviorKey, behaviors );
   };
 
   return spec;
