@@ -15,13 +15,6 @@ window.stik = {
   labs: {}
 };
 
-Function.prototype.method = function method(name, func){
-  if (!this.hasOwnProperty(name)) {
-    this.prototype[name] = func;
-    return this;
-  }
-};
-
 window.stik.injectable = function injectable(spec){
   spec.instantiable = spec.instantiable || false;
   spec.resolvable = spec.resolvable || false;
