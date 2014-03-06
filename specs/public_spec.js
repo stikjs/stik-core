@@ -7,13 +7,13 @@ describe("Public", function(){
       action        = "Login";
       executionUnit = function(){};
 
-      spyOn(stik.$$manager, "$addControllerWithAction");
+      spyOn( stik.$$manager, "addControllerWithAction" );
 
-      stik.controller(controller, action, executionUnit);
+      stik.controller( controller, action, executionUnit );
 
       expect(
-        stik.$$manager.$addControllerWithAction
-      ).toHaveBeenCalledWith(controller, action, executionUnit);
+        stik.$$manager.addControllerWithAction
+      ).toHaveBeenCalledWith( controller, action, executionUnit );
     });
 
     it("without action", function(){
@@ -36,28 +36,28 @@ describe("Public", function(){
     name          = "some-behavior"
     executionUnit = function(){};
 
-    spyOn(stik.$$manager, "$addBehavior");
+    spyOn( stik.$$manager, "addBehavior" );
 
-    stik.behavior(name, executionUnit);
+    stik.behavior( name, executionUnit );
 
     expect(
-      stik.$$manager.$addBehavior
-    ).toHaveBeenCalledWith(name, executionUnit);
+      stik.$$manager.addBehavior
+    ).toHaveBeenCalledWith( name, executionUnit );
   });
 
   describe(".bindLazy", function(){
     it("when ok", function(){
-      spyOn(stik.$$manager, "$applyBehaviors").andReturn(true);
+      spyOn( stik.$$manager, "applyBehaviors" ).andReturn( true );
 
       expect(function(){
         stik.bindLazy();
       }).not.toThrow();
 
-      expect(stik.$$manager.$applyBehaviors).toHaveBeenCalled();
+      expect( stik.$$manager.applyBehaviors ).toHaveBeenCalled();
     });
 
     it("when no controllers were bound", function(){
-      spyOn(stik.$$manager, "$applyBehaviors").andReturn(true);
+      spyOn( stik.$$manager, "applyBehaviors").andReturn( true );
 
       expect(function(){
         stik.bindLazy()
@@ -65,8 +65,8 @@ describe("Public", function(){
     });
 
     it("when no behaviors were bound", function(){
-      spyOn(stik.$$manager, "$bindActions").andReturn(true);
-      spyOn(stik.$$manager, "$applyBehaviors").andReturn(false);
+      spyOn(stik.$$manager, "bindActions").andReturn( true );
+      spyOn(stik.$$manager, "applyBehaviors").andReturn( false );
 
       expect(function(){
         stik.bindLazy()
@@ -74,12 +74,12 @@ describe("Public", function(){
     });
 
     it("when nothing was bound", function(){
-      spyOn(stik.$$manager, "$bindActions").andReturn(false);
-      spyOn(stik.$$manager, "$applyBehaviors").andReturn(false);
+      spyOn( stik.$$manager, "bindActions" ).andReturn( false );
+      spyOn( stik.$$manager, "applyBehaviors" ).andReturn( false );
 
       expect(function(){
         stik.bindLazy()
-      }).toThrow("Stik: Nothing new to bind!");
+      }).toThrow( "Stik: Nothing new to bind!" );
     });
   });
 
@@ -92,12 +92,12 @@ describe("Public", function(){
       resolvable: false
     };
 
-    spyOn(stik.$$manager, "$addBoundary");
+    spyOn( stik.$$manager, "addBoundary" );
 
-    stik.boundary(myBoundary);
+    stik.boundary( myBoundary );
 
     expect(
-      stik.$$manager.$addBoundary
-    ).toHaveBeenCalledWith(myBoundary);
+      stik.$$manager.addBoundary
+    ).toHaveBeenCalledWith( myBoundary );
   });
 });

@@ -1,31 +1,33 @@
-window.stik.createBehavior = function behavior(spec){
-  if (!spec.name) { throw "Stik: Behavior name is missing"; }
-  if (spec.name.indexOf(" ") !== -1) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
-  if (!spec.executionUnit) { throw "Stik: Behavior needs a function to use as its execution unit"; }
+window.stik.createBehavior = function behavior( spec ){
+  if ( !spec.name ) { throw "Stik: Behavior name is missing"; }
+  if ( spec.name.indexOf(" ") !== -1 ) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
+  if ( !spec.executionUnit ) { throw "Stik: Behavior needs a function to use as its execution unit"; }
 
   var behaviorKey = "data-behaviors"
 
-  function bind(modules){
+  spec.bind = function bind( modules ){
     var templates = spec.findTemplates(),
         i = templates.length;
 
-    while (i--) {
-      load(templates[i], modules);
+    while ( i-- ) {
+      bindWithTemplate(
+        templates[ i ]
+      ).context.load( spec.executionUnit, modules );
+      markAsApplyed( templates[ i ] );
     }
 
     return templates.length > 0;
-  } spec.bind = bind;
-
-  function load(template, modules){
-    modules.$template = window.stik.injectable({
-      module: template
-    });
-
-    var dependencies = resolveDependencies(modules);
-
-    spec.executionUnit.apply({}, dependencies);
-    markAsApplyed(template);
   };
+
+  function bindWithTemplate(template){
+    return {
+      context: window.stik.context({
+        behavior: spec.behavior,
+        template: template
+      }),
+      executionUnit: spec.executionUnit
+    };
+  } spec.bindWithTemplate = bindWithTemplate;
 
   function findTemplates(){
     var selector = "[class*=" + spec.name + "]" +

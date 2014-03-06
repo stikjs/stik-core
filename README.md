@@ -123,16 +123,16 @@ stik.behavior("some-other-behavior", function($template){
 });
 ```
 
-The bind of a behavior to its component is achieved using css classes. Stik.js will prepend a `bh-` on the behavior's name. So it needs to be added in your css selector.
+The bind of a behavior to its component is achieved using css classes.
 
 ```html
-  <input class="bh-sparkle-input bh-some-other-behavior" />
+  <input class="sparkle-input some-other-behavior" />
 ```
 
 After a template is bound to any behavior it will get a new attribute signalling behaviors were successfully applied, like so:
 
 ```html
-  <input class="bh-sparkle-input bh-some-other-behavior" data-behaviors="bh-sparkle-input bh-some-other-behavior" />
+  <input class="sparkle-input some-other-behavior" data-behaviors="sparkle-input some-other-behavior" />
 ```
 
 ##Dependency Injection

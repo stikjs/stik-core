@@ -1,39 +1,23 @@
-window.stik.action = function action(spec){
-  if (!spec.controller) { throw "Stik: Action needs an controller name"; }
-  if (!spec.name) { throw "Stik: Action name can't be empty"; }
-  if (!spec.executionUnit) { throw "Stik: Action needs a function to use as its execution unit"; }
+window.stik.action = function action( spec ){
+  if ( !spec.controller ) { throw "Stik: Action needs an controller name"; }
+  if ( !spec.name ) { throw "Stik: Action name can't be empty"; }
+  if ( !spec.executionUnit ) { throw "Stik: Action needs a function to use as its execution unit"; }
 
-  function bind(modules){
-    var templates, i;
+  spec.bind = function( modules ){
+    var templates = spec.findTemplates(),
+        i = templates.length;
 
-    templates = spec.findTemplates();
-
-    i = templates.length;
-    while(i--){
+    while( i-- ){
       bindWithTemplate(
-        templates[i]
-      ).context.load(spec.executionUnit, modules);
+        templates[ i ]
+      ).context.load( spec.executionUnit, modules );
+      markAsBound( templates[ i ] );
     }
 
     return templates.length > 0;
-  } spec.bind = bind;
+  };
 
-  function $resolveDependencies(modules){
-    var injector = window.stik.injector(
-      this.$$executionUnit, modules
-    );
-
-    return injector.$resolveDependencies();
-  } spec.$resolveDependencies = $resolveDependencies;
-
-  function mergeModules(template, modules){
-    modules.$context  = this;
-    modules.$template = template;
-
-    return modules;
-  }
-
-  function findTemplates(DOMInjection){
+  spec.findTemplates = function(DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -41,9 +25,9 @@ window.stik.action = function action(spec){
                    "[data-action=" + spec.name + "]" +
                    ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
-  } spec.findTemplates = findTemplates;
+  };
 
-  function bindWithTemplate(template, modules){
+  function bindWithTemplate( template ){
     return {
       context: window.stik.context({
         controller: spec.controller,
@@ -53,6 +37,10 @@ window.stik.action = function action(spec){
       executionUnit: spec.executionUnit
     };
   } spec.bindWithTemplate = bindWithTemplate;
+
+  function markAsBound( template ){
+    template.className = (template.className + ' stik-bound').trim();
+  }
 
   return spec;
 };

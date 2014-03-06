@@ -1,164 +1,152 @@
-(function(){
-  function Manager(){
-    this.$$behaviors   = [];
-    this.$$controllers = {};
-    this.$$boundaries  = {controller:{}, behavior:{}};
-  }
+window.stik.manager = function manager(){
+  var behaviors   = {},
+      controllers = {},
+      boundaries  = { controller:{}, behavior:{} },
+      obj = {};
 
-  Manager.method("$addControllerWithAction", function(controllerName, actionName, executionUnit){
-    var ctrl, action;
-    ctrl = this.$storeController(controllerName);
-    action = ctrl.action(actionName, executionUnit);
-    action.bind(
-      this.$extractBoundaries(this.$$boundaries.controller)
-    );
+  obj.addControllerWithAction = function( controllerName, actionName, executionUnit ){
+    var ctrl = storeController( controllerName ),
+        action = ctrl.action( actionName, executionUnit );
+    action.bind( extractBoundaries( boundaries.controller ) );
     return ctrl;
-  });
+  };
 
-  Manager.method("$addController", function(controllerName, executionUnit){
-    var ctrl = this.$storeController(controllerName);
-    executionUnit.call({}, ctrl);
-    this.$bindController(ctrl);
+  obj.addController = function( controllerName, executionUnit ){
+    var ctrl = storeController( controllerName );
+    executionUnit.call( {}, ctrl );
+    bindController( ctrl );
     return ctrl;
-  });
+  };
 
-  Manager.method("$storeController", function(controllerName){
-    var ctrl = window.stik.createController({
-      name: controllerName
-    });
-    this.$$controllers[controllerName] = ctrl;
-    return ctrl;
-  });
-
-  Manager.method("$addBehavior", function(name, executionUnit){
-    var behavior;
-
-    if (this.$isBehaviorRegistered(name)) {
+  obj.addBehavior = function( name, executionUnit ){
+    if ( isBehaviorRegistered( name ) ) {
       throw "Stik: Another behavior already exist with name '" + name + "'";
     }
 
-    behavior = this.$createBehavior({
+    var behavior = createBehavior({
       name: name,
       executionUnit: executionUnit
     });
-    this.$$behaviors.push(behavior);
-    this.$applyBehavior(behavior);
+    behaviors[name] = behavior;
+
+    obj.applyBehavior( behavior );
 
     return behavior;
-  });
+  };
 
-  Manager.method("$addBoundary", function(spec){
-    var boundary,
-        that = this;
+  obj.addBoundary = function( spec ){
+    var boundary;
 
     spec.from = spec.from || 'controller|behavior';
 
-    this.$parseFrom(spec.from, function(parsedFrom){
-      boundary = window.stik.createBoundary(spec);
-      that.$$boundaries[parsedFrom][spec.as] = boundary;
+    parseFrom( spec.from, function( parsedFrom ){
+      boundary = window.stik.createBoundary( spec );
+      boundaries[ parsedFrom ][ spec.as ] = boundary;
     });
 
     return boundary;
-  });
+  };
 
-  Manager.method("$parseFrom", function(from, forEachFound){
-    var targets, i;
+  obj.applyBehaviors = function(){
+    var boundAny = false,
+        behavior;
 
-    targets = from.toLowerCase().split("|");
-
-    i = targets.length;
-    while (i--) {
-      if (targets[i] !== "controller" && targets[i] !== "behavior") {
-        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
-      } else {
-        forEachFound(targets[i]);
-      }
-    }
-  });
-
-  Manager.method("$isBehaviorRegistered", function(name){
-    var i = this.$$behaviors.length;
-
-    while (i--) {
-      if (this.$$behaviors[i].name === name) {
-        return true;
-      }
-    }
-
-    return false;
-  });
-
-  Manager.method("$createBehavior", function(name, executionUnit){
-    return window.stik.createBehavior(name, executionUnit);
-  });
-
-  Manager.method("$applyBehavior", function(behavior){
-    var modules = this.$extractBoundaries(
-      this.$$boundaries.behavior
-    );
-    return behavior.bind(modules);
-  });
-
-  Manager.method("$applyBehaviors", function(){
-    var boundAny, i;
-
-    boundAny = false;
-    i        = this.$$behaviors.length;
-
-    while (i--) {
-      if (this.$applyBehavior(this.$$behaviors[i])) {
+    for ( behavior in behaviors ) {
+      if ( obj.applyBehavior( behaviors[ behavior ] ) ) {
         boundAny = true;
       }
     }
 
     return boundAny;
-  });
+  };
 
-  Manager.method("$extractBoundaries", function(collection){
-    var modules, key;
+  obj.applyBehavior = function( behavior ){
+    var modules = extractBoundaries( boundaries.behavior );
+    return behavior.bind( modules );
+  };
 
-    modules = {};
+  obj.bindActionWithTemplate = function( controller, action, template ){
+    var modules = extractBoundaries( boundaries.controller ),
+        result;
 
-    for (key in collection) {
+    result = controllers[ controller ].actions[ action ].bindWithTemplate(
+      template, modules
+    );
+    result.modules = modules;
+
+    return result;
+  };
+
+  obj.bindBehaviorWithTemplate = function( behavior, template ){
+    var modules = extractBoundaries( boundaries.controller ),
+        result;
+
+    result = behaviors[ behavior ].bindWithTemplate(
+      template, modules
+    );
+    result.modules = modules;
+
+    return result;
+  };
+
+  obj.bindActions = function(){
+    var modules = extractBoundaries( boundaries.controller ),
+        boundAny = false,
+        ctrl;
+
+    for ( ctrl in controllers ) {
+      if ( controllers[ ctrl ].bind( modules ) ) {
+        boundAny = true;
+      }
+    }
+
+    return boundAny;
+  };
+
+  function storeController( controllerName ){
+    var ctrl = window.stik.createController({
+      name: controllerName
+    });
+    controllers[ controllerName ] = ctrl;
+    return ctrl;
+  }
+
+  function parseFrom( from, forEachFound ){
+    var targets = from.toLowerCase().split( "|" ),
+        i = targets.length;
+
+    while ( i-- ) {
+      if (targets[ i ] !== "controller" && targets[ i ] !== "behavior") {
+        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
+      } else {
+        forEachFound( targets[ i ] );
+      }
+    }
+  }
+
+  function isBehaviorRegistered( name ){
+    return !!behaviors[ name ];
+  }
+
+  function createBehavior( name, executionUnit ){
+    return window.stik.createBehavior( name, executionUnit );
+  }
+
+  function extractBoundaries( collection ){
+    var modules = {},
+        key;
+
+    for ( key in collection ) {
       modules[key] = collection[key].to;
     }
 
     return modules;
-  });
+  }
 
-  Manager.method("$bindActionWithTemplate", function(controller, action, template){
-    var modules, result;
+  function bindController( controller ){
+    var modules = extractBoundaries( boundaries.controller );
+    controller.bind( modules );
+  }
 
-    modules = this.$extractBoundaries(this.$$boundaries.controller);
-
-    result = this.$$controllers[controller].actions[action].bindWithTemplate(
-      template, modules
-    );
-
-    result.modules = modules;
-    return result;
-  });
-
-  Manager.method("$bindActions", function(){
-    var modules, boundAny, ctrl;
-
-    modules = this.$extractBoundaries(this.$$boundaries.controller);
-
-    boundAny = false;
-
-    for (ctrl in this.$$controllers) {
-      if (this.$$controllers[ctrl].bind(modules)) {
-        boundAny = true;
-      }
-    }
-
-    return boundAny;
-  });
-
-  Manager.method("$bindController", function(controller){
-    var modules = this.$extractBoundaries(this.$$boundaries.controller);
-    controller.bind(modules);
-  });
-
-  window.stik.Manager = Manager;
-})();
+  return obj;
+};

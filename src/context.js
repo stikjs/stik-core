@@ -1,19 +1,18 @@
-window.stik.context = function context(spec){
+window.stik.context = function context( spec ){
   spec.template = window.stik.injectable({
     module: spec.template
   });
 
-  function load(executionUnit, modules){
+  spec.load = function( executionUnit, modules ){
     var dependencies = resolveDependencies(
       executionUnit,
-      mergeModules(modules)
+      mergeModules( modules )
     );
 
-    executionUnit.apply(spec, dependencies);
-    markAsBound();
-  } spec.load = load;
+    executionUnit.apply( spec, dependencies );
+  };
 
-  function resolveDependencies(executionUnit, modules){
+  function resolveDependencies( executionUnit, modules ){
     var injector = window.stik.injector({
       executionUnit: executionUnit,
       modules: modules
@@ -22,15 +21,10 @@ window.stik.context = function context(spec){
     return injector.resolveDependencies();
   }
 
-  function mergeModules(modules){
+  function mergeModules( modules ){
     modules.$template = spec.template;
 
     return modules;
-  }
-
-  function markAsBound(){
-    var template = spec.template.resolve();
-    template.className = (template.className + ' stik-bound').trim();
   }
 
   return spec;

@@ -70,7 +70,7 @@ describe("ControllerLab", function(){
       "<span class=\"vader\" data-bind=\"vader\"></span>" +
     "</div>";
 
-    viewBagDoubleMock = jasmine.createSpyObj("viewBag", ["$push"])
+    viewBagDoubleMock = jasmine.createSpyObj("viewBag", ["$push"]);
 
     lab = stik.labs.controller({
       name: "StarWarsCtrl",

@@ -4,17 +4,17 @@ describe("Behavior", function(){
       stik.createBehavior({
         name: null, executionUnit: function(){}
       });
-    }).toThrow("Stik: Behavior name is missing");
+    }).toThrow( "Stik: Behavior name is missing" );
     expect(function(){
       stik.createBehavior({
         name: "some-behavior"
       });
-    }).toThrow("Stik: Behavior needs a function to use as its execution unit");
+    }).toThrow( "Stik: Behavior needs a function to use as its execution unit" );
     expect(function(){
       stik.createBehavior({
         name: "some behavior"
       });
-    }).toThrow("Stik: 'some behavior' is not a valid Behavior name. Please replace empty spaces with dashes ('-')");
+    }).toThrow( "Stik: 'some behavior' is not a valid Behavior name. Please replace empty spaces with dashes ('-')" );
   });
 
   describe("#load", function(){
@@ -43,7 +43,7 @@ describe("Behavior", function(){
     it("with one template", function(){
       var behavior, template;
 
-      template = document.createElement("div");
+      template = document.createElement( "div" );
       template.className += "some-behavior";
 
       behavior = stik.createBehavior({
@@ -51,32 +51,32 @@ describe("Behavior", function(){
         executionUnit: function(){}
       });
 
-      spyOn(behavior, "findTemplates").andReturn([template]);
+      spyOn( behavior, "findTemplates" ).andReturn( [ template ] );
 
-      behavior.bind(template, {});
+      behavior.bind( template, {} );
 
       expect(
-        template.getAttribute("data-behaviors")
-      ).toEqual('some-behavior');
+        template.getAttribute( "data-behaviors" )
+      ).toEqual( "some-behavior" );
     });
 
     it("with two behavior", function(){
       var behavior, template;
 
-      template = document.createElement("div");
-      template.setAttribute("data-behaviors", "old-behavior");
+      template = document.createElement( "div" );
+      template.setAttribute( "data-behaviors", "old-behavior" );
 
       behavior = stik.createBehavior({
         name: "some-behavior",
         executionUnit: function(){}
       });
 
-      spyOn(behavior, "findTemplates").andReturn([template]);
+      spyOn( behavior, "findTemplates" ).andReturn( [ template ] );
 
-      behavior.bind(template, {});
+      behavior.bind( template, {} );
 
       expect(
-        template.getAttribute("data-behaviors")
+        template.getAttribute( "data-behaviors" )
       ).toEqual(
         "old-behavior some-behavior"
       );
@@ -85,20 +85,20 @@ describe("Behavior", function(){
     it("with three behavior", function(){
       var behavior, template;
 
-      template = document.createElement("div");
-      template.setAttribute("data-behaviors", "old-behavior wierd-behavior");
+      template = document.createElement( "div" );
+      template.setAttribute( "data-behaviors", "old-behavior wierd-behavior" );
 
       behavior = stik.createBehavior({
         name: "some-behavior",
         executionUnit: function(){}
       });
 
-      spyOn(behavior, "findTemplates").andReturn([template]);
+      spyOn( behavior, "findTemplates" ).andReturn( [ template ] );
 
-      behavior.bind(template, {});
+      behavior.bind( template, {} );
 
       expect(
-        template.getAttribute("data-behaviors")
+        template.getAttribute( "data-behaviors" )
       ).toEqual(
         "old-behavior wierd-behavior some-behavior"
       );

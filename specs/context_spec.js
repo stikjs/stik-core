@@ -1,38 +1,13 @@
 describe("Context", function(){
-  var subject, elmDouble;
-
-  function setupElmDouble(){
-    return {
-      getAttribute: function(){},
-    };
-  };
-
-  function modulesDouble(){
-    return {
-      $template: function(){},
-      $messaging: function(){},
-      $courier: function(){}
-    };
-  };
-
-  beforeEach(function(){
-    elmDouble = setupElmDouble();
-  });
-
-  afterEach(function(){
-    subject = null;
-    elmDouble = null;
-  });
-
   describe("#load", function(){
     it("should run the execution unit it is bound to", function(){
       var template, modules, executionUnitDouble, injectedTemplate;
 
       injectedTemplate = false;
 
-      template = document.createElement("div");
+      template = document.createElement( "div" );
 
-      executionUnitDouble = function($template){
+      executionUnitDouble = function( $template ){
         injectedTemplate = $template;
       };
 
@@ -42,10 +17,9 @@ describe("Context", function(){
         template: template
       });
 
-      context.load(executionUnitDouble, modulesDouble());
+      context.load( executionUnitDouble, {} );
 
-      expect(injectedTemplate).toEqual(template);
-      expect(template.className).toEqual("stik-bound");
+      expect( injectedTemplate ).toEqual( template );
     });
   });
 });
