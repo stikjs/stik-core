@@ -1,11 +1,11 @@
-window.stik.injector = function injector(spec){
-  if (!spec.executionUnit) { throw "Stik: Injector needs a function to use as its execution unit"; }
+window.stik.injector = function injector( spec ){
+  if ( !spec.executionUnit ) { throw "Stik: Injector needs a function to use as its execution unit"; }
 
-  function resolveDependencies(){
+  spec.resolveDependencies = function(){
     var args = extractArguments();
 
-    return grabModules(args);
-  } spec.resolveDependencies = resolveDependencies;
+    return grabModules( args );
+  };
 
   function extractArguments(){
     var argsPattern, funcString, args;
@@ -14,33 +14,33 @@ window.stik.injector = function injector(spec){
 
     funcString = spec.executionUnit.toString();
 
-    args = funcString.match(argsPattern)[1].split(',');
+    args = funcString.match( argsPattern )[ 1 ].split( ',' );
 
-    return trimmedArgs(args);
+    return trimmedArgs( args );
   }
 
-  function trimmedArgs(args){
+  function trimmedArgs( args ){
     var result = [];
-    args.forEach(function(arg){
-      result.push(arg.trim());
+    args.forEach( function( arg ){
+      result.push( arg.trim() );
     });
     return result;
   }
 
-  function grabModules(args){
+  function grabModules( args ){
     var module, dependencies;
 
     dependencies = [];
 
-    if (args.length === 1 && args[0] === "") { return []; }
+    if ( args.length === 1 && args[ 0 ] === "" ) { return []; }
 
-    for (var i = 0; i < args.length; i++) {
-      if (!(module = spec.modules[args[i]])) {
-        throw "Stik could not find this module (" + args[i] + ")";
+    for ( var i = 0; i < args.length; i++ ) {
+      if ( !( module = spec.modules[ args[ i ] ] ) ) {
+        throw "Stik could not find this module (" + args[ i ] + ")";
       }
 
       dependencies.push(
-        module.resolve(spec.modules)
+        module.resolve( spec.modules )
       );
     }
 

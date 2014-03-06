@@ -14,7 +14,8 @@ module.exports = function(grunt){
     'src/helper.js',
     'src/courier.js',
     'src/view_bag.js',
-    'src/controller_lab.js'
+    'src/behavior_lab.js',
+    'src/controller_lab.js',
   ];
 
   grunt.initConfig({

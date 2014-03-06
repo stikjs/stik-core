@@ -5,6 +5,10 @@ describe("Manager", function(){
     };
   };
 
+  beforeEach(function(){
+    stik.$$manager.$reset();
+  });
+
   describe("#$addControllerWithAction", function(){
     it("should throw if any parameters is empty or missing", function(){
       var manager = stik.manager();
@@ -63,35 +67,67 @@ describe("Manager", function(){
     });
 
     it("should default to both controller and behavior", function(){
-      var manager = stik.manager(),
-          customFunc = jasmine.createSpy( "customFunc" );
+      var customFuncMock = jasmine.createSpy("customFunc");
 
-      manager.addBoundary({
-        as: "customFunc",
-        callable: true,
-        to: customFunc
+      stik.boundary({
+        as: "customFuncForBoth",
+        to: customFuncMock
       });
 
-      manager.addController( 'some-controller', function(customObj){} );
-      manager.addBehavior( 'some-behavior', function(customObj){} );
+      stik.controller( "some-controller", "some-action", function(customFuncForBoth){
+        customFuncForBoth()
+      });
+      stik.behavior( "some-behavior", function(customFuncForBoth){
+        customFuncForBoth()
+      });
 
-      manager.bindActions();
+      stik.labs.controller({
+        name: "some-controller",
+        action: "some-action",
+        template: "<a></a>"
+      }).run();
 
-      expect( customObjMock.calls ).toEqual( 2 );
+      stik.labs.behavior({
+        name: "some-behavior",
+        template: "<a></a>"
+      }).run();
+
+      expect( customFuncMock.calls.length ).toEqual( 2 );
     });
 
     it("should create a new controller boundary", function(){
-      var manager = stik.manager();
+      var customFuncMock = jasmine.createSpy("customFunc");
 
-      manager.addBoundary({
-        as: "CustomObj",
+      stik.boundary({
+        as: "customFuncForController",
         from: "controller",
-        to: function(){}
+        to: customFuncMock
       });
 
-      expect(
-        manager.boundaries.controller["CustomObj"]
-      ).toBeDefined();
+      stik.controller( "AppCtrl", "List", function( customFuncForController ){
+        customFuncForController();
+      });
+
+      stik.labs.controller({
+        name: "AppCtrl",
+        action: "List",
+        template: "<a></a>"
+      }).run();
+
+      expect( customFuncMock ).toHaveBeenCalled();
+
+      stik.behavior( "do-something", function( customFuncForController ){
+        customFuncForController();
+      });
+
+      var behaviorLab = stik.labs.behavior({
+        name: "do-something",
+        template: "<a></a>"
+      });
+
+      expect(function(){
+        behaviorLab.run();
+      }).toThrow("Stik could not find this module (customFuncForController)");
     });
 
     it("should be injectable into behaviors", function(){
@@ -132,17 +168,17 @@ describe("Manager", function(){
 
       template = 'div';
 
-      ctrl = manager.addControllerWithAction("AppCtrl", "List", function(CustomObj){
+      ctrl = manager.addControllerWithAction( "AppCtrl", "List", function( CustomObj ){
         result = CustomObj;
       });
 
       spyOn(
-         ctrl.actions["List"], "findTemplates"
-      ).andReturn([template]);
+         ctrl.actions[ "List" ], "findTemplates"
+      ).andReturn( [ template ] );
 
-      manager.$bindActions();
+      manager.bindActions();
 
-      expect(result).toEqual(injectable);
+      expect( result ).toEqual( injectable );
     });
   });
 
@@ -160,18 +196,15 @@ describe("Manager", function(){
       }).toThrow( "Stik: Another behavior already exist with name 'some-behavior'" );
     });
 
-    it("should be able to inject the new store the new behavior", function(){
+    it("should try to apply", function(){
       var manager = stik.manager(),
-          behavior = "some-behavior",
-          executionUnit;
-
-      executionUnit = function(){};
+          behavior = "some-behavior";
 
       spyOn( manager, "applyBehavior" );
 
-      manager.addBehavior( behavior, executionUnit );
+      manager.addBehavior( behavior, function(){} );
 
-      expect( behavior.behaviors.length ).toBe( 1 );
+      expect( manager.applyBehavior ).toHaveBeenCalled();
     });
   });
 
@@ -196,7 +229,7 @@ describe("Manager", function(){
 
       expect( manager.applyBehaviors() ).toBeTruthy();
       expect(
-        manager.$applyBehavior
+        manager.applyBehavior
       ).toHaveBeenCalledWith( behavior );
     });
 

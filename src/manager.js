@@ -19,9 +19,7 @@ window.stik.manager = function manager(){
   };
 
   obj.addBehavior = function( name, executionUnit ){
-    if ( isBehaviorRegistered( name ) ) {
-      throw "Stik: Another behavior already exist with name '" + name + "'";
-    }
+    if ( isBehaviorRegistered( name ) ) { throw "Stik: Another behavior already exist with name '" + name + "'"; }
 
     var behavior = createBehavior({
       name: name,
@@ -37,7 +35,7 @@ window.stik.manager = function manager(){
   obj.addBoundary = function( spec ){
     var boundary;
 
-    spec.from = spec.from || 'controller|behavior';
+    spec.from = spec.from || "controller|behavior";
 
     parseFrom( spec.from, function( parsedFrom ){
       boundary = window.stik.createBoundary( spec );
@@ -78,7 +76,7 @@ window.stik.manager = function manager(){
   };
 
   obj.bindBehaviorWithTemplate = function( behavior, template ){
-    var modules = extractBoundaries( boundaries.controller ),
+    var modules = extractBoundaries( boundaries.behavior ),
         result;
 
     result = behaviors[ behavior ].bindWithTemplate(
@@ -101,6 +99,11 @@ window.stik.manager = function manager(){
     }
 
     return boundAny;
+  };
+
+  obj.$reset = function(){
+    controllers = {};
+    behaviors = {};
   };
 
   function storeController( controllerName ){
