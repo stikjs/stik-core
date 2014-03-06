@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.0 | From: 04-03-2014
+// Version: 0.10.0 | From: 06-03-2014
 
 if (window.stik){
   throw "Stik is already loaded. Check your requires ;)";
@@ -15,136 +15,113 @@ window.stik = {
   labs: {}
 };
 
-(function(){
-  Function.prototype.method = function(name, func){
-    if (!this.hasOwnProperty(name)) {
-      this.prototype[name] = func;
-      return this;
-    }
+Function.prototype.method = function method(name, func){
+  if (!this.hasOwnProperty(name)) {
+    this.prototype[name] = func;
+    return this;
   }
-})();
+};
 
-(function(){
-  function TempConstructor(){}
+window.stik.injectable = function injectable(spec){
+  spec.instantiable = spec.instantiable || false;
+  spec.resolvable = spec.resolvable || false;
 
-  window.stik.injectable = function(spec){
-    spec.instantiable = spec.instantiable || false;
-    spec.resolvable = spec.resolvable || false;
-
-    function resolve(dependencies){
-      if (spec.instantiable === true) {
-        return buildModule(
-          resolveDependencies(dependencies)
-        );
-      } else if (spec.resolvable === true) {
-        return callWithDependencies(
-          {},
-          resolveDependencies(dependencies)
-        );
-      } else {
-        return spec.module;
-      }
-    } spec.resolve = resolve;
-
-    function buildModule(dependencies){
-      var newInstance, value;
-
-      TempConstructor.prototype = spec.module.prototype;
-      newInstance = new TempConstructor();
-
-      value = callWithDependencies(
-        newInstance, dependencies
+  function resolve(dependencies){
+    if (spec.instantiable === true) {
+      return buildModule(
+        resolveDependencies(dependencies)
       );
-
-      return Object(value) === value ? value : newInstance;
+    } else if (spec.resolvable === true) {
+      return callWithDependencies(
+        {},
+        resolveDependencies(dependencies)
+      );
+    } else {
+      return spec.module;
     }
+  } spec.resolve = resolve;
 
-    function resolveDependencies(dependencies){
-      var injector = window.stik.injector({
-        executionUnit: spec.module,
-        modules: dependencies
-      });
+  function buildModule(dependencies){
+    var newInstance, value;
 
-      return injector.resolveDependencies();
-    }
+    function TempConstructor(){}
+    TempConstructor.prototype = spec.module.prototype;
+    newInstance = new TempConstructor();
 
-    function callWithDependencies(context, dependencies){
-      return spec.module.apply(context, dependencies);
-    }
+    value = callWithDependencies(
+      newInstance, dependencies
+    );
 
-    return spec;
+    return Object(value) === value ? value : newInstance;
   }
-}());
 
-window.stik.createController = function(spec){
-  if (!spec.name) {
-    throw "Stik: Controller needs a name";
+  function resolveDependencies(dependencies){
+    var injector = window.stik.injector({
+      executionUnit: spec.module,
+      modules: dependencies
+    });
+
+    return injector.resolveDependencies();
   }
+
+  function callWithDependencies(context, dependencies){
+    return spec.module.apply(context, dependencies);
+  }
+
+  return spec;
+};
+
+window.stik.createController = function controller( spec ){
+  if ( !spec.name ) { throw "Stik: Controller needs a name"; }
 
   spec.actions = {};
 
-  function action(actionName, executionUnit){
+  spec.action = function( actionName, executionUnit ){
     var newAction = window.stik.action({
       name: actionName,
       controller: spec.name,
       executionUnit: executionUnit
     });
-    spec.actions[actionName] = newAction;
+    spec.actions[ actionName ] = newAction;
     return newAction;
-  } spec.action = action;
+  };
 
-  function bind(modules){
+  spec.bind = function( modules ){
     var name,
         boundAny = false;
 
-    for (name in spec.actions){
-      if (spec.actions[name].bind(modules)) {
+    for ( name in spec.actions ){
+      if ( spec.actions[ name ].bind( modules ) ) {
         boundAny = true;
       }
     }
 
     return boundAny;
-  } spec.bind = bind;
+  };
 
   return spec;
 };
 
-window.stik.action = function(spec){
-  if (!spec.controller) { throw "Stik: Action needs an controller name"; }
-  if (!spec.name) { throw "Stik: Action name can't be empty"; }
-  if (!spec.executionUnit) { throw "Stik: Action needs a function to use as its execution unit"; }
+window.stik.action = function action( spec ){
+  if ( !spec.controller ) { throw "Stik: Action needs an controller name"; }
+  if ( !spec.name ) { throw "Stik: Action name can't be empty"; }
+  if ( !spec.executionUnit ) { throw "Stik: Action needs a function to use as its execution unit"; }
 
-  function bind(modules){
-    var templates, i;
+  spec.bind = function( modules ){
+    var templates = spec.findTemplates(),
+        i = templates.length;
 
-    templates = spec.findTemplates();
-
-    i = templates.length;
-    while(i--){
+    while( i-- ){
       bindWithTemplate(
-        templates[i]
-      ).context.load(spec.executionUnit, modules);
+        templates[ i ]
+      ).context.load( spec.executionUnit, modules );
+      markAsBound( templates[ i ] );
     }
 
     return templates.length > 0;
-  } spec.bind = bind;
+  };
 
-  function $resolveDependencies(modules){
-    var injector = window.stik.injector(
-      this.$$executionUnit, modules
-    );
-
-    return injector.$resolveDependencies();
-  } spec.$resolveDependencies = $resolveDependencies;
-
-  function mergeModules(template, modules){
-    modules.$context  = this;
-    modules.$template = template;
-
-    return modules;
-  }
-
-  function findTemplates(DOMInjection){
+  spec.findTemplates = function(DOMInjection){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -152,9 +129,9 @@ window.stik.action = function(spec){
                    "[data-action=" + spec.name + "]" +
                    ":not([class*=stik-bound])";
     return DOMHandler.querySelectorAll(selector);
-  } spec.findTemplates = findTemplates;
+  };
 
-  function bindWithTemplate(template, modules){
+  function bindWithTemplate( template ){
     return {
       context: window.stik.context({
         controller: spec.controller,
@@ -165,25 +142,28 @@ window.stik.action = function(spec){
     };
   } spec.bindWithTemplate = bindWithTemplate;
 
+  function markAsBound( template ){
+    template.className = (template.className + ' stik-bound').trim();
+  }
+
   return spec;
 };
 
-window.stik.context = function(spec){
+window.stik.context = function context( spec ){
   spec.template = window.stik.injectable({
     module: spec.template
   });
 
-  function load(executionUnit, modules){
+  spec.load = function( executionUnit, modules ){
     var dependencies = resolveDependencies(
       executionUnit,
-      mergeModules(modules)
+      mergeModules( modules )
     );
 
-    executionUnit.apply(spec, dependencies);
-    markAsBound();
-  } spec.load = load;
+    executionUnit.apply( spec, dependencies );
+  };
 
-  function resolveDependencies(executionUnit, modules){
+  function resolveDependencies( executionUnit, modules ){
     var injector = window.stik.injector({
       executionUnit: executionUnit,
       modules: modules
@@ -192,48 +172,45 @@ window.stik.context = function(spec){
     return injector.resolveDependencies();
   }
 
-  function mergeModules(modules){
+  function mergeModules( modules ){
     modules.$template = spec.template;
 
     return modules;
   }
 
-  function markAsBound(){
-    var template = spec.template.resolve();
-    template.className = (template.className + ' stik-bound').trim();
-  }
-
   return spec;
 };
 
-window.stik.createBehavior = function(spec){
-  if (!spec.name) { throw "Stik: Behavior name is missing"; }
-  if (spec.name.indexOf(" ") !== -1) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
-  if (!spec.executionUnit) { throw "Stik: Behavior needs a function to use as its execution unit"; }
+window.stik.createBehavior = function behavior( spec ){
+  if ( !spec.name ) { throw "Stik: Behavior name is missing"; }
+  if ( spec.name.indexOf(" ") !== -1 ) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
+  if ( !spec.executionUnit ) { throw "Stik: Behavior needs a function to use as its execution unit"; }
 
   var behaviorKey = "data-behaviors"
 
-  function bind(modules){
+  spec.bind = function bind( modules ){
     var templates = spec.findTemplates(),
         i = templates.length;
 
-    while (i--) {
-      load(templates[i], modules);
+    while ( i-- ) {
+      bindWithTemplate(
+        templates[ i ]
+      ).context.load( spec.executionUnit, modules );
+      markAsApplyed( templates[ i ] );
     }
 
     return templates.length > 0;
-  } spec.bind = bind;
-
-  function load(template, modules){
-    modules.$template = window.stik.injectable({
-      module: template
-    });
-
-    var dependencies = resolveDependencies(modules);
-
-    spec.executionUnit.apply({}, dependencies);
-    markAsApplyed(template);
   };
+
+  function bindWithTemplate(template){
+    return {
+      context: window.stik.context({
+        behavior: spec.behavior,
+        template: template
+      }),
+      executionUnit: spec.executionUnit
+    };
+  } spec.bindWithTemplate = bindWithTemplate;
 
   function findTemplates(){
     var selector = "[class*=" + spec.name + "]" +
@@ -261,7 +238,7 @@ window.stik.createBehavior = function(spec){
   return spec;
 }
 
-window.stik.createBoundary = function(spec){
+window.stik.createBoundary = function boundary(spec){
   if (spec.as.indexOf(" ") !== -1) {
     throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')";
   }
@@ -278,14 +255,14 @@ window.stik.createBoundary = function(spec){
   return obj;
 };
 
-window.stik.injector = function(spec){
-  if (!spec.executionUnit) { throw "Stik: Injector needs a function to use as its execution unit"; }
+window.stik.injector = function injector( spec ){
+  if ( !spec.executionUnit ) { throw "Stik: Injector needs a function to use as its execution unit"; }
 
-  function resolveDependencies(){
+  spec.resolveDependencies = function(){
     var args = extractArguments();
 
-    return grabModules(args);
-  } spec.resolveDependencies = resolveDependencies;
+    return grabModules( args );
+  };
 
   function extractArguments(){
     var argsPattern, funcString, args;
@@ -294,33 +271,33 @@ window.stik.injector = function(spec){
 
     funcString = spec.executionUnit.toString();
 
-    args = funcString.match(argsPattern)[1].split(',');
+    args = funcString.match( argsPattern )[ 1 ].split( ',' );
 
-    return trimmedArgs(args);
+    return trimmedArgs( args );
   }
 
-  function trimmedArgs(args){
+  function trimmedArgs( args ){
     var result = [];
-    args.forEach(function(arg){
-      result.push(arg.trim());
+    args.forEach( function( arg ){
+      result.push( arg.trim() );
     });
     return result;
   }
 
-  function grabModules(args){
+  function grabModules( args ){
     var module, dependencies;
 
     dependencies = [];
 
-    if (args.length === 1 && args[0] === "") { return []; }
+    if ( args.length === 1 && args[ 0 ] === "" ) { return []; }
 
-    for (var i = 0; i < args.length; i++) {
-      if (!(module = spec.modules[args[i]])) {
-        throw "Stik could not find this module (" + args[i] + ")";
+    for ( var i = 0; i < args.length; i++ ) {
+      if ( !( module = spec.modules[ args[ i ] ] ) ) {
+        throw "Stik could not find this module (" + args[ i ] + ")";
       }
 
       dependencies.push(
-        module.resolve(spec.modules)
+        module.resolve( spec.modules )
       );
     }
 
@@ -330,204 +307,195 @@ window.stik.injector = function(spec){
   return spec;
 };
 
-(function(){
-  function Manager(){
-    this.$$behaviors   = [];
-    this.$$controllers = {};
-    this.$$boundaries  = {controller:{}, behavior:{}};
-  }
+window.stik.manager = function manager(){
+  var behaviors   = {},
+      controllers = {},
+      boundaries  = { controller:{}, behavior:{} },
+      obj = {};
 
-  Manager.method("$addControllerWithAction", function(controllerName, actionName, executionUnit){
-    var ctrl, action;
-    ctrl = this.$storeController(controllerName);
-    action = ctrl.action(actionName, executionUnit);
-    action.bind(
-      this.$extractBoundaries(this.$$boundaries.controller)
-    );
+  obj.addControllerWithAction = function( controllerName, actionName, executionUnit ){
+    var ctrl = storeController( controllerName ),
+        action = ctrl.action( actionName, executionUnit );
+    action.bind( extractBoundaries( boundaries.controller ) );
     return ctrl;
-  });
+  };
 
-  Manager.method("$addController", function(controllerName, executionUnit){
-    var ctrl = this.$storeController(controllerName);
-    executionUnit.call({}, ctrl);
-    this.$bindController(ctrl);
+  obj.addController = function( controllerName, executionUnit ){
+    var ctrl = storeController( controllerName );
+    executionUnit.call( {}, ctrl );
+    bindController( ctrl );
     return ctrl;
-  });
+  };
 
-  Manager.method("$storeController", function(controllerName){
-    var ctrl = window.stik.createController({
-      name: controllerName
-    });
-    this.$$controllers[controllerName] = ctrl;
-    return ctrl;
-  });
+  obj.addBehavior = function( name, executionUnit ){
+    if ( isBehaviorRegistered( name ) ) { throw "Stik: Another behavior already exist with name '" + name + "'"; }
 
-  Manager.method("$addBehavior", function(name, executionUnit){
-    var behavior;
-
-    if (this.$isBehaviorRegistered(name)) {
-      throw "Stik: Another behavior already exist with name '" + name + "'";
-    }
-
-    behavior = this.$createBehavior({
+    var behavior = createBehavior({
       name: name,
       executionUnit: executionUnit
     });
-    this.$$behaviors.push(behavior);
-    this.$applyBehavior(behavior);
+    behaviors[name] = behavior;
+
+    obj.applyBehavior( behavior );
 
     return behavior;
-  });
+  };
 
-  Manager.method("$addBoundary", function(spec){
-    var boundary,
-        that = this;
+  obj.addBoundary = function( spec ){
+    var boundary;
 
-    spec.from = spec.from || 'controller|behavior';
+    spec.from = spec.from || "controller|behavior";
 
-    this.$parseFrom(spec.from, function(parsedFrom){
-      boundary = window.stik.createBoundary(spec);
-      that.$$boundaries[parsedFrom][spec.as] = boundary;
+    parseFrom( spec.from, function( parsedFrom ){
+      boundary = window.stik.createBoundary( spec );
+      boundaries[ parsedFrom ][ spec.as ] = boundary;
     });
 
     return boundary;
-  });
+  };
 
-  Manager.method("$parseFrom", function(from, forEachFound){
-    var targets, i;
+  obj.applyBehaviors = function(){
+    var boundAny = false,
+        behavior;
 
-    targets = from.toLowerCase().split("|");
-
-    i = targets.length;
-    while (i--) {
-      if (targets[i] !== "controller" && targets[i] !== "behavior") {
-        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
-      } else {
-        forEachFound(targets[i]);
-      }
-    }
-  });
-
-  Manager.method("$isBehaviorRegistered", function(name){
-    var i = this.$$behaviors.length;
-
-    while (i--) {
-      if (this.$$behaviors[i].name === name) {
-        return true;
-      }
-    }
-
-    return false;
-  });
-
-  Manager.method("$createBehavior", function(name, executionUnit){
-    return window.stik.createBehavior(name, executionUnit);
-  });
-
-  Manager.method("$applyBehavior", function(behavior){
-    var modules = this.$extractBoundaries(
-      this.$$boundaries.behavior
-    );
-    return behavior.bind(modules);
-  });
-
-  Manager.method("$applyBehaviors", function(){
-    var boundAny, i;
-
-    boundAny = false;
-    i        = this.$$behaviors.length;
-
-    while (i--) {
-      if (this.$applyBehavior(this.$$behaviors[i])) {
+    for ( behavior in behaviors ) {
+      if ( obj.applyBehavior( behaviors[ behavior ] ) ) {
         boundAny = true;
       }
     }
 
     return boundAny;
-  });
+  };
 
-  Manager.method("$extractBoundaries", function(collection){
-    var modules, key;
+  obj.applyBehavior = function( behavior ){
+    var modules = extractBoundaries( boundaries.behavior );
+    return behavior.bind( modules );
+  };
 
-    modules = {};
+  obj.bindActionWithTemplate = function( controller, action, template ){
+    var modules = extractBoundaries( boundaries.controller ),
+        result;
 
-    for (key in collection) {
+    result = controllers[ controller ].actions[ action ].bindWithTemplate(
+      template, modules
+    );
+    result.modules = modules;
+
+    return result;
+  };
+
+  obj.bindBehaviorWithTemplate = function( behavior, template ){
+    var modules = extractBoundaries( boundaries.behavior ),
+        result;
+
+    result = behaviors[ behavior ].bindWithTemplate(
+      template, modules
+    );
+    result.modules = modules;
+
+    return result;
+  };
+
+  obj.bindActions = function(){
+    var modules = extractBoundaries( boundaries.controller ),
+        boundAny = false,
+        ctrl;
+
+    for ( ctrl in controllers ) {
+      if ( controllers[ ctrl ].bind( modules ) ) {
+        boundAny = true;
+      }
+    }
+
+    return boundAny;
+  };
+
+  obj.$reset = function(){
+    controllers = {};
+    behaviors = {};
+  };
+
+  function storeController( controllerName ){
+    var ctrl = window.stik.createController({
+      name: controllerName
+    });
+    controllers[ controllerName ] = ctrl;
+    return ctrl;
+  }
+
+  function parseFrom( from, forEachFound ){
+    var targets = from.toLowerCase().split( "|" ),
+        i = targets.length;
+
+    while ( i-- ) {
+      if (targets[ i ] !== "controller" && targets[ i ] !== "behavior") {
+        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
+      } else {
+        forEachFound( targets[ i ] );
+      }
+    }
+  }
+
+  function isBehaviorRegistered( name ){
+    return !!behaviors[ name ];
+  }
+
+  function createBehavior( name, executionUnit ){
+    return window.stik.createBehavior( name, executionUnit );
+  }
+
+  function extractBoundaries( collection ){
+    var modules = {},
+        key;
+
+    for ( key in collection ) {
       modules[key] = collection[key].to;
     }
 
     return modules;
-  });
+  }
 
-  Manager.method("$bindActionWithTemplate", function(controller, action, template){
-    var modules, result;
+  function bindController( controller ){
+    var modules = extractBoundaries( boundaries.controller );
+    controller.bind( modules );
+  }
 
-    modules = this.$extractBoundaries(this.$$boundaries.controller);
+  return obj;
+};
 
-    result = this.$$controllers[controller].actions[action].bindWithTemplate(
-      template, modules
-    );
+window.stik.$$manager = window.stik.manager();
 
-    result.modules = modules;
-    return result;
-  });
-
-  Manager.method("$bindActions", function(){
-    var modules, boundAny, ctrl;
-
-    modules = this.$extractBoundaries(this.$$boundaries.controller);
-
-    boundAny = false;
-
-    for (ctrl in this.$$controllers) {
-      if (this.$$controllers[ctrl].bind(modules)) {
-        boundAny = true;
-      }
-    }
-
-    return boundAny;
-  });
-
-  Manager.method("$bindController", function(controller){
-    var modules = this.$extractBoundaries(this.$$boundaries.controller);
-    controller.bind(modules);
-  });
-
-  window.stik.Manager = Manager;
-})();
-
-window.stik.$$manager = new window.stik.Manager();
-
-window.stik.controller = function(controllerName, action, executionUnit){
-  if (typeof action === "string") {
-    return window.stik.$$manager.$addControllerWithAction(
+window.stik.controller = function( controllerName, action, executionUnit ){
+  if ( typeof action === "string" ) {
+    return window.stik.$$manager.addControllerWithAction(
       controllerName, action, executionUnit
     );
   } else {
-    return window.stik.$$manager.$addController(
+    return window.stik.$$manager.addController(
       controllerName, action
     );
   }
 };
 
-window.stik.behavior = function(name, executionUnit){
-  return this.$$manager.$addBehavior(name, executionUnit);
+window.stik.behavior = function( name, executionUnit ){
+  return window.stik.$$manager.addBehavior( name, executionUnit );
 };
 
 window.stik.bindLazy = function(){
-  if (!this.$$manager.$bindActions() & !this.$$manager.$applyBehaviors()) {
+  if ( !window.stik.$$manager.bindActions() & !window.stik.$$manager.applyBehaviors() ) {
     throw "Stik: Nothing new to bind!";
   }
 };
 
-window.stik.boundary = function(spec){
-  return this.$$manager.$addBoundary(spec);
+window.stik.boundary = function( spec ){
+  return window.stik.$$manager.addBoundary( spec );
 };
 
 (function(){
   var helpers = {},
       modules = {};
 
-  window.stik.helper = function(as, func){
+  window.stik.helper = function helper(as, func){
     if (!as) { throw "Stik: Helper needs a name"; }
     if (!func || typeof func !== "function") { throw "Stik: Helper needs a function"; }
 
@@ -542,10 +510,7 @@ window.stik.boundary = function(spec){
     return helpers[as];
   }
 
-  window.stik.boundary({
-    as: "$h",
-    to: helpers
-  });
+  window.stik.boundary({ as: "$h", to: helpers });
 }());
 
 window.stik.courier = function courier(){
@@ -596,11 +561,10 @@ window.stik.courier = function courier(){
 };
 
 window.stik.boundary({
-  as: "$courier",
-  to: window.stik.courier()
+  as: "$courier", to: window.stik.courier()
 });
 
-window.stik.viewBag = function($template){
+window.stik.viewBag = function viewBag($template){
   if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
 
   var obj = {},
@@ -673,18 +637,56 @@ window.stik.boundary({
   to: window.stik.viewBag
 });
 
-window.stik.labs.controller = function controllerLab(spec){
-  if (!spec) { throw "Stik: Controller Lab needs an environment to run"; }
-  if (!spec.name) { throw "Stik: Controller Lab needs a name"; }
-  if (!spec.action) { throw "Stik: Controller Lab needs the action name"; }
-  if (!spec.template) { throw "Stik: Controller Lab needs a template"; }
+window.stik.labs.behavior = function behaviorLab( spec ){
+  if ( !spec ) { throw "Stik: Behavior Lab needs an environment to run"; }
+  if ( !spec.name ) { throw "Stik: Behavior Lab needs a name"; }
+  if ( !spec.template ) { throw "Stik: Behavior Lab needs a template"; }
 
   var env = {},
       result;
 
   env.template = parseAsDOM();
 
-  result = window.stik.$$manager.$bindActionWithTemplate(
+  result = window.stik.$$manager.bindBehaviorWithTemplate(
+    spec.name, env.template
+  );
+
+  env.run = function( doubles ){
+    result.context.load(
+      result.executionUnit, mergeModules( doubles )
+    );
+  };
+
+  function parseAsDOM(){
+    var container = document.implementation.createHTMLDocument();
+    container.body.innerHTML = spec.template;
+    return container.body.firstChild;
+  }
+
+  function mergeModules( doubles ){
+    for ( dbl in doubles ) {
+      result.modules[ dbl ] = window.stik.injectable({
+        module: doubles[ dbl ]
+      });
+    }
+    return result.modules;
+  }
+
+  return env;
+};
+
+window.stik.labs.controller = function controllerLab( spec ){
+  if ( !spec ) { throw "Stik: Controller Lab needs an environment to run"; }
+  if ( !spec.name ) { throw "Stik: Controller Lab needs a name"; }
+  if ( !spec.action ) { throw "Stik: Controller Lab needs the action name"; }
+  if ( !spec.template ) { throw "Stik: Controller Lab needs a template"; }
+
+  var env = {},
+      result;
+
+  env.template = parseAsDOM();
+
+  result = window.stik.$$manager.bindActionWithTemplate(
     spec.name, spec.action, env.template
   );
 
@@ -694,18 +696,20 @@ window.stik.labs.controller = function controllerLab(spec){
     return container.body.firstChild;
   }
 
-  function run(doubles){
-    result.context.load(result.executionUnit, mergeModules(doubles));
-  } env.run = run;
-
-  function mergeModules(doubles){
-    for (dbl in doubles) {
-      result.modules[dbl] = window.stik.injectable({
-        module: doubles[dbl]
+  function mergeModules( doubles ){
+    for ( dbl in doubles ) {
+      result.modules[ dbl ] = window.stik.injectable({
+        module: doubles[ dbl ]
       });
     }
     return result.modules;
   }
 
+  env.run = function run( doubles ){
+    result.context.load(
+      result.executionUnit, mergeModules( doubles )
+    );
+  };
+
   return env;
-}
+};

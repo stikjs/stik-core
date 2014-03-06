@@ -24,7 +24,7 @@ describe("ControllerLab", function(){
     });
   });
 
-  it("should push data to the template", function(){
+  it("should run the specified controller action", function(){
     var template, lab;
 
     stik.controller("StarWarsCtrl", "Dialog", function($viewBag){

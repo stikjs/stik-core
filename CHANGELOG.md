@@ -1,5 +1,8 @@
 # 0.10.0 (2014-03-08)
 
+##Features
+- **Behavior Lab** Behaviors can now be tested using Behavior Lab ([c669286a81](https://github.com/stikjs/stik.js/commit/c669286a818ab461aa3a05177f5233cb05482695))
+
 ##Improvements
 - **Controller Lab** Stabilizing the Controller Lab api ([182335b59a](https://github.com/stikjs/stik.js/commit/182335b59a98a570178b555408cad42101e795fe))
 - **Boundary** Defaulting "from" to both controllers and behaviors ([00693adbd9](https://github.com/stikjs/stik.js/commit/00693adbd9e078a541ed0f87406fb474387e92d6))

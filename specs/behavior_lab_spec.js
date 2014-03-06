@@ -17,7 +17,7 @@ describe("BehaviorLab", function(){
     });
   });
 
-  it("should push data to the template", function(){
+  it("should run the specified behavior", function(){
     var template, lab;
 
     stik.behavior( "lightsaber-sparks", function( $template ){
