@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.0 | From: 06-03-2014
+// Version: 0.10.0 | From: 07-03-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -557,7 +557,7 @@ window.stik.viewBag = function viewBag( $template ){
   if (!$template) { throw "Stik: ViewBag needs a template to be attached to"; }
 
   var obj = {},
-      bindingKey = "data-bind";
+      bindingKey = "data-key";
 
   obj.$push = function( dataSet ){
     var fields = fieldsToBind(),

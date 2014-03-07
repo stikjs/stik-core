@@ -10,7 +10,7 @@ describe("ViewBag", function(){
       var template, viewBag, data;
 
       template = new DOMParser().parseFromString(
-        '<div><span data-bind="userName"></span></div>', "text/xml"
+        '<div><span data-key="userName"></span></div>', "text/xml"
       ).firstChild;
 
       viewBag = stik.viewBag(template);
@@ -29,8 +29,8 @@ describe("ViewBag", function(){
 
       template = new DOMParser().parseFromString(
         '<div>'+
-          '<span data-bind="userName"></span>' +
-          '<a href="#" data-bind="removal"></a>' +
+          '<span data-key="userName"></span>' +
+          '<a href="#" data-key="removal"></a>' +
         '</div>',
         "text/xml"
       ).firstChild;
@@ -57,7 +57,7 @@ describe("ViewBag", function(){
       var template, viewBag, data;
 
       template = new DOMParser().parseFromString(
-        '<div data-bind="userName"></div>',
+        '<div data-key="userName"></div>',
         "text/xml"
       ).firstChild;
 
@@ -77,8 +77,8 @@ describe("ViewBag", function(){
 
       template = new DOMParser().parseFromString(
         '<div>'+
-          '<input type="text" data-bind="speaker" />' +
-          '<textarea data-bind="catchPhrase"></textarea>' +
+          '<input type="text" data-key="speaker" />' +
+          '<textarea data-key="catchPhrase"></textarea>' +
         '</div>',
         "text/xml"
       ).firstChild;
@@ -106,9 +106,9 @@ describe("ViewBag", function(){
 
       template = new DOMParser().parseFromString(
         '<div>'+
-          '<span data-bind="userName"></span>' +
-          '<strong data-bind="dontBind"></strong>' +
-          '<a href="#" data-bind="removal"></a>' +
+          '<span data-key="userName"></span>' +
+          '<strong data-key="dontBind"></strong>' +
+          '<a href="#" data-key="removal"></a>' +
         '</div>',
         "text/xml"
       ).firstChild;
@@ -132,7 +132,7 @@ describe("ViewBag", function(){
       var template, viewBag, data;
 
       template = new DOMParser().parseFromString(
-        '<div><span data-bind="userName">Luke</span></div>',
+        '<div><span data-key="userName">Luke</span></div>',
         "text/xml"
       ).firstChild;
 
@@ -149,7 +149,7 @@ describe("ViewBag", function(){
       var template, viewBag;
 
       template = new DOMParser().parseFromString(
-        '<div data-bind="userName">Luke Skywalker</div>',
+        '<div data-key="userName">Luke Skywalker</div>',
         "text/xml"
       ).firstChild;
 
@@ -165,8 +165,8 @@ describe("ViewBag", function(){
 
       template = new DOMParser().parseFromString(
         '<div>'+
-          '<span data-bind="userName">Luke Skywalker</span>' +
-          '<a href="#" data-bind="removal">kill Luke Skywalker</a>' +
+          '<span data-key="userName">Luke Skywalker</span>' +
+          '<a href="#" data-key="removal">kill Luke Skywalker</a>' +
         '</div>',
         "text/xml"
       ).firstChild;

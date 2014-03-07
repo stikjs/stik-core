@@ -35,8 +35,8 @@ describe("ControllerLab", function(){
     });
 
     template = "<div data-controller=\"StarWarsCtrl\" data-action=\"Dialog\">" +
-      "<span class=\"luke\" data-bind=\"luke\"></span>" +
-      "<span class=\"vader\" data-bind=\"vader\"></span>" +
+      "<span class=\"luke\" data-key=\"luke\"></span>" +
+      "<span class=\"vader\" data-key=\"vader\"></span>" +
     "</div>";
 
     lab = stik.labs.controller({
@@ -66,8 +66,8 @@ describe("ControllerLab", function(){
     });
 
     template = "<div data-controller=\"StarWarsCtrl\" data-action=\"LightsaberDuel\">" +
-      "<span class=\"luke\" data-bind=\"luke\"></span>" +
-      "<span class=\"vader\" data-bind=\"vader\"></span>" +
+      "<span class=\"luke\" data-key=\"luke\"></span>" +
+      "<span class=\"vader\" data-key=\"vader\"></span>" +
     "</div>";
 
     viewBagDoubleMock = jasmine.createSpyObj("viewBag", ["$push"]);

@@ -250,10 +250,10 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
 ```
 ```html
 <div data-controller="MessageCtrl" data-action="Revelation">
-  <span data-bind="senderName"></span>
-  <span data-bind="receiverName"></span>
-  <span data-bind="message"></span>
-  <input data-bind="customNOOO"/>
+  <span data-key="senderName"></span>
+  <span data-key="receiverName"></span>
+  <span data-key="message"></span>
+  <input data-key="customNOOO"/>
 </div>
 ```
 
@@ -453,8 +453,8 @@ it("should push data to the template", function(){
   var template, lab;
 
   template = "<div data-controller=\"StarWarsCtrl\" data-action=\"Dialog\">" +
-    "<span class=\"luke\" data-bind=\"luke\"></span>" +
-    "<span class=\"vader\" data-bind=\"vader\"></span>" +
+    "<span class=\"luke\" data-key=\"luke\"></span>" +
+    "<span class=\"vader\" data-key=\"vader\"></span>" +
   "</div>";
 
   lab = stik.labs.controller({

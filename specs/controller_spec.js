@@ -4,7 +4,7 @@ describe("Controller", function(){
       var template, ctrl, result;
 
       template = document.createElement( "div" );
-      template.innerHTML = "<span data-bind=\"iAmYour\"></span>";
+      template.innerHTML = "<span data-key=\"iAmYour\"></span>";
 
       ctrl = stik.controller( "StarWarsCtrl", "Revelation", function( $viewBag ){
         $viewBag.$push({
@@ -26,7 +26,7 @@ describe("Controller", function(){
       var template, result, ctrl, action;
 
       template = document.createElement( "div" );
-      template.innerHTML = "<span data-bind=\"no\"></span>";
+      template.innerHTML = "<span data-key=\"no\"></span>";
 
       ctrl = stik.controller( "StarWarsCtrl", function( ctrl ){} );
 
