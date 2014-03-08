@@ -4,5 +4,6 @@ tmp/
 node_modules/
 bower_components/
 reports/
+docs/
 
 .DS_Store
