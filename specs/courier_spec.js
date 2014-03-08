@@ -36,15 +36,15 @@ describe("Courier", function(){
 
     it("should return a function to allow removing the receiver", function(){
       var courier = stik.courier(),
-          box = "new-item",
+          box = "missing-message",
           unsubscribe;
 
       unsubscribe = courier.$receive(box, function(){});
       unsubscribe();
 
       expect(function(){
-        courier.$send('new-item', {some: "data"});
-      }).toThrow("Stik: No receiver registered for 'new-item'");
+        courier.$send(box, {});
+      }).toThrow("Stik: No receiver registered for 'missing-message'");
     });
 
     it("while unsubscribing should maintain the other boxes intact", function(){
@@ -109,6 +109,21 @@ describe("Courier", function(){
       courier.$send("new-message", message);
 
       expect(receiver).toHaveBeenCalledWith(message);
+    });
+
+    it("should be able to wildcard a message", function(){
+      var courier = stik.courier(),
+          message = "some message",
+          newReceiver = jasmine.createSpy("newReceiver"),
+          addedReceiver = jasmine.createSpy("addedReceiver");
+
+      courier.$receive("message-new", newReceiver);
+      courier.$receive("message-added", addedReceiver);
+
+      courier.$send("message-*", message);
+
+      expect(newReceiver).toHaveBeenCalledWith(message);
+      expect(addedReceiver).toHaveBeenCalledWith(message);
     });
   });
 });
