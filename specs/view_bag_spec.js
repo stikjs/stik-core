@@ -1,7 +1,11 @@
 describe("ViewBag", function(){
   it("#initializing", function(){
+    var lab = stik.labs.boundary({
+      name: "$viewBag"
+    });
+
     expect(function(){
-      stik.viewBag()
+      lab.run({ $template: undefined })
     }).toThrow("Stik: ViewBag needs a template to be attached to");
   });
 
@@ -13,7 +17,11 @@ describe("ViewBag", function(){
         '<div><span data-key="userName"></span></div>', "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       data = {userName: 'Luke Skywalker'};
 
@@ -35,7 +43,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       data = {
         userName: 'Luke Skywalker',
@@ -61,7 +73,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       data = {userName: 'Luke Skywalker'};
 
@@ -83,7 +99,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       data = {
         speaker: "Darth Vader",
@@ -113,7 +133,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       data = {userName: 'Luke Skywalker'};
 
@@ -136,7 +160,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       viewBag.$push({userName: ""});
 
@@ -153,7 +181,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       dataSet = viewBag.$pull();
 
@@ -171,7 +203,11 @@ describe("ViewBag", function(){
         "text/xml"
       ).firstChild;
 
-      viewBag = stik.viewBag(template);
+      viewBag = stik.labs.boundary({
+        name: "$viewBag"
+      }).run({
+        $template: template
+      });
 
       dataSet = viewBag.$pull();
 
