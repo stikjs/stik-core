@@ -12,7 +12,7 @@ window.stik.labs.behavior = function behaviorLab( spec ){
     spec.name, env.template
   );
 
-  env.run = function( doubles ){
+  env.run = function run( doubles ){
     result.context.load(
       result.executionUnit, mergeModules( doubles )
     );

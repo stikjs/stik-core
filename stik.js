@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.0 | From: 08-03-2014
+// Version: 0.10.0 | From: 09-03-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -19,7 +19,7 @@ window.stik.injectable = function injectable( spec ){
   spec.instantiable = spec.instantiable || false;
   spec.resolvable = spec.resolvable || false;
 
-  function resolve( dependencies ){
+  spec.resolve = function resolve( dependencies ){
     if ( spec.instantiable === true ) {
       return buildModule(
         resolveDependencies( dependencies )
@@ -32,7 +32,7 @@ window.stik.injectable = function injectable( spec ){
     } else {
       return spec.module;
     }
-  } spec.resolve = resolve;
+  };
 
   function buildModule( dependencies ){
     var newInstance, value;
@@ -243,6 +243,8 @@ window.stik.createBoundary = function boundary( spec ){
     resolvable: spec.resolvable
   });
 
+  obj.name = spec.as;
+
   return obj;
 };
 
@@ -399,6 +401,16 @@ window.stik.manager = function manager(){
     }
 
     return boundAny;
+  };
+
+  obj.getBoundary = function getBoundary(name){
+    for ( type in boundaries ) {
+      for ( boundaryName in boundaries[ type ] ) {
+        if ( boundaryName === name ) {
+          return boundaries[ type ][ boundaryName ];
+        }
+      }
+    }
   };
 
   obj.$reset = function(){
@@ -658,7 +670,7 @@ window.stik.labs.behavior = function behaviorLab( spec ){
     spec.name, env.template
   );
 
-  env.run = function( doubles ){
+  env.run = function run( doubles ){
     result.context.load(
       result.executionUnit, mergeModules( doubles )
     );
@@ -697,6 +709,12 @@ window.stik.labs.controller = function controllerLab( spec ){
     spec.name, spec.action, env.template
   );
 
+  env.run = function run( doubles ){
+    result.context.load(
+      result.executionUnit, mergeModules( doubles )
+    );
+  };
+
   function parseAsDOM(){
     var container = document.implementation.createHTMLDocument();
     container.body.innerHTML = spec.template;
@@ -712,11 +730,32 @@ window.stik.labs.controller = function controllerLab( spec ){
     return result.modules;
   }
 
+  return env;
+};
+
+window.stik.labs.boundary = function boundaryLab( spec ){
+  if ( !spec ) { throw "Stik: Boundary Lab needs an environment to run"; }
+  if ( !spec.name ) { throw "Stik: Boundary Lab needs a name"; }
+
+  var env = {};
+
+  boundary = window.stik.$$manager.getBoundary( spec.name );
+
   env.run = function run( doubles ){
-    result.context.load(
-      result.executionUnit, mergeModules( doubles )
-    );
+    return boundary.to.resolve( asInjectables( doubles ) );
   };
+
+  function asInjectables( doubles ){
+    var injectableDoubles = {};
+
+    for ( dbl in doubles ) {
+      injectableDoubles[ dbl ] = window.stik.injectable({
+        module: doubles[ dbl ]
+      });
+    }
+
+    return injectableDoubles;
+  }
 
   return env;
 };

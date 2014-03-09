@@ -2,7 +2,7 @@ window.stik.injectable = function injectable( spec ){
   spec.instantiable = spec.instantiable || false;
   spec.resolvable = spec.resolvable || false;
 
-  function resolve( dependencies ){
+  spec.resolve = function resolve( dependencies ){
     if ( spec.instantiable === true ) {
       return buildModule(
         resolveDependencies( dependencies )
@@ -15,7 +15,7 @@ window.stik.injectable = function injectable( spec ){
     } else {
       return spec.module;
     }
-  } spec.resolve = resolve;
+  };
 
   function buildModule( dependencies ){
     var newInstance, value;

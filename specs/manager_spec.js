@@ -9,7 +9,7 @@ describe("Manager", function(){
     stik.$$manager.$reset();
   });
 
-  describe("#$addControllerWithAction", function(){
+  describe("#saddControllerWithAction", function(){
     it("should throw if any parameters is empty or missing", function(){
       var manager = stik.manager();
 
@@ -261,4 +261,38 @@ describe("Manager", function(){
       ).toHaveBeenCalledWith(behavior3);
     });
   });
+
+  describe("#getBoundary", function(){
+    it("should retreive a controller boundary", function(){
+      var manager = window.stik.manager(),
+          boundary;
+
+      manager.addBoundary({
+        as: "some-boundary",
+        from: "controller",
+        to: function(){}
+      });
+
+      boundary = manager.getBoundary("some-boundary");
+
+      expect(boundary).not.toBeUndefined();
+      expect(boundary.name).toEqual("some-boundary");
+    });
+
+    it("should retreive a behavior boundary", function(){
+      var manager = window.stik.manager(),
+          boundary;
+
+      manager.addBoundary({
+        as: "some-boundary",
+        from: "behavior",
+        to: function(){}
+      });
+
+      boundary = manager.getBoundary("some-boundary");
+
+      expect(boundary).not.toBeUndefined();
+      expect(boundary.name).toEqual("some-boundary");
+    });
+  })
 });

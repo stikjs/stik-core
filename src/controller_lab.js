@@ -13,6 +13,12 @@ window.stik.labs.controller = function controllerLab( spec ){
     spec.name, spec.action, env.template
   );
 
+  env.run = function run( doubles ){
+    result.context.load(
+      result.executionUnit, mergeModules( doubles )
+    );
+  };
+
   function parseAsDOM(){
     var container = document.implementation.createHTMLDocument();
     container.body.innerHTML = spec.template;
@@ -27,12 +33,6 @@ window.stik.labs.controller = function controllerLab( spec ){
     }
     return result.modules;
   }
-
-  env.run = function run( doubles ){
-    result.context.load(
-      result.executionUnit, mergeModules( doubles )
-    );
-  };
 
   return env;
 };

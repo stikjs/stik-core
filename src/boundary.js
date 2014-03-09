@@ -10,5 +10,7 @@ window.stik.createBoundary = function boundary( spec ){
     resolvable: spec.resolvable
   });
 
+  obj.name = spec.as;
+
   return obj;
 };

@@ -101,6 +101,16 @@ window.stik.manager = function manager(){
     return boundAny;
   };
 
+  obj.getBoundary = function getBoundary(name){
+    for ( type in boundaries ) {
+      for ( boundaryName in boundaries[ type ] ) {
+        if ( boundaryName === name ) {
+          return boundaries[ type ][ boundaryName ];
+        }
+      }
+    }
+  };
+
   obj.$reset = function(){
     controllers = {};
     behaviors = {};
