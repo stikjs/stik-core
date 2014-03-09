@@ -656,6 +656,28 @@ window.stik.boundary({
   to: window.stik.viewBag
 });
 
+stik.boundary({
+  as: "$params",
+  resolvable: true,
+  to: function( $template ){
+    var attrs = {}, name;
+
+    for ( attr in $template.attributes ) {
+      if ( $template.attributes[ attr ].value ) {
+        name = $template.attributes[ attr ].name
+        attrs[ parseName( name ) ] =
+          $template.attributes[ attr ].value;
+      }
+    }
+
+    function parseName( name ){
+      return name.match(/(data-)(.+)/)[ 2 ];
+    }
+
+    return attrs;
+  }
+});
+
 window.stik.labs.behavior = function behaviorLab( spec ){
   if ( !spec ) { throw "Stik: Behavior Lab needs an environment to run"; }
   if ( !spec.name ) { throw "Stik: Behavior Lab needs a name"; }
