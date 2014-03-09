@@ -525,7 +525,7 @@ expect(viewBagMock.$push).toHaveBeenCalledWith({/* ... */})
 
 ##Helping Stik.js
 ###I found a bug!
-If you found a repeatable bug then file an issue on [issues page](https://github.com/lukelex/stik.js/issues), preferably with a working example or repo.
+If you found a repeatable bug then file an issue on [issues page](https://github.com/stikjs/stik.js/issues), preferably with a working example or repo.
 
 ###I have a new sugestion!
 For Feature requests or followup on current tasks and development status check our [Trello Board](https://trello.com/b/KKddbfdU/stik-js). Feel free to comment there or file issues.
