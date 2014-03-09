@@ -1,9 +1,13 @@
 describe("Courier", function(){
   describe("#$receive", function(){
     it("should be able to send to one box", function(){
-      var courier = stik.courier(),
+      var courier,
           box = "create-item",
           opener = jasmine.createSpy('createBoxOpener');
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       courier.$receive(box, opener);
 
@@ -14,11 +18,15 @@ describe("Courier", function(){
     });
 
     it("should be able to send to multiple boxes", function(){
-      var courier = stik.courier(),
+      var courier,
           createBox = "create-item",
           updateBox = "updated-item",
           createBoxOpener = jasmine.createSpy('createBoxOpener'),
           updateBoxOpener = jasmine.createSpy('updateBoxOpener');
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       courier.$receive(createBox, createBoxOpener);
       courier.$receive(updateBox, updateBoxOpener);
@@ -35,9 +43,13 @@ describe("Courier", function(){
     });
 
     it("should return a function to allow removing the receiver", function(){
-      var courier = stik.courier(),
+      var courier,
           box = "missing-message",
           unsubscribe;
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       unsubscribe = courier.$receive(box, function(){});
       unsubscribe();
@@ -48,11 +60,15 @@ describe("Courier", function(){
     });
 
     it("while unsubscribing should maintain the other boxes intact", function(){
-      var courier = stik.courier(),
+      var courier,
           newItemBox = "new-item",
           changeItemBox = "change-item",
           changeItemOpener = jasmine.createSpy("opener"),
           newItemUnsubscribe, changeItemUnsubscribe;
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       newItemUnsubscribe = courier.$receive(newItemBox, function(){});
       changeItemUnsubscribe = courier.$receive(changeItemBox, changeItemOpener);
@@ -75,7 +91,9 @@ describe("Courier", function(){
 
   describe("#$send", function(){
     it("should throw if no $receiver is register", function(){
-      var courier = stik.courier();
+      var courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       expect(function(){
         courier.$send('new-item', {});
@@ -83,9 +101,13 @@ describe("Courier", function(){
     });
 
     it("a text message", function(){
-      var courier = stik.courier(),
+      var courier,
           message = "some message",
           receiver = jasmine.createSpy("receiver");
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       courier.$receive("new-message", receiver)
       courier.$send("new-message", message);
@@ -94,9 +116,13 @@ describe("Courier", function(){
     });
 
     it("an object message", function(){
-      var courier = stik.courier(),
-          receiver = jasmine.createSpy("receiver"),
-          message;
+      var courier,
+          message,
+          receiver = jasmine.createSpy("receiver");
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       message = {
         some: "super",
@@ -112,10 +138,14 @@ describe("Courier", function(){
     });
 
     it("should be able to wildcard a message", function(){
-      var courier = stik.courier(),
+      var courier,
           message = "some message",
           newReceiver = jasmine.createSpy("newReceiver"),
           addedReceiver = jasmine.createSpy("addedReceiver");
+
+      courier = stik.labs.boundary({
+        name: "$courier"
+      }).run()();
 
       courier.$receive("message-new", newReceiver);
       courier.$receive("message-added", addedReceiver);
