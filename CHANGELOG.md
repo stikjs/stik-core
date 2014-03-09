@@ -2,10 +2,13 @@
 
 ##Features
 - **Behavior Lab** Behaviors can now be tested using Behavior Lab ([c669286a81](https://github.com/stikjs/stik.js/commit/c669286a818ab461aa3a05177f5233cb05482695))
+- **Boundary Lab** Boudnaries can now be tested using Boundary Lab ([8d78632bab](https://github.com/stikjs/stik.js/commit/8d78632bab62e4690e892cae8858366464d8039c))
+- **$params** `data-*` params are now easily accessible through the $params boundary ([a390c6f367](https://github.com/stikjs/stik.js/commit/a390c6f367c27b47062369ff298bc4912bd0c72a))
+- **$courier** RegExp like messages can be sent to match mutiple receivers ([dd24e4d220](https://github.com/stikjs/stik.js/commit/dd24e4d220a7976983667b72c6493852c1f522ee))
 
 ##Improvements
 - **Controller Lab** Stabilizing the Controller Lab api ([182335b59a](https://github.com/stikjs/stik.js/commit/182335b59a98a570178b555408cad42101e795fe))
-- **Boundary** Defaulting "from" to both controllers and behaviors ([00693adbd9](https://github.com/stikjs/stik.js/commit/00693adbd9e078a541ed0f87406fb474387e92d6))
+- **Boundary** Defaulting `from` to both controllers and behaviors ([00693adbd9](https://github.com/stikjs/stik.js/commit/00693adbd9e078a541ed0f87406fb474387e92d6))
 
 # 0.9.0 (2014-03-01)
 

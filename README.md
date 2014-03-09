@@ -257,6 +257,21 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
 </div>
 ```
 
+###$params
+Captures all the `data-*` attributes defined in the template and gives you an object to easily access them.
+
+####Using it
+```html
+<div class="lightsaber-clash" data-force="strong" data-direction="downwards"></div>
+```
+
+```javascript
+stik.behavior("lightsaber-clash", function($params){
+  $params.force // "strong"
+  $params.direction // "downwards"
+});
+```
+
 ##Boundaries
 External libraries, objects and functions can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
 
@@ -496,6 +511,48 @@ it("should run the specified behavior", function(){
   expect(
     lab.template.className
   ).toEqual( "lightsaber-sparks sparkling" );
+});
+```
+
+####Boundary Lab
+```javascript
+// this boundary might be defined in your stik_params.js file
+stik.boundary({
+  as: "$params",
+  resolvable: true,
+  to: function( $template ){
+    var attrs = {}, name;
+
+    for ( attr in $template.attributes ) {
+      if ( $template.attributes[ attr ].value ) {
+        name = $template.attributes[ attr ].name
+        attrs[ parseName( name ) ] =
+          $template.attributes[ attr ].value;
+      }
+    }
+
+    function parseName( name ){
+      return name.match(/(data-)(.+)/)[ 2 ];
+    }
+
+    return attrs;
+  }
+});
+
+// and this in your specs/boundaries/stik_params_spec.js
+it("should retrieve one attribute from the template", function(){
+  var template = document.createElement("div"),
+      result;
+
+  template.setAttribute("data-id", "$081209j09urr123");
+
+  result = stik.labs.boundary({
+    name: "$params"
+  }).run({
+    $template: template
+  });
+
+  expect(result).toEqual( { id: "$081209j09urr123" } );
 });
 ```
 
