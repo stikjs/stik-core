@@ -1,4 +1,4 @@
-# 0.10.0 (2014-03-08)
+# 0.10.0 (2014-03-09)
 
 ##Features
 - **Behavior Lab** Behaviors can now be tested using Behavior Lab ([c669286a81](https://github.com/stikjs/stik.js/commit/c669286a818ab461aa3a05177f5233cb05482695))
