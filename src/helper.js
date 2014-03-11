@@ -6,7 +6,7 @@
     if ( !as ) { throw "Stik: Helper needs a name"; }
     if ( !func || typeof func !== "function" ) { throw "Stik: Helper needs a function"; }
 
-    modules[as] = window.stik.injectable({
+    modules[ as ] = window.stik.injectable({
       module: func,
       resolvable: true
     });

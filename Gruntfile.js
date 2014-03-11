@@ -15,6 +15,7 @@ module.exports = function(grunt){
     'src/courier.js',
     'src/view_bag.js',
     'src/params.js',
+    'src/utils.js',
     'src/behavior_lab.js',
     'src/controller_lab.js',
     'src/boundary_lab.js'
