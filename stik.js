@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.0 | From: 09-03-2014
+// Version: 0.11.0 | From: 11-03-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -18,8 +18,11 @@ window.stik = {
 window.stik.injectable = function injectable( spec ){
   spec.instantiable = spec.instantiable || false;
   spec.resolvable = spec.resolvable || false;
+  spec.cache = spec.cache || false;
 
   spec.resolve = function resolve( dependencies ){
+    if ( !!spec.cachedValue ) { return spec.cachedValue; }
+
     if ( spec.instantiable === true ) {
       return buildModule(
         resolveDependencies( dependencies )
@@ -58,7 +61,17 @@ window.stik.injectable = function injectable( spec ){
   }
 
   function callWithDependencies( context, dependencies ){
-    return spec.module.apply( context, dependencies );
+    var result = spec.module.apply( context, dependencies );
+
+    cacheValue(result);
+
+    return result;
+  }
+
+  function cacheValue( value ){
+    if ( spec.cache === true ){
+      spec.cachedValue = value;
+    }
   }
 
   return spec;
@@ -240,7 +253,8 @@ window.stik.createBoundary = function boundary( spec ){
   obj.to = window.stik.injectable({
     module: spec.to,
     instantiable: spec.instantiable,
-    resolvable: spec.resolvable
+    resolvable: spec.resolvable,
+    cache: spec.cache
   });
 
   obj.name = spec.as;
@@ -484,7 +498,7 @@ window.stik.behavior = function( name, executionUnit ){
   return window.stik.$$manager.addBehavior( name, executionUnit );
 };
 
-window.stik.bindLazy = function(){
+window.stik.lazyBind = window.stik.bindLazy = function(){
   if ( !window.stik.$$manager.bindActions() & !window.stik.$$manager.applyBehaviors() ) {
     throw "Stik: Nothing new to bind!";
   }
@@ -502,7 +516,7 @@ window.stik.boundary = function( spec ){
     if ( !as ) { throw "Stik: Helper needs a name"; }
     if ( !func || typeof func !== "function" ) { throw "Stik: Helper needs a function"; }
 
-    modules[as] = window.stik.injectable({
+    modules[ as ] = window.stik.injectable({
       module: func,
       resolvable: true
     });
@@ -518,6 +532,8 @@ window.stik.boundary = function( spec ){
 
 window.stik.boundary({
   as: "$courier",
+  resolvable: true,
+  cache: true,
   to: function courier(){
     var obj = {},
         subscriptions = {};
@@ -538,7 +554,7 @@ window.stik.boundary({
           openedBoxes,
           foundAny = false;
 
-      fetchSubscriptions( box , function(openers){
+      fetchSubscriptions( box , function( openers ){
         foundAny = true;
         i = openers.length;
         while ( i-- ) {
@@ -672,6 +688,34 @@ stik.boundary({
     }
 
     return attrs;
+  }
+});
+
+stik.helper( "$window", function(){
+  return window;
+});
+
+stik.helper( "debounce", function(){
+  return function( func, wait, immediate ){
+    // copied from underscore.js
+  	var timeout;
+  	return function(){
+  		var context = this, args = arguments;
+  		var later = function() {
+  			timeout = null;
+  			if ( !immediate ) func.apply( context, args );
+  		};
+  		var callNow = immediate && !timeout;
+  		clearTimeout( timeout );
+  		timeout = setTimeout( later, wait );
+  		if ( callNow ) func.apply( context, args );
+  	}
+  }
+});
+
+stik.helper( "goTo", function($window){
+  return function(url){
+    $window.location = url;
   }
 });
 
