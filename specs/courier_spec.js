@@ -7,7 +7,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       courier.$receive(box, opener);
 
@@ -26,7 +26,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       courier.$receive(createBox, createBoxOpener);
       courier.$receive(updateBox, updateBoxOpener);
@@ -49,7 +49,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       unsubscribe = courier.$receive(box, function(){});
       unsubscribe();
@@ -68,7 +68,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       newItemUnsubscribe = courier.$receive(newItemBox, function(){});
       changeItemUnsubscribe = courier.$receive(changeItemBox, changeItemOpener);
@@ -93,7 +93,7 @@ describe("Courier", function(){
     it("should throw if no $receiver is register", function(){
       var courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       expect(function(){
         courier.$send('new-item', {});
@@ -107,7 +107,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       courier.$receive("new-message", receiver)
       courier.$send("new-message", message);
@@ -122,7 +122,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       message = {
         some: "super",
@@ -145,7 +145,7 @@ describe("Courier", function(){
 
       courier = stik.labs.boundary({
         name: "$courier"
-      }).run()();
+      }).run();
 
       courier.$receive("message-new", newReceiver);
       courier.$receive("message-added", addedReceiver);

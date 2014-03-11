@@ -1,5 +1,7 @@
 window.stik.boundary({
   as: "$courier",
+  resolvable: true,
+  cache: true,
   to: function courier(){
     var obj = {},
         subscriptions = {};
@@ -20,7 +22,7 @@ window.stik.boundary({
           openedBoxes,
           foundAny = false;
 
-      fetchSubscriptions( box , function(openers){
+      fetchSubscriptions( box , function( openers ){
         foundAny = true;
         i = openers.length;
         while ( i-- ) {

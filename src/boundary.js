@@ -7,7 +7,8 @@ window.stik.createBoundary = function boundary( spec ){
   obj.to = window.stik.injectable({
     module: spec.to,
     instantiable: spec.instantiable,
-    resolvable: spec.resolvable
+    resolvable: spec.resolvable,
+    cache: spec.cache
   });
 
   obj.name = spec.as;

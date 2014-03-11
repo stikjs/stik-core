@@ -1,8 +1,11 @@
 window.stik.injectable = function injectable( spec ){
   spec.instantiable = spec.instantiable || false;
   spec.resolvable = spec.resolvable || false;
+  spec.cache = spec.cache || false;
 
   spec.resolve = function resolve( dependencies ){
+    if ( !!spec.cachedValue ) { return spec.cachedValue; }
+
     if ( spec.instantiable === true ) {
       return buildModule(
         resolveDependencies( dependencies )
@@ -41,7 +44,17 @@ window.stik.injectable = function injectable( spec ){
   }
 
   function callWithDependencies( context, dependencies ){
-    return spec.module.apply( context, dependencies );
+    var result = spec.module.apply( context, dependencies );
+
+    cacheValue(result);
+
+    return result;
+  }
+
+  function cacheValue( value ){
+    if ( spec.cache === true ){
+      spec.cachedValue = value;
+    }
   }
 
   return spec;
