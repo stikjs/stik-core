@@ -16,7 +16,7 @@ window.stik.behavior = function( name, executionUnit ){
   return window.stik.$$manager.addBehavior( name, executionUnit );
 };
 
-window.stik.bindLazy = function(){
+window.stik.lazyBind = window.stik.bindLazy = function(){
   if ( !window.stik.$$manager.bindActions() & !window.stik.$$manager.applyBehaviors() ) {
     throw "Stik: Nothing new to bind!";
   }
