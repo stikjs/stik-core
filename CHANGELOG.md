@@ -1,8 +1,17 @@
+# 0.10.1 (2014-03-12)
+
+##Improvements
+- **Boundary cache** [f69534682d](https://github.com/stikjs/stik.js/commit/f69534682d3b111e107d674982326b2f41f74bc9)
+- **lazyBind** Aliasing lazyBind to bindLazy ([0cf1ac1937](https://github.com/stikjs/stik.js/commit/0cf1ac193722e013d26679afbe403c9f53841345))
+
+##Bugs
+- **$courier** Caching courier to avoid duplicate instances ([f69534682d](https://github.com/stikjs/stik.js/commit/f69534682d3b111e107d674982326b2f41f74bc9))
+
 # 0.10.0 (2014-03-09)
 
 ##Features
 - **Behavior Lab** Behaviors can now be tested using Behavior Lab ([c669286a81](https://github.com/stikjs/stik.js/commit/c669286a818ab461aa3a05177f5233cb05482695))
-- **Boundary Lab** Boudnaries can now be tested using Boundary Lab ([8d78632bab](https://github.com/stikjs/stik.js/commit/8d78632bab62e4690e892cae8858366464d8039c))
+- **Boundary Lab** Boundaries can now be tested using Boundary Lab ([8d78632bab](https://github.com/stikjs/stik.js/commit/8d78632bab62e4690e892cae8858366464d8039c))
 - **$params** `data-*` params are now easily accessible through the $params boundary ([a390c6f367](https://github.com/stikjs/stik.js/commit/a390c6f367c27b47062369ff298bc4912bd0c72a))
 - **$courier** RegExp like messages can be sent to match mutiple receivers ([dd24e4d220](https://github.com/stikjs/stik.js/commit/dd24e4d220a7976983667b72c6493852c1f522ee))
 

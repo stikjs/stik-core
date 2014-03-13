@@ -389,12 +389,25 @@ stik.controller("AppCtrl", "List", function(TwoWayDataBinding){
 });
 ```
 
-###Helpers
+###Cachable Boundaries
+Function and Instantiable boundaries can be cached to avoid duplicate calls or expensive operations. The function will be called the first time and its value will be cached for all subsequencial calls.
+
+```javascript
+stik.boundary({
+  as: "expensiveFunction",
+  cache: true,
+  to: function(){
+    return expensiveOperation();
+  }
+});
+```
+
+##Helpers
 Helpers can be used as a shortcut to create small functional pieces of code.
 
 All defined helpers reside under the **$h** module that can be injected into controllers, behaviors and boundaries.
 
-####Defining
+###Defining
 ```javascript
 // this helper does not have dependencies
 stik.helper("hasClass", function(){
@@ -417,7 +430,7 @@ stik.helper("toggleClass", function(hasClass){
 });
 ```
 
-####Using it
+###Using it
 ```javascript
 stik.controller("AppCtrl", "List", function($template, $h){
   $h.toggleClass($template, "stik-is-awesome");
@@ -447,12 +460,12 @@ stik.boundary({
 });
 ```
 
-###Labs
+##Labs
 Stik comes with a collection of utilities, called Labs, that allows you to write automated tests for your components.
 
 Labs are framework agnostic, which means that they can be written using [jasmine](http://jasmine.github.io/edge/introduction.html), [QUnit](https://qunitjs.com/), or any other assertion library out there.
 
-####Controller Lab
+###Controller Lab
 
 ```javascript
 // this controller might be defined in your star_wars_ctrl.js file
@@ -489,7 +502,7 @@ it("should push data to the template", function(){
 });
 ```
 
-####Behavior Lab
+###Behavior Lab
 ```javascript
 // this behavior might be defined in your lightsaber-sparks.js file
 stik.behavior( "lightsaber-sparks", function( $template ){
@@ -514,7 +527,7 @@ it("should run the specified behavior", function(){
 });
 ```
 
-####Boundary Lab
+###Boundary Lab
 ```javascript
 // this boundary might be defined in your stik_params.js file
 stik.boundary({
@@ -556,7 +569,7 @@ it("should retrieve one attribute from the template", function(){
 });
 ```
 
-####Mocks and Stubs
+###Mocks and Stubs
 Eventually your components might depend on external services or have expensive operations. For those situations every Lab provides an interfaces for you to inject doubles instead of the real entities.
 
 For more information on Mocks and Stubs please read [Mocks Aren't Stubs](http://martinfowler.com/articles/mocksArentStubs.html). And for a more in depth look at how to write testable software be sure to read this awesome book [Growing Object-Oriented Software, Guided by Tests](http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627/ref=sr_1_1?ie=UTF8&qid=1393900349&sr=8-1&keywords=growing+object-oriented+software+guided+by+tests)
