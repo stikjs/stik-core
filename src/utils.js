@@ -1,3 +1,5 @@
+stik.boundary({ as: "$window", to: window });
+
 stik.helper( "$window", function(){
   return window;
 });

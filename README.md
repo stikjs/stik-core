@@ -460,6 +460,51 @@ stik.boundary({
 });
 ```
 
+##Utils
+There are a few predefined boundaries and helpers to help you out in the development process and/or mocking your dependencies.
+
+###$window
+Allows you to mock he window global obj
+```javascript
+stik.behavior("someWindowDependentBehavior", function($window){
+  $window.AudioListener();
+  // in this way you can later on
+  // mock the window object on your tests
+});
+
+// or
+
+stik.helper("clearTimeout", function($window){
+  return $window.clearTimeout;
+});
+```
+
+###goTo
+Gives you a mockable interface to `window.location`.
+
+```javascript
+stik.controller("AppCtrl", "Posts", function($h){
+  $h.goTo('/posts/73892');
+  // mockable redirect
+});
+```
+
+###debounce
+Debouncing ensures that a method gets executed only once, during the specified interval, even if several calls were triggered.
+
+```javascript
+stik.behavior("shineOnMouseMove", function($h, $template){
+  shineFunc.bind({}, $template);
+
+  $template.addEventListener("mousemove", function(){
+    $h.debounce(shineThis, 500);
+    // the `shineThis` function will only be called
+    // once within 500ms even if the browser triggers
+    // 100 events
+  });
+});
+```
+
 ##Labs
 Stik comes with a collection of utilities, called Labs, that allows you to write automated tests for your components.
 
