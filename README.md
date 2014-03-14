@@ -496,12 +496,10 @@ Debouncing ensures that a method gets executed only once, during the specified i
 stik.behavior("shineOnMouseMove", function($h, $template){
   shineFunc.bind({}, $template);
 
-  $template.addEventListener("mousemove", function(){
-    $h.debounce(shineThis, 500);
-    // the `shineThis` function will only be called
-    // once within 500ms even if the browser triggers
-    // 100 events
-  });
+  // the `shineThis` function will only be called
+  // once within 500ms even if the browser triggers
+  // 100+ mouse events
+  $template.addEventListener("mousemove", $h.debounce(shineThis, 500));
 });
 ```
 
