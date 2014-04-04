@@ -746,9 +746,9 @@ stik.helper("addClass", function(){
 stik.helper("toggleClass", function(hasClass, addClass, removeClass){
   return function toggleClass(elm, selector){
     if (hasClass(elm, selector)) {
-      removeClass();
+      removeClass(elm, selector);
     } else if (!hasClass(elm, selector)) {
-      addClass();
+      addClass(elm, selector);
     }
   }
 });
