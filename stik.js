@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.2 | From: 05-04-2014
+// Version: 0.11.0 | From: 05-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -700,7 +700,7 @@ stik.helper( "$window", function(){
 });
 
 stik.helper( "debounce", function(){
-  return function( func, wait, immediate ){
+  return function debounce( func, wait, immediate ){
     // copied from underscore.js
   	var timeout;
   	return function(){
@@ -731,20 +731,20 @@ stik.helper("hasClass", function(){
 });
 
 stik.helper("removeClass", function(){
-  return function(elm, selector){
+  return function removeClass(elm, selector){
     var regex = new RegExp("\\b\\s?" + selector + "\\b", "g");
     elm.className = elm.className.replace(regex, '');
   }
 });
 
 stik.helper("addClass", function(){
-  return function(elm, selector){
+  return function addClass(elm, selector){
     elm.className += " " + selector;
   }
 });
 
 stik.helper("toggleClass", function(hasClass, addClass, removeClass){
-  return function(elm, selector){
+  return function toggleClass(elm, selector){
     if (hasClass(elm, selector)) {
       removeClass();
     } else if (!hasClass(elm, selector)) {
