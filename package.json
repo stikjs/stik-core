@@ -1,6 +1,6 @@
 {
   "name": "stik.js",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "description": "A JS library to wire you JavaScript execution to your HTML template",
   "main": "stik.js",
   "scripts": {
