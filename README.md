@@ -257,7 +257,7 @@ stik.controller("MessageCtrl", "Revelation", function($viewBag){
 </div>
 ```
 
-###$params
+###$data
 Captures all the `data-*` attributes defined in the template and gives you an object to easily access them.
 
 ####Using it
@@ -266,9 +266,9 @@ Captures all the `data-*` attributes defined in the template and gives you an ob
 ```
 
 ```javascript
-stik.behavior("lightsaber-clash", function($params){
-  $params.force // "strong"
-  $params.direction // "downwards"
+stik.behavior("lightsaber-clash", function($data){
+  $data.force // "strong"
+  $data.direction // "downwards"
 });
 ```
 
@@ -572,9 +572,9 @@ it("should run the specified behavior", function(){
 
 ###Boundary Lab
 ```javascript
-// this boundary might be defined in your stik_params.js file
+// this boundary might be defined in your stik_data.js file
 stik.boundary({
-  as: "$params",
+  as: "$data",
   resolvable: true,
   to: function( $template ){
     var attrs = {}, name;
@@ -603,7 +603,7 @@ it("should retrieve one attribute from the template", function(){
   template.setAttribute("data-id", "$081209j09urr123");
 
   result = stik.labs.boundary({
-    name: "$params"
+    name: "$data"
   }).run({
     $template: template
   });

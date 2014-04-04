@@ -723,6 +723,36 @@ stik.helper( "goTo", function($window){
   }
 });
 
+stik.helper("hasClass", function(){
+  return function(elm, selector){
+    var className = " " + selector + " ";
+    return (" " + elm.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1;
+  }
+});
+
+stik.helper("removeClass", function(){
+  return function(elm, selector){
+    var regex = new RegExp("\\b\\s?" + selector + "\\b", "g");
+    elm.className = elm.className.replace(regex, '');
+  }
+});
+
+stik.helper("addClass", function(){
+  return function(elm, selector){
+    elm.className += " " + selector;
+  }
+});
+
+stik.helper("toggleClass", function(hasClass, addClass, removeClass){
+  return function(elm, selector){
+    if (hasClass(elm, selector)) {
+      removeClass();
+    } else if (!hasClass(elm, selector)) {
+      addClass();
+    }
+  }
+});
+
 window.stik.labs.behavior = function behaviorLab( spec ){
   if ( !spec ) { throw "Stik: Behavior Lab needs an environment to run"; }
   if ( !spec.name ) { throw "Stik: Behavior Lab needs a name"; }
