@@ -3,7 +3,7 @@ window.stik.createBehavior = function behavior( spec ){
   if ( spec.name.indexOf(" ") !== -1 ) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
   if ( !spec.executionUnit ) { throw "Stik: Behavior needs a function to use as its execution unit"; }
 
-  var behaviorKey = "data-behaviors"
+  var behaviorKey = "data-behaviors";
 
   spec.bind = function bind( modules ){
     var templates = spec.findTemplates(),

@@ -1,4 +1,4 @@
-describe("$params", function(){
+describe("$data", function(){
   it("should retrieve one attribute from the template", function(){
     var template = document.createElement("div"),
         result;
@@ -6,7 +6,7 @@ describe("$params", function(){
     template.setAttribute("data-id", "$081209j09urr123");
 
     result = stik.labs.boundary({
-      name: "$params"
+      name: "$data"
     }).run({
       $template: template
     });
@@ -23,7 +23,7 @@ describe("$params", function(){
     template.setAttribute("data-relative", "$0129740y4u2i2");
 
     result = stik.labs.boundary({
-      name: "$params"
+      name: "$data"
     }).run({
       $template: template
     });
@@ -43,7 +43,7 @@ describe("$params", function(){
     template.setAttribute("data-is-more-active", "true");
 
     result = stik.labs.boundary({
-      name: "$params"
+      name: "$data"
     }).run({
       $template: template
     });

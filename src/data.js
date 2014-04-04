@@ -1,5 +1,5 @@
 stik.boundary({
-  as: "$params",
+  as: "$data",
   resolvable: true,
   to: function( $template ){
     var attrs = {}, name;
@@ -7,8 +7,10 @@ stik.boundary({
     for ( attr in $template.attributes ) {
       if ( $template.attributes[ attr ].value ) {
         name = $template.attributes[ attr ].name
-        attrs[ parseName( name ) ] =
-          $template.attributes[ attr ].value;
+        if (name.match(/^data-/m)) {
+          attrs[ parseName( name ) ] =
+            $template.attributes[ attr ].value;
+        }
       }
     }
 

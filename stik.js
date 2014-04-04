@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.10.1 | From: 12-03-2014
+// Version: 0.10.2 | From: 05-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -192,7 +192,7 @@ window.stik.createBehavior = function behavior( spec ){
   if ( spec.name.indexOf(" ") !== -1 ) { throw "Stik: '" + spec.name + "' is not a valid Behavior name. Please replace empty spaces with dashes ('-')"; }
   if ( !spec.executionUnit ) { throw "Stik: Behavior needs a function to use as its execution unit"; }
 
-  var behaviorKey = "data-behaviors"
+  var behaviorKey = "data-behaviors";
 
   spec.bind = function bind( modules ){
     var templates = spec.findTemplates(),
@@ -670,7 +670,7 @@ window.stik.boundary({
 });
 
 stik.boundary({
-  as: "$params",
+  as: "$data",
   resolvable: true,
   to: function( $template ){
     var attrs = {}, name;
@@ -678,8 +678,10 @@ stik.boundary({
     for ( attr in $template.attributes ) {
       if ( $template.attributes[ attr ].value ) {
         name = $template.attributes[ attr ].name
-        attrs[ parseName( name ) ] =
-          $template.attributes[ attr ].value;
+        if (name.match(/^data-/m)) {
+          attrs[ parseName( name ) ] =
+            $template.attributes[ attr ].value;
+        }
       }
     }
 
@@ -690,6 +692,8 @@ stik.boundary({
     return attrs;
   }
 });
+
+stik.boundary({ as: "$window", to: window });
 
 stik.helper( "$window", function(){
   return window;
