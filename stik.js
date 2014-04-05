@@ -717,39 +717,55 @@ stik.helper( "debounce", function(){
   }
 });
 
-stik.helper( "goTo", function($window){
-  return function(url){
+stik.helper( "goTo", function( $window ){
+  return function( url ){
     $window.location = url;
   }
 });
 
-stik.helper("hasClass", function(){
-  return function(elm, selector){
+stik.helper( "hasClass", function(){
+  return function( elm, selector ){
     var className = " " + selector + " ";
-    return (" " + elm.className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1;
+    return ( " " + elm.className + " " ).
+      replace( /[\n\t]/g, " " ).
+      indexOf( className ) > -1;
   }
 });
 
-stik.helper("removeClass", function(){
-  return function removeClass(elm, selector){
-    var regex = new RegExp("\\b\\s?" + selector + "\\b", "g");
-    elm.className = elm.className.replace(regex, '');
+stik.helper( "removeClass", function(){
+  return function removeClass( elm, selector ){
+    var regex = new RegExp( "\\b\\s?" + selector + "\\b", "g" );
+    elm.className = elm.className.replace( regex, '' );
   }
 });
 
-stik.helper("addClass", function(){
-  return function addClass(elm, selector){
+stik.helper( "addClass", function(){
+  return function addClass( elm, selector ){
     elm.className += " " + selector;
   }
 });
 
-stik.helper("toggleClass", function(hasClass, addClass, removeClass){
-  return function toggleClass(elm, selector){
-    if (hasClass(elm, selector)) {
-      removeClass(elm, selector);
-    } else if (!hasClass(elm, selector)) {
-      addClass(elm, selector);
+stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
+  return function toggleClass( elm, selector ){
+    if ( hasClass( elm, selector ) ) {
+      removeClass( elm, selector );
+    } else if ( !hasClass( elm, selector ) ) {
+      addClass( elm, selector );
     }
+  }
+});
+
+stik.helper( "deepExtend", function(){
+  return function deepExtend( destination, source ){
+    for ( var property in source ) {
+      if ( Object.isObjectLiteral( destination[property] ) && Object.isObjectLiteral( source[ property ] ) ) {
+        destination[ property ] = destination[ property ] || {};
+        arguments.callee( destination[ property ], source[ property ]);
+      } else {
+        destination[ property ] = source[ property ];
+      }
+    }
+    return destination;
   }
 });
 

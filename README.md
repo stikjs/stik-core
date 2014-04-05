@@ -489,6 +489,55 @@ stik.controller("AppCtrl", "Posts", function($h){
 });
 ```
 
+###addClass
+Adds the specified class to the element.
+
+```javascript
+stik.behavior("active-on-focus", function($template, $h){
+  $template.onfocus = function(){
+    $h.addClass($template, "active");
+  };
+});
+```
+
+###removeClass
+Removes the specified class from the element.
+
+```javascript
+stik.behavior("active-on-focus", function($template, $h){
+  // ...
+  $template.onblur = function(){
+    $h.removeClass($template, "active");
+  };
+});
+```
+
+###hasClass
+Checks whether the element has the specified class.
+
+```javascript
+stik.behavior("active-on-click", function($template, $h){
+  $template.addEventListener "click", function(){
+    if ($h.hasClass($template, "active")) {
+      $h.removeClass($template, "active");
+    } else {
+      $h.addClass($template, "active");
+    }
+  };
+});
+```
+
+###toggleClass
+Toggles the specified class on the element.
+
+```javascript
+stik.behavior("active-on-click", function($template, $h){
+  $template.addEventListener "click", function(){
+    $h.toggleClass($template, "active");
+  };
+});
+```
+
 ###debounce
 Debouncing ensures that a method gets executed only once, during the specified interval, even if several calls were triggered.
 
@@ -500,6 +549,21 @@ stik.behavior("shineOnMouseMove", function($h, $template){
   // once within 500ms even if the browser triggers
   // 100+ mouse events
   $template.addEventListener("mousemove", $h.debounce(shineThis, 500));
+});
+```
+
+###deepExtend
+Gives you the ability to deep copy all properties and values from one object to another.
+
+```javascript
+stik.controller("AppCtrl", "Post", function($h, httpGet){
+  currentPost = {};
+
+  anotherPost = httpGet("/posts/1029783.json");
+
+  $h.deepExtend currentPost, anotherPost
+  // currentPost will have all new properties
+  // and values from anotherPost
 });
 ```
 
