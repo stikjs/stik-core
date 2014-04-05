@@ -37,16 +37,20 @@ stik.helper( "hasClass", function(){
   }
 });
 
-stik.helper( "removeClass", function(){
+stik.helper( "removeClass", function( hasClass ){
   return function removeClass( elm, selector ){
-    var regex = new RegExp( "\\b\\s?" + selector + "\\b", "g" );
-    elm.className = elm.className.replace( regex, '' );
+    if ( hasClass( elm, selector ) ){
+      var regex = new RegExp( "\\b\\s?" + selector + "\\b", "g" );
+      elm.className = elm.className.replace( regex, '' );
+    }
   }
 });
 
-stik.helper( "addClass", function(){
+stik.helper( "addClass", function( hasClass ){
   return function addClass( elm, selector ){
-    elm.className += " " + selector;
+    if ( !hasClass( elm, selector ) ){
+      elm.className += " " + selector;
+    }
   }
 });
 
