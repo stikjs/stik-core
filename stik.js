@@ -920,7 +920,7 @@ window.stik.labs.helper = function helperLab( spec ){
     return function(){
       return helpers[ spec.name ].apply( {}, arguments );
     }
-    helpers.cleaDoubles();
+    helpers.cleanDoubles();
   };
 
   return env;
