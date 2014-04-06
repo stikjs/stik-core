@@ -47,7 +47,7 @@ describe("Manager", function(){
           from: "different",
           to: {}
         });
-      }).toThrow( "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both" );
+      }).toThrow( "Stik: Invalid boundary 'from' specified. Please use 'controller', 'behavior', 'all' or leave it blank to default to 'all'" );
 
       expect(function(){
         manager.addBoundary({

@@ -317,7 +317,7 @@ window.stik.injector = function injector( spec ){
 window.stik.manager = function manager(){
   var behaviors   = {},
       controllers = {},
-      boundaries  = { controller:{}, behavior:{} },
+      boundaries  = { all: {}, controller:{}, behavior:{} },
       obj = {};
 
   obj.addControllerWithAction = function( controllerName, actionName, executionUnit ){
@@ -351,12 +351,14 @@ window.stik.manager = function manager(){
   obj.addBoundary = function( spec ){
     var boundary;
 
-    spec.from = spec.from || "controller|behavior";
+    spec.from = spec.from || "all";
 
-    parseFrom( spec.from, function( parsedFrom ){
+    if ( [ "all", "controller", "behavior" ].indexOf( spec.from ) === -1 ) {
+      throw "Stik: Invalid boundary 'from' specified. Please use 'controller', 'behavior', 'all' or leave it blank to default to 'all'";
+    } else {
       boundary = window.stik.createBoundary( spec );
-      boundaries[ parsedFrom ][ spec.as ] = boundary;
-    });
+      boundaries[ spec.from ][ spec.as ] = boundary;
+    }
 
     return boundary;
   };
@@ -440,19 +442,6 @@ window.stik.manager = function manager(){
     return ctrl;
   }
 
-  function parseFrom( from, forEachFound ){
-    var targets = from.toLowerCase().split( "|" ),
-        i = targets.length;
-
-    while ( i-- ) {
-      if (targets[ i ] !== "controller" && targets[ i ] !== "behavior") {
-        throw "Stik: Invalid boundary 'from' specified. Please use 'controller' or 'behavior' or leave it blank to default to both";
-      } else {
-        forEachFound( targets[ i ] );
-      }
-    }
-  }
-
   function isBehaviorRegistered( name ){
     return !!behaviors[ name ];
   }
@@ -462,11 +451,14 @@ window.stik.manager = function manager(){
   }
 
   function extractBoundaries( collection ){
-    var modules = {},
-        key;
+    var key,
+        modules = {};
 
     for ( key in collection ) {
       modules[ key ] = collection[ key ].to;
+    }
+    for ( key in boundaries.all ) {
+      modules[ key ] = boundaries.all[ key ].to;
     }
 
     return modules;
