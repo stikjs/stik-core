@@ -6,7 +6,7 @@
   "authors": [
     "Lukas Alexandre <lukas@codelogic.me>"
   ],
-  "description": "A JS library to wire you JavaScript execution to your HTML template",
+  "description": "A JS framework to wire your JavaScript execution to your server-side rendered HTML templates",
   "keywords": [
     "scope",
     "management",
