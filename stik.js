@@ -502,7 +502,8 @@ window.stik.boundary = function( spec ){
 
 (function(){
   var helpers = {},
-      modules = {};
+      modules = {},
+      tmpDependencies = {};
 
   window.stik.helper = function helper( as, func ){
     if ( !as ) { throw "Stik: Helper needs a name"; }
@@ -513,11 +514,30 @@ window.stik.boundary = function( spec ){
       resolvable: true
     });
     helpers[ as ] = function(){
-      return modules[ as ].resolve( modules ).apply( {}, arguments );
+      var func = modules[ as ].resolve( withDependencies() );
+      return func.apply( {}, arguments );
     };
 
     return helpers[ as ];
+  };
+
+  function withDependencies(){
+    for ( name in modules ) {
+      if ( !tmpDependencies.hasOwnProperty( name ) ) {
+        tmpDependencies[ name ] = modules[ name ];
+      }
+    }
+
+    return tmpDependencies;
   }
+
+  helpers.pushDoubles = function( doubles ){
+    for ( name in doubles ) {
+      tmpDependencies[ name ] = window.stik.injectable({
+        module: doubles[ name ]
+      });
+    }
+  };
 
   window.stik.boundary( { as: "$h", to: helpers } );
 }());
@@ -685,7 +705,7 @@ stik.boundary({
   }
 });
 
-stik.boundary({ as: "$window", to: window });
+stik.boundary( { as: "$window", to: window } );
 
 stik.helper( "$window", function(){
   return window;
@@ -694,18 +714,18 @@ stik.helper( "$window", function(){
 stik.helper( "debounce", function(){
   return function debounce( func, wait, immediate ){
     // copied from underscore.js
-  	var timeout;
-  	return function(){
-  		var context = this, args = arguments;
-  		var later = function() {
-  			timeout = null;
-  			if ( !immediate ) func.apply( context, args );
-  		};
-  		var callNow = immediate && !timeout;
-  		clearTimeout( timeout );
-  		timeout = setTimeout( later, wait );
-  		if ( callNow ) func.apply( context, args );
-  	}
+    var timeout;
+    return function(){
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if ( !immediate ) func.apply( context, args );
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout( timeout );
+      timeout = setTimeout( later, wait );
+      if ( callNow ) func.apply( context, args );
+    }
   }
 });
 
@@ -736,7 +756,7 @@ stik.helper( "removeClass", function( hasClass ){
 stik.helper( "addClass", function( hasClass ){
   return function addClass( elm, selector ){
     if ( !hasClass( elm, selector ) ){
-      elm.className += " " + selector;
+      elm.className = ( elm.className + " " + selector ).trim();
     }
   }
 });
@@ -751,10 +771,26 @@ stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
   }
 });
 
+stik.helper( "hideElm", function(){
+  return function hideElm( elm ){
+    elm.style.display = "none";
+  }
+});
+
+stik.helper( "showElm", function(){
+  return function showElm( elm ){
+    if ( elm.style.removeProperty ) {
+      elm.style.removeProperty( "display" );
+    } else {
+      elm.style.removeAttribute( "display" );
+    }
+  }
+});
+
 stik.helper( "deepExtend", function(){
   return function deepExtend( destination, source ){
     for ( var property in source ) {
-      if ( Object.isObjectLiteral( destination[property] ) && Object.isObjectLiteral( source[ property ] ) ) {
+      if ( Object.isObjectLiteral( destination[ property ] ) && Object.isObjectLiteral( source[ property ] ) ) {
         destination[ property ] = destination[ property ] || {};
         arguments.callee( destination[ property ], source[ property ]);
       } else {
@@ -864,6 +900,24 @@ window.stik.labs.boundary = function boundaryLab( spec ){
 
     return injectableDoubles;
   }
+
+  return env;
+};
+
+window.stik.labs.helper = function helperLab( spec ){
+  if ( !spec ) { throw "Stik: Helper Lab needs an environment to run"; }
+  if ( !spec.name ) { throw "Stik: Helper Lab needs a name"; }
+
+  var env = {},
+      boundary = window.stik.labs.boundary( { name: "$h" } );
+
+  env.run = function run( doubles ){
+    var helpers = boundary.run( doubles );
+    helpers.pushDoubles( doubles );
+    return function(){
+      return helpers[ spec.name ].apply( {}, arguments );
+    }
+  };
 
   return env;
 };

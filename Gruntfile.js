@@ -1,7 +1,6 @@
 module.exports = function(grunt){
   var srcFiles = [
     'src/setup.js',
-    'src/augmentations.js',
     'src/injectable.js',
     'src/controller.js',
     'src/action.js',
@@ -18,7 +17,8 @@ module.exports = function(grunt){
     'src/utils.js',
     'src/behavior_lab.js',
     'src/controller_lab.js',
-    'src/boundary_lab.js'
+    'src/boundary_lab.js',
+    'src/helper_lab.js'
   ];
 
   grunt.initConfig({
