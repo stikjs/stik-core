@@ -539,6 +539,10 @@ window.stik.boundary = function( spec ){
     }
   };
 
+  helpers.cleanDoubles = function(){
+    tmpDependencies = {};
+  };
+
   window.stik.boundary( { as: "$h", to: helpers } );
 }());
 
@@ -917,6 +921,7 @@ window.stik.labs.helper = function helperLab( spec ){
     return function(){
       return helpers[ spec.name ].apply( {}, arguments );
     }
+    helpers.cleaDoubles();
   };
 
   return env;

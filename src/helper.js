@@ -1,6 +1,7 @@
 (function(){
   var helpers = {},
-      modules = {};
+      modules = {},
+      tmpDependencies = {};
 
   window.stik.helper = function helper( as, func ){
     if ( !as ) { throw "Stik: Helper needs a name"; }
@@ -11,11 +12,34 @@
       resolvable: true
     });
     helpers[ as ] = function(){
-      return modules[ as ].resolve( modules ).apply( {}, arguments );
+      var func = modules[ as ].resolve( withDependencies() );
+      return func.apply( {}, arguments );
     };
 
     return helpers[ as ];
+  };
+
+  function withDependencies(){
+    for ( name in modules ) {
+      if ( !tmpDependencies.hasOwnProperty( name ) ) {
+        tmpDependencies[ name ] = modules[ name ];
+      }
+    }
+
+    return tmpDependencies;
   }
+
+  helpers.pushDoubles = function( doubles ){
+    for ( name in doubles ) {
+      tmpDependencies[ name ] = window.stik.injectable({
+        module: doubles[ name ]
+      });
+    }
+  };
+
+  helpers.cleanDoubles = function(){
+    tmpDependencies = {};
+  };
 
   window.stik.boundary( { as: "$h", to: helpers } );
 }());

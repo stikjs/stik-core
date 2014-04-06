@@ -1,4 +1,4 @@
-stik.boundary({ as: "$window", to: window });
+stik.boundary( { as: "$window", to: window } );
 
 stik.helper( "$window", function(){
   return window;
@@ -7,18 +7,18 @@ stik.helper( "$window", function(){
 stik.helper( "debounce", function(){
   return function debounce( func, wait, immediate ){
     // copied from underscore.js
-  	var timeout;
-  	return function(){
-  		var context = this, args = arguments;
-  		var later = function() {
-  			timeout = null;
-  			if ( !immediate ) func.apply( context, args );
-  		};
-  		var callNow = immediate && !timeout;
-  		clearTimeout( timeout );
-  		timeout = setTimeout( later, wait );
-  		if ( callNow ) func.apply( context, args );
-  	}
+    var timeout;
+    return function(){
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if ( !immediate ) func.apply( context, args );
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout( timeout );
+      timeout = setTimeout( later, wait );
+      if ( callNow ) func.apply( context, args );
+    }
   }
 });
 
@@ -49,7 +49,7 @@ stik.helper( "removeClass", function( hasClass ){
 stik.helper( "addClass", function( hasClass ){
   return function addClass( elm, selector ){
     if ( !hasClass( elm, selector ) ){
-      elm.className += " " + selector;
+      elm.className = ( elm.className + " " + selector ).trim();
     }
   }
 });
@@ -64,10 +64,26 @@ stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
   }
 });
 
+stik.helper( "hideElm", function(){
+  return function hideElm( elm ){
+    elm.style.display = "none";
+  }
+});
+
+stik.helper( "showElm", function(){
+  return function showElm( elm ){
+    if ( elm.style.removeProperty ) {
+      elm.style.removeProperty( "display" );
+    } else {
+      elm.style.removeAttribute( "display" );
+    }
+  }
+});
+
 stik.helper( "deepExtend", function(){
   return function deepExtend( destination, source ){
     for ( var property in source ) {
-      if ( Object.isObjectLiteral( destination[property] ) && Object.isObjectLiteral( source[ property ] ) ) {
+      if ( Object.isObjectLiteral( destination[ property ] ) && Object.isObjectLiteral( source[ property ] ) ) {
         destination[ property ] = destination[ property ] || {};
         arguments.callee( destination[ property ], source[ property ]);
       } else {

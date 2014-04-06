@@ -20,16 +20,16 @@ describe("helper", function(){
   it("should be injectable into behaviors", function(){
     var helperDouble, template, behavior;
 
-    helperDouble = jasmine.createSpy("hasClass");
+    helperDouble = jasmine.createSpy("hasClassName");
 
-    stik.helper("hasClass", function(){
+    stik.helper("hasClassName", function(){
       return helperDouble;
     });
 
     template = document.createElement("div");
 
     behavior = stik.behavior("some-behavior", function($h){
-      $h.hasClass();
+      $h.hasClassName();
     });
     spyOn(behavior, "findTemplates").andReturn([template]);
 
@@ -41,14 +41,14 @@ describe("helper", function(){
   it("should be injectable into controllers", function(){
     var helperDouble, template, ctrl;
 
-    helperDouble = jasmine.createSpy("hasClass");
+    helperDouble = jasmine.createSpy("hasClassName");
 
-    stik.helper("hasClass", function(){
+    stik.helper("hasClassName", function(){
       return helperDouble;
     });
 
     ctrl = stik.controller("AppCtrl", "List", function($h){
-      $h.hasClass();
+      $h.hasClassName();
     });
 
     template = document.createElement("div");
@@ -64,12 +64,12 @@ describe("helper", function(){
     hasClassCheck = jasmine.createSpy('hasClassCheck');
     toggleClassCheck = jasmine.createSpy('toggleClassCheck');
 
-    stik.helper("hasClass", function(){
+    stik.helper("hasClassName", function(){
       return hasClassCheck;
     });
-    stik.helper("toggleClass", function(hasClass){
+    stik.helper("toggleClassName", function(hasClassName){
       return function(elm, className){
-        hasClass(elm, className);
+        hasClassName(elm, className);
         toggleClassCheck(elm, className);
       };
     });
@@ -77,8 +77,8 @@ describe("helper", function(){
     template = document.createElement("div");
 
     behavior = stik.behavior("my-behavior", function($template, $h){
-      $h.toggleClass($template, 'some-class');
-      $h.hasClass($template, 'some-class');
+      $h.toggleClassName($template, 'some-class');
+      $h.hasClassName($template, 'some-class');
     });
 
     spyOn(behavior, "findTemplates").andReturn([template]);
