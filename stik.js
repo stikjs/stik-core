@@ -567,7 +567,6 @@ window.stik.boundary({
 
     obj.$send = function $send( box, message ){
       var i = 0,
-          openedBoxes,
           foundAny = false;
 
       fetchSubscriptions( box , function( openers ){
