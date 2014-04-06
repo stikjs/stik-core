@@ -1,7 +1,19 @@
+# 0.11.0 (2014-04-06)
+
+##Improvements
+- **utils** Preventing addClass and removeClass helpers to run when unecessary ([642933fe03](https://github.com/stikjs/stik.js/commit/642933fe030d74b3469b448589caff1d04ca997a))
+- **utils_spec** Adding tests to some util methods ([2b619a197f](https://github.com/stikjs/stik.js/commit/2b619a197fd57f058afcd9bf3ca17093419c57ac))
+
+##Bugs
+- **** Courier doesn't create two instances ([f332503389](https://github.com/stikjs/stik.js/commit/f332503389e8a44d55c2445262db389d69702659))
+
+##Features
+- **Helper Lab** ([a6d66bf30d](https://github.com/stikjs/stik.js/commit/a6d66bf30db156a6fb614e34c146a54c883ff194))
+
 # 0.10.1 (2014-03-12)
 
 ##Improvements
-- **Boundary cache** [f69534682d](https://github.com/stikjs/stik.js/commit/f69534682d3b111e107d674982326b2f41f74bc9)
+- **Boundary cache** ([f69534682d](https://github.com/stikjs/stik.js/commit/f69534682d3b111e107d674982326b2f41f74bc9))
 - **lazyBind** Aliasing lazyBind to bindLazy ([0cf1ac1937](https://github.com/stikjs/stik.js/commit/0cf1ac193722e013d26679afbe403c9f53841345))
 
 ##Bugs

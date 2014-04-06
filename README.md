@@ -676,6 +676,27 @@ it("should retrieve one attribute from the template", function(){
 });
 ```
 
+###Helper Lab
+```javascript
+stik.helper( "hasClass", function(){
+  return function( elm, selector ){
+    var className = " " + selector + " ";
+    return ( " " + elm.className + " " ).
+      replace( /[\n\t]/g, " " ).
+      indexOf( className ) > -1;
+  }
+});
+
+var elm = document.createElement("div");
+elm.className = "not-active";
+
+var hasClassHelper = stik.labs.helper({
+  name: "hasClass"
+}).run();
+
+expect(hasClassHelper(elm, "active")).toBeFalsy();
+```
+
 ###Mocks and Stubs
 Eventually your components might depend on external services or have expensive operations. For those situations every Lab provides an interfaces for you to inject doubles instead of the real entities.
 
