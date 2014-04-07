@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.11.0 | From: 06-04-2014
+// Version: 0.11.0 | From: 07-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -554,7 +554,7 @@ window.stik.boundary({
     var obj = {},
         subscriptions = {};
 
-    obj.$receive = function( box, opener ){
+    obj.receive = function receive( box, opener ){
       var subscription = createSubscription({
         box: box, opener: opener
       });
@@ -565,7 +565,7 @@ window.stik.boundary({
       return unsubscribe.bind( {}, subscription );
     };
 
-    obj.$send = function $send( box, message ){
+    obj.send = function send( box, message ){
       var i = 0,
           foundAny = false;
 

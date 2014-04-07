@@ -9,11 +9,11 @@ describe("Courier", function(){
         name: "$courier"
       }).run();
 
-      courier.$receive(box, opener);
+      courier.receive(box, opener);
 
       expect(opener).not.toHaveBeenCalled();
 
-      courier.$send(box);
+      courier.send(box);
       expect(opener).toHaveBeenCalled();
     });
 
@@ -28,17 +28,17 @@ describe("Courier", function(){
         name: "$courier"
       }).run();
 
-      courier.$receive(createBox, createBoxOpener);
-      courier.$receive(updateBox, updateBoxOpener);
+      courier.receive(createBox, createBoxOpener);
+      courier.receive(updateBox, updateBoxOpener);
 
       expect(createBoxOpener).not.toHaveBeenCalled();
       expect(updateBoxOpener).not.toHaveBeenCalled();
 
-      courier.$send(createBox);
+      courier.send(createBox);
       expect(createBoxOpener).toHaveBeenCalled();
       expect(updateBoxOpener).not.toHaveBeenCalled();
 
-      courier.$send(updateBox);
+      courier.send(updateBox);
       expect(updateBoxOpener).toHaveBeenCalled();
     });
 
@@ -51,11 +51,11 @@ describe("Courier", function(){
         name: "$courier"
       }).run();
 
-      unsubscribe = courier.$receive(box, function(){});
+      unsubscribe = courier.receive(box, function(){});
       unsubscribe();
 
       expect(function(){
-        courier.$send(box, {});
+        courier.send(box, {});
       }).toThrow("Stik: No receiver registered for 'missing-message'");
     });
 
@@ -70,33 +70,33 @@ describe("Courier", function(){
         name: "$courier"
       }).run();
 
-      newItemUnsubscribe = courier.$receive(newItemBox, function(){});
-      changeItemUnsubscribe = courier.$receive(changeItemBox, changeItemOpener);
+      newItemUnsubscribe = courier.receive(newItemBox, function(){});
+      changeItemUnsubscribe = courier.receive(changeItemBox, changeItemOpener);
 
       newItemUnsubscribe();
 
       expect(function(){
-        courier.$send(newItemBox, {});
+        courier.send(newItemBox, {});
       }).toThrow("Stik: No receiver registered for 'new-item'");
 
       expect(changeItemOpener).not.toHaveBeenCalled();
 
       expect(function(){
-        courier.$send(changeItemBox, {});
+        courier.send(changeItemBox, {});
       }).not.toThrow();
 
       expect(changeItemOpener).toHaveBeenCalled();
     });
   });
 
-  describe("#$send", function(){
+  describe("#send", function(){
     it("should throw if no $receiver is register", function(){
       var courier = stik.labs.boundary({
         name: "$courier"
       }).run();
 
       expect(function(){
-        courier.$send('new-item', {});
+        courier.send('new-item', {});
       }).toThrow("Stik: No receiver registered for 'new-item'");
     });
 
@@ -109,8 +109,8 @@ describe("Courier", function(){
         name: "$courier"
       }).run();
 
-      courier.$receive("new-message", receiver)
-      courier.$send("new-message", message);
+      courier.receive("new-message", receiver)
+      courier.send("new-message", message);
 
       expect(receiver).toHaveBeenCalledWith(message);
     });
@@ -131,8 +131,8 @@ describe("Courier", function(){
         }
       };
 
-      courier.$receive("new-message", receiver)
-      courier.$send("new-message", message);
+      courier.receive("new-message", receiver)
+      courier.send("new-message", message);
 
       expect(receiver).toHaveBeenCalledWith(message);
     });
@@ -147,10 +147,10 @@ describe("Courier", function(){
         name: "$courier"
       }).run();
 
-      courier.$receive("message-new", newReceiver);
-      courier.$receive("message-added", addedReceiver);
+      courier.receive("message-new", newReceiver);
+      courier.receive("message-added", addedReceiver);
 
-      courier.$send("message-*", message);
+      courier.send("message-*", message);
 
       expect(newReceiver).toHaveBeenCalledWith(message);
       expect(addedReceiver).toHaveBeenCalledWith(message);

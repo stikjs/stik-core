@@ -6,7 +6,7 @@ window.stik.boundary({
     var obj = {},
         subscriptions = {};
 
-    obj.$receive = function( box, opener ){
+    obj.receive = function receive( box, opener ){
       var subscription = createSubscription({
         box: box, opener: opener
       });
@@ -17,7 +17,7 @@ window.stik.boundary({
       return unsubscribe.bind( {}, subscription );
     };
 
-    obj.$send = function $send( box, message ){
+    obj.send = function send( box, message ){
       var i = 0,
           foundAny = false;
 
