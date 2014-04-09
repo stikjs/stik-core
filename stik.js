@@ -232,17 +232,17 @@ window.stik.createBehavior = function behavior( spec ){
     });
 
     return injector.resolveDependencies();
-  };
+  }
 
   function markAsApplyed( template ){
     var behaviors = template.getAttribute( behaviorKey );
     behaviors = ( ( behaviors || "" ) + " " + spec.name ).trim();
 
     template.setAttribute( behaviorKey, behaviors );
-  };
+  }
 
   return spec;
-}
+};
 
 window.stik.createBoundary = function boundary( spec ){
   if ( spec.as.indexOf(" ") !== -1 ) { throw "Stik: '" + spec.as + "' is not a valid Boundary name. Please replace empty spaces with dashes ('-')"; }
@@ -923,7 +923,7 @@ window.stik.labs.helper = function helperLab( spec ){
     return function(){
       return helpers[ spec.name ].apply( {}, arguments );
     };
-    helpers.cleanDoubles();
+    // helpers.cleanDoubles();
   };
 
   return env;
