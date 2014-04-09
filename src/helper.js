@@ -20,7 +20,7 @@
   };
 
   function withDependencies(){
-    for ( name in modules ) {
+    for ( var name in modules ) {
       if ( !tmpDependencies.hasOwnProperty( name ) ) {
         tmpDependencies[ name ] = modules[ name ];
       }
@@ -30,7 +30,7 @@
   }
 
   helpers.pushDoubles = function pushDoubles( doubles ){
-    for ( name in doubles ) {
+    for ( var name in doubles ) {
       tmpDependencies[ name ] = window.stik.injectable({
         module: doubles[ name ]
       });

@@ -104,6 +104,8 @@ window.stik.manager = function manager(){
   };
 
   obj.getBoundary = function getBoundary(name){
+    var type, boundaryName;
+
     for ( type in boundaries ) {
       for ( boundaryName in boundaries[ type ] ) {
         if ( boundaryName === name ) {

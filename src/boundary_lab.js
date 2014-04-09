@@ -12,7 +12,7 @@ window.stik.labs.boundary = function boundaryLab( spec ){
   function asInjectables( doubles ){
     var injectableDoubles = {};
 
-    for ( dbl in doubles ) {
+    for ( var dbl in doubles ) {
       injectableDoubles[ dbl ] = window.stik.injectable({
         module: doubles[ dbl ]
       });

@@ -2,11 +2,12 @@ stik.boundary({
   as: "$data",
   resolvable: true,
   to: function( $template ){
-    var attrs = {}, name;
+    var attrs = {},
+        attr, name;
 
     for ( attr in $template.attributes ) {
       if ( $template.attributes[ attr ].value ) {
-        name = $template.attributes[ attr ].name
+        name = $template.attributes[ attr ].name;
         if (name.match(/^data-/m)) {
           attrs[ parseName( name ) ] =
             $template.attributes[ attr ].value;

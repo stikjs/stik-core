@@ -420,6 +420,8 @@ window.stik.manager = function manager(){
   };
 
   obj.getBoundary = function getBoundary(name){
+    var type, boundaryName;
+
     for ( type in boundaries ) {
       for ( boundaryName in boundaries[ type ] ) {
         if ( boundaryName === name ) {
@@ -522,7 +524,7 @@ window.stik.boundary = function boundary( spec ){
   };
 
   function withDependencies(){
-    for ( name in modules ) {
+    for ( var name in modules ) {
       if ( !tmpDependencies.hasOwnProperty( name ) ) {
         tmpDependencies[ name ] = modules[ name ];
       }
@@ -532,7 +534,7 @@ window.stik.boundary = function boundary( spec ){
   }
 
   helpers.pushDoubles = function pushDoubles( doubles ){
-    for ( name in doubles ) {
+    for ( var name in doubles ) {
       tmpDependencies[ name ] = window.stik.injectable({
         module: doubles[ name ]
       });
@@ -583,7 +585,7 @@ window.stik.boundary({
     function fetchSubscriptions( box, callback ){
       var pattern = new RegExp( box );
 
-      for ( sub in subscriptions ) {
+      for ( var sub in subscriptions ) {
         if ( pattern.exec( sub ) ) {
           callback( subscriptions[ sub ] );
         }
@@ -688,11 +690,12 @@ stik.boundary({
   as: "$data",
   resolvable: true,
   to: function( $template ){
-    var attrs = {}, name;
+    var attrs = {},
+        attr, name;
 
     for ( attr in $template.attributes ) {
       if ( $template.attributes[ attr ].value ) {
-        name = $template.attributes[ attr ].name
+        name = $template.attributes[ attr ].name;
         if (name.match(/^data-/m)) {
           attrs[ parseName( name ) ] =
             $template.attributes[ attr ].value;
@@ -728,14 +731,14 @@ stik.helper( "debounce", function(){
       clearTimeout( timeout );
       timeout = setTimeout( later, wait );
       if ( callNow ) func.apply( context, args );
-    }
-  }
+    };
+  };
 });
 
 stik.helper( "goTo", function( $window ){
   return function goTo( url ){
     $window.location = url;
-  }
+  };
 });
 
 stik.helper( "hasClass", function(){
@@ -744,7 +747,7 @@ stik.helper( "hasClass", function(){
     return ( " " + elm.className + " " ).
       replace( /[\n\t]/g, " " ).
       indexOf( className ) > -1;
-  }
+  };
 });
 
 stik.helper( "removeClass", function( hasClass ){
@@ -753,7 +756,7 @@ stik.helper( "removeClass", function( hasClass ){
       var regex = new RegExp( "\\b\\s?" + selector + "\\b", "g" );
       elm.className = elm.className.replace( regex, '' );
     }
-  }
+  };
 });
 
 stik.helper( "addClass", function( hasClass ){
@@ -761,7 +764,7 @@ stik.helper( "addClass", function( hasClass ){
     if ( !hasClass( elm, selector ) ){
       elm.className = ( elm.className + " " + selector ).trim();
     }
-  }
+  };
 });
 
 stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
@@ -771,13 +774,13 @@ stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
     } else if ( !hasClass( elm, selector ) ) {
       addClass( elm, selector );
     }
-  }
+  };
 });
 
 stik.helper( "hideElm", function(){
   return function hideElm( elm ){
     elm.style.display = "none";
-  }
+  };
 });
 
 stik.helper( "showElm", function(){
@@ -787,7 +790,7 @@ stik.helper( "showElm", function(){
     } else {
       elm.style.removeAttribute( "display" );
     }
-  }
+  };
 });
 
 stik.helper( "deepExtend", function(){
@@ -801,7 +804,7 @@ stik.helper( "deepExtend", function(){
       }
     }
     return destination;
-  }
+  };
 });
 
 window.stik.labs.behavior = function behaviorLab( spec ){
@@ -831,7 +834,7 @@ window.stik.labs.behavior = function behaviorLab( spec ){
   }
 
   function mergeModules( doubles ){
-    for ( dbl in doubles ) {
+    for ( var dbl in doubles ) {
       result.modules[ dbl ] = window.stik.injectable({
         module: doubles[ dbl ]
       });
@@ -870,7 +873,7 @@ window.stik.labs.controller = function controllerLab( spec ){
   }
 
   function mergeModules( doubles ){
-    for ( dbl in doubles ) {
+    for ( var dbl in doubles ) {
       result.modules[ dbl ] = window.stik.injectable({
         module: doubles[ dbl ]
       });
@@ -895,7 +898,7 @@ window.stik.labs.boundary = function boundaryLab( spec ){
   function asInjectables( doubles ){
     var injectableDoubles = {};
 
-    for ( dbl in doubles ) {
+    for ( var dbl in doubles ) {
       injectableDoubles[ dbl ] = window.stik.injectable({
         module: doubles[ dbl ]
       });
@@ -919,7 +922,7 @@ window.stik.labs.helper = function helperLab( spec ){
     helpers.pushDoubles( doubles );
     return function(){
       return helpers[ spec.name ].apply( {}, arguments );
-    }
+    };
     helpers.cleanDoubles();
   };
 

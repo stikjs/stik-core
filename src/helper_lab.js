@@ -10,7 +10,7 @@ window.stik.labs.helper = function helperLab( spec ){
     helpers.pushDoubles( doubles );
     return function(){
       return helpers[ spec.name ].apply( {}, arguments );
-    }
+    };
     helpers.cleanDoubles();
   };
 

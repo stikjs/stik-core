@@ -35,7 +35,7 @@ window.stik.boundary({
     function fetchSubscriptions( box, callback ){
       var pattern = new RegExp( box );
 
-      for ( sub in subscriptions ) {
+      for ( var sub in subscriptions ) {
         if ( pattern.exec( sub ) ) {
           callback( subscriptions[ sub ] );
         }

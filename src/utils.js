@@ -18,14 +18,14 @@ stik.helper( "debounce", function(){
       clearTimeout( timeout );
       timeout = setTimeout( later, wait );
       if ( callNow ) func.apply( context, args );
-    }
-  }
+    };
+  };
 });
 
 stik.helper( "goTo", function( $window ){
   return function goTo( url ){
     $window.location = url;
-  }
+  };
 });
 
 stik.helper( "hasClass", function(){
@@ -34,7 +34,7 @@ stik.helper( "hasClass", function(){
     return ( " " + elm.className + " " ).
       replace( /[\n\t]/g, " " ).
       indexOf( className ) > -1;
-  }
+  };
 });
 
 stik.helper( "removeClass", function( hasClass ){
@@ -43,7 +43,7 @@ stik.helper( "removeClass", function( hasClass ){
       var regex = new RegExp( "\\b\\s?" + selector + "\\b", "g" );
       elm.className = elm.className.replace( regex, '' );
     }
-  }
+  };
 });
 
 stik.helper( "addClass", function( hasClass ){
@@ -51,7 +51,7 @@ stik.helper( "addClass", function( hasClass ){
     if ( !hasClass( elm, selector ) ){
       elm.className = ( elm.className + " " + selector ).trim();
     }
-  }
+  };
 });
 
 stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
@@ -61,13 +61,13 @@ stik.helper( "toggleClass", function( hasClass, addClass, removeClass ){
     } else if ( !hasClass( elm, selector ) ) {
       addClass( elm, selector );
     }
-  }
+  };
 });
 
 stik.helper( "hideElm", function(){
   return function hideElm( elm ){
     elm.style.display = "none";
-  }
+  };
 });
 
 stik.helper( "showElm", function(){
@@ -77,7 +77,7 @@ stik.helper( "showElm", function(){
     } else {
       elm.style.removeAttribute( "display" );
     }
-  }
+  };
 });
 
 stik.helper( "deepExtend", function(){
@@ -91,5 +91,5 @@ stik.helper( "deepExtend", function(){
       }
     }
     return destination;
-  }
+  };
 });

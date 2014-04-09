@@ -26,7 +26,7 @@ window.stik.labs.controller = function controllerLab( spec ){
   }
 
   function mergeModules( doubles ){
-    for ( dbl in doubles ) {
+    for ( var dbl in doubles ) {
       result.modules[ dbl ] = window.stik.injectable({
         module: doubles[ dbl ]
       });
