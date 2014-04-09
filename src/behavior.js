@@ -43,14 +43,14 @@ window.stik.createBehavior = function behavior( spec ){
     });
 
     return injector.resolveDependencies();
-  };
+  }
 
   function markAsApplyed( template ){
     var behaviors = template.getAttribute( behaviorKey );
     behaviors = ( ( behaviors || "" ) + " " + spec.name ).trim();
 
     template.setAttribute( behaviorKey, behaviors );
-  };
+  }
 
   return spec;
-}
+};
