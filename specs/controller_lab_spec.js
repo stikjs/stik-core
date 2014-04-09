@@ -28,7 +28,7 @@ describe("ControllerLab", function(){
     var template, lab;
 
     stik.controller("StarWarsCtrl", "Dialog", function($viewBag){
-      $viewBag.$push({
+      $viewBag.push({
         luke: "You killed my father",
         vader: "Luke, I'm your father"
       });
@@ -59,7 +59,7 @@ describe("ControllerLab", function(){
     var template, lab, viewBagDoubleMock;
 
     stik.controller("StarWarsCtrl", "LightsaberDuel", function($viewBag){
-      $viewBag.$push({
+      $viewBag.push({
         luke: "You killed my father",
         vader: "Luke, I'm your father"
       });
@@ -70,7 +70,7 @@ describe("ControllerLab", function(){
       "<span class=\"vader\" data-key=\"vader\"></span>" +
     "</div>";
 
-    viewBagDoubleMock = jasmine.createSpyObj("viewBag", ["$push"]);
+    viewBagDoubleMock = jasmine.createSpyObj("viewBag", ["push"]);
 
     lab = stik.labs.controller({
       name: "StarWarsCtrl",
@@ -81,7 +81,7 @@ describe("ControllerLab", function(){
       $viewBag: viewBagDoubleMock
     });
 
-    expect(viewBagDoubleMock.$push).toHaveBeenCalledWith({
+    expect(viewBagDoubleMock.push).toHaveBeenCalledWith({
       luke: "You killed my father", vader: "Luke, I'm your father"
     });
 

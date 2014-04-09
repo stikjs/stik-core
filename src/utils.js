@@ -23,13 +23,13 @@ stik.helper( "debounce", function(){
 });
 
 stik.helper( "goTo", function( $window ){
-  return function( url ){
+  return function goTo( url ){
     $window.location = url;
   }
 });
 
 stik.helper( "hasClass", function(){
-  return function( elm, selector ){
+  return function hasClass( elm, selector ){
     var className = " " + selector + " ";
     return ( " " + elm.className + " " ).
       replace( /[\n\t]/g, " " ).

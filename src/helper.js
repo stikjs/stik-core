@@ -29,7 +29,7 @@
     return tmpDependencies;
   }
 
-  helpers.pushDoubles = function( doubles ){
+  helpers.pushDoubles = function pushDoubles( doubles ){
     for ( name in doubles ) {
       tmpDependencies[ name ] = window.stik.injectable({
         module: doubles[ name ]
@@ -37,7 +37,7 @@
     }
   };
 
-  helpers.cleanDoubles = function(){
+  helpers.cleanDoubles = function cleanDoubles(){
     tmpDependencies = {};
   };
 

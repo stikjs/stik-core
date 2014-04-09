@@ -7,7 +7,7 @@ window.stik.boundary({
     var obj = {},
         bindingKey = "data-key";
 
-    obj.$push = function( dataSet ){
+    obj.push = function push( dataSet ){
       var fields = fieldsToBind(),
           i = fields.length,
           dataToBind;
@@ -21,7 +21,7 @@ window.stik.boundary({
       }
     };
 
-    obj.$pull = function(){
+    obj.pull = function pull(){
       var fields = fieldsToBind( $template ),
           dataSet = {},
           i = fields.length,

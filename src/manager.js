@@ -4,21 +4,21 @@ window.stik.manager = function manager(){
       boundaries  = { all: {}, controller:{}, behavior:{} },
       obj = {};
 
-  obj.addControllerWithAction = function( controllerName, actionName, executionUnit ){
+  obj.addControllerWithAction = function addControllerWithAction( controllerName, actionName, executionUnit ){
     var ctrl = storeController( controllerName ),
         action = ctrl.action( actionName, executionUnit );
     action.bind( extractBoundaries( boundaries.controller ) );
     return ctrl;
   };
 
-  obj.addController = function( controllerName, executionUnit ){
+  obj.addController = function addController( controllerName, executionUnit ){
     var ctrl = storeController( controllerName );
     executionUnit.call( {}, ctrl );
     bindController( ctrl );
     return ctrl;
   };
 
-  obj.addBehavior = function( name, executionUnit ){
+  obj.addBehavior = function addBehavior( name, executionUnit ){
     if ( isBehaviorRegistered( name ) ) { throw "Stik: Another behavior already exist with name '" + name + "'"; }
 
     var behavior = createBehavior({
@@ -32,7 +32,7 @@ window.stik.manager = function manager(){
     return behavior;
   };
 
-  obj.addBoundary = function( spec ){
+  obj.addBoundary = function addBoundary( spec ){
     var boundary;
 
     spec.from = spec.from || "all";
@@ -47,7 +47,7 @@ window.stik.manager = function manager(){
     return boundary;
   };
 
-  obj.applyBehaviors = function(){
+  obj.applyBehaviors = function applyBehaviors(){
     var boundAny = false,
         behavior;
 
@@ -60,12 +60,12 @@ window.stik.manager = function manager(){
     return boundAny;
   };
 
-  obj.applyBehavior = function( behavior ){
+  obj.applyBehavior = function applyBehavior( behavior ){
     var modules = extractBoundaries( boundaries.behavior );
     return behavior.bind( modules );
   };
 
-  obj.bindActionWithTemplate = function( controller, action, template ){
+  obj.bindActionWithTemplate = function bindActionWithTemplate( controller, action, template ){
     var modules = extractBoundaries( boundaries.controller ),
         result;
 
@@ -77,7 +77,7 @@ window.stik.manager = function manager(){
     return result;
   };
 
-  obj.bindBehaviorWithTemplate = function( behavior, template ){
+  obj.bindBehaviorWithTemplate = function bindBehaviorWithTemplate( behavior, template ){
     var modules = extractBoundaries( boundaries.behavior ),
         result;
 
@@ -89,7 +89,7 @@ window.stik.manager = function manager(){
     return result;
   };
 
-  obj.bindActions = function(){
+  obj.bindActions = function bindActions(){
     var modules = extractBoundaries( boundaries.controller ),
         boundAny = false,
         ctrl;
@@ -113,7 +113,7 @@ window.stik.manager = function manager(){
     }
   };
 
-  obj.$reset = function(){
+  obj.$reset = function $reset(){
     controllers = {};
     behaviors = {};
   };

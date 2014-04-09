@@ -3,7 +3,7 @@ window.stik.action = function action( spec ){
   if ( !spec.name ) { throw "Stik: Action name can't be empty"; }
   if ( !spec.executionUnit ) { throw "Stik: Action needs a function to use as its execution unit"; }
 
-  spec.bind = function( modules ){
+  spec.bind = function bind( modules ){
     var templates = spec.findTemplates(),
         i = templates.length;
 
@@ -17,7 +17,7 @@ window.stik.action = function action( spec ){
     return templates.length > 0;
   };
 
-  spec.findTemplates = function( DOMInjection ){
+  spec.findTemplates = function findTemplates( DOMInjection ){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -39,7 +39,7 @@ window.stik.action = function action( spec ){
   } spec.bindWithTemplate = bindWithTemplate;
 
   function markAsBound( template ){
-    template.className = (template.className + ' stik-bound').trim();
+    template.className = ( template.className + ' stik-bound').trim();
   }
 
   return spec;

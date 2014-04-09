@@ -3,7 +3,7 @@ window.stik.createController = function controller( spec ){
 
   spec.actions = {};
 
-  spec.action = function( actionName, executionUnit ){
+  spec.action = function action( actionName, executionUnit ){
     var newAction = window.stik.action({
       name: actionName,
       controller: spec.name,
@@ -13,7 +13,7 @@ window.stik.createController = function controller( spec ){
     return newAction;
   };
 
-  spec.bind = function( modules ){
+  spec.bind = function bind( modules ){
     var name,
         boundAny = false;
 

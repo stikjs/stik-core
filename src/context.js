@@ -3,7 +3,7 @@ window.stik.context = function context( spec ){
     module: spec.template
   });
 
-  spec.load = function( executionUnit, modules ){
+  spec.load = function load( executionUnit, modules ){
     var dependencies = resolveDependencies(
       executionUnit,
       mergeModules( modules )

@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.11.0 | From: 07-04-2014
+// Version: 0.11.0 | From: 09-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -82,7 +82,7 @@ window.stik.createController = function controller( spec ){
 
   spec.actions = {};
 
-  spec.action = function( actionName, executionUnit ){
+  spec.action = function action( actionName, executionUnit ){
     var newAction = window.stik.action({
       name: actionName,
       controller: spec.name,
@@ -92,7 +92,7 @@ window.stik.createController = function controller( spec ){
     return newAction;
   };
 
-  spec.bind = function( modules ){
+  spec.bind = function bind( modules ){
     var name,
         boundAny = false;
 
@@ -113,7 +113,7 @@ window.stik.action = function action( spec ){
   if ( !spec.name ) { throw "Stik: Action name can't be empty"; }
   if ( !spec.executionUnit ) { throw "Stik: Action needs a function to use as its execution unit"; }
 
-  spec.bind = function( modules ){
+  spec.bind = function bind( modules ){
     var templates = spec.findTemplates(),
         i = templates.length;
 
@@ -127,7 +127,7 @@ window.stik.action = function action( spec ){
     return templates.length > 0;
   };
 
-  spec.findTemplates = function( DOMInjection ){
+  spec.findTemplates = function findTemplates( DOMInjection ){
     var DOMHandler = document;
     if (DOMInjection) { DOMHandler = DOMInjection; }
 
@@ -149,7 +149,7 @@ window.stik.action = function action( spec ){
   } spec.bindWithTemplate = bindWithTemplate;
 
   function markAsBound( template ){
-    template.className = (template.className + ' stik-bound').trim();
+    template.className = ( template.className + ' stik-bound').trim();
   }
 
   return spec;
@@ -160,7 +160,7 @@ window.stik.context = function context( spec ){
     module: spec.template
   });
 
-  spec.load = function( executionUnit, modules ){
+  spec.load = function load( executionUnit, modules ){
     var dependencies = resolveDependencies(
       executionUnit,
       mergeModules( modules )
@@ -265,7 +265,7 @@ window.stik.createBoundary = function boundary( spec ){
 window.stik.injector = function injector( spec ){
   if ( !spec.executionUnit ) { throw "Stik: Injector needs a function to use as its execution unit"; }
 
-  spec.resolveDependencies = function(){
+  spec.resolveDependencies = function resolveDependencies(){
     var args = extractArguments();
 
     return grabModules( args );
@@ -320,21 +320,21 @@ window.stik.manager = function manager(){
       boundaries  = { all: {}, controller:{}, behavior:{} },
       obj = {};
 
-  obj.addControllerWithAction = function( controllerName, actionName, executionUnit ){
+  obj.addControllerWithAction = function addControllerWithAction( controllerName, actionName, executionUnit ){
     var ctrl = storeController( controllerName ),
         action = ctrl.action( actionName, executionUnit );
     action.bind( extractBoundaries( boundaries.controller ) );
     return ctrl;
   };
 
-  obj.addController = function( controllerName, executionUnit ){
+  obj.addController = function addController( controllerName, executionUnit ){
     var ctrl = storeController( controllerName );
     executionUnit.call( {}, ctrl );
     bindController( ctrl );
     return ctrl;
   };
 
-  obj.addBehavior = function( name, executionUnit ){
+  obj.addBehavior = function addBehavior( name, executionUnit ){
     if ( isBehaviorRegistered( name ) ) { throw "Stik: Another behavior already exist with name '" + name + "'"; }
 
     var behavior = createBehavior({
@@ -348,7 +348,7 @@ window.stik.manager = function manager(){
     return behavior;
   };
 
-  obj.addBoundary = function( spec ){
+  obj.addBoundary = function addBoundary( spec ){
     var boundary;
 
     spec.from = spec.from || "all";
@@ -363,7 +363,7 @@ window.stik.manager = function manager(){
     return boundary;
   };
 
-  obj.applyBehaviors = function(){
+  obj.applyBehaviors = function applyBehaviors(){
     var boundAny = false,
         behavior;
 
@@ -376,12 +376,12 @@ window.stik.manager = function manager(){
     return boundAny;
   };
 
-  obj.applyBehavior = function( behavior ){
+  obj.applyBehavior = function applyBehavior( behavior ){
     var modules = extractBoundaries( boundaries.behavior );
     return behavior.bind( modules );
   };
 
-  obj.bindActionWithTemplate = function( controller, action, template ){
+  obj.bindActionWithTemplate = function bindActionWithTemplate( controller, action, template ){
     var modules = extractBoundaries( boundaries.controller ),
         result;
 
@@ -393,7 +393,7 @@ window.stik.manager = function manager(){
     return result;
   };
 
-  obj.bindBehaviorWithTemplate = function( behavior, template ){
+  obj.bindBehaviorWithTemplate = function bindBehaviorWithTemplate( behavior, template ){
     var modules = extractBoundaries( boundaries.behavior ),
         result;
 
@@ -405,7 +405,7 @@ window.stik.manager = function manager(){
     return result;
   };
 
-  obj.bindActions = function(){
+  obj.bindActions = function bindActions(){
     var modules = extractBoundaries( boundaries.controller ),
         boundAny = false,
         ctrl;
@@ -429,7 +429,7 @@ window.stik.manager = function manager(){
     }
   };
 
-  obj.$reset = function(){
+  obj.$reset = function $reset(){
     controllers = {};
     behaviors = {};
   };
@@ -474,7 +474,7 @@ window.stik.manager = function manager(){
 
 window.stik.$$manager = window.stik.manager();
 
-window.stik.controller = function( controllerName, action, executionUnit ){
+window.stik.controller = function controller( controllerName, action, executionUnit ){
   if ( typeof action === "string" ) {
     return window.stik.$$manager.addControllerWithAction(
       controllerName, action, executionUnit
@@ -486,17 +486,17 @@ window.stik.controller = function( controllerName, action, executionUnit ){
   }
 };
 
-window.stik.behavior = function( name, executionUnit ){
+window.stik.behavior = function behavior( name, executionUnit ){
   return window.stik.$$manager.addBehavior( name, executionUnit );
 };
 
-window.stik.lazyBind = window.stik.bindLazy = function(){
+window.stik.lazyBind = window.stik.bindLazy = function bindLazy(){
   if ( !window.stik.$$manager.bindActions() & !window.stik.$$manager.applyBehaviors() ) {
     throw "Stik: Nothing new to bind!";
   }
 };
 
-window.stik.boundary = function( spec ){
+window.stik.boundary = function boundary( spec ){
   return window.stik.$$manager.addBoundary( spec );
 };
 
@@ -531,7 +531,7 @@ window.stik.boundary = function( spec ){
     return tmpDependencies;
   }
 
-  helpers.pushDoubles = function( doubles ){
+  helpers.pushDoubles = function pushDoubles( doubles ){
     for ( name in doubles ) {
       tmpDependencies[ name ] = window.stik.injectable({
         module: doubles[ name ]
@@ -539,7 +539,7 @@ window.stik.boundary = function( spec ){
     }
   };
 
-  helpers.cleanDoubles = function(){
+  helpers.cleanDoubles = function cleanDoubles(){
     tmpDependencies = {};
   };
 
@@ -622,7 +622,7 @@ window.stik.boundary({
     var obj = {},
         bindingKey = "data-key";
 
-    obj.$push = function( dataSet ){
+    obj.push = function push( dataSet ){
       var fields = fieldsToBind(),
           i = fields.length,
           dataToBind;
@@ -636,7 +636,7 @@ window.stik.boundary({
       }
     };
 
-    obj.$pull = function(){
+    obj.pull = function pull(){
       var fields = fieldsToBind( $template ),
           dataSet = {},
           i = fields.length,
@@ -733,13 +733,13 @@ stik.helper( "debounce", function(){
 });
 
 stik.helper( "goTo", function( $window ){
-  return function( url ){
+  return function goTo( url ){
     $window.location = url;
   }
 });
 
 stik.helper( "hasClass", function(){
-  return function( elm, selector ){
+  return function hasClass( elm, selector ){
     var className = " " + selector + " ";
     return ( " " + elm.className + " " ).
       replace( /[\n\t]/g, " " ).

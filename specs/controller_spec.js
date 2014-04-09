@@ -7,10 +7,10 @@ describe("Controller", function(){
       template.innerHTML = "<span data-key=\"iAmYour\"></span>";
 
       ctrl = stik.controller( "StarWarsCtrl", "Revelation", function( $viewBag ){
-        $viewBag.$push({
+        $viewBag.push({
           iAmYour: "Father!!!!!!"
         });
-        result = $viewBag.$pull().iAmYour;
+        result = $viewBag.pull().iAmYour;
       });
 
       spyOn(
@@ -31,10 +31,10 @@ describe("Controller", function(){
       ctrl = stik.controller( "StarWarsCtrl", function( ctrl ){} );
 
       action = ctrl.action( "Response", function( $viewBag ){
-        $viewBag.$push({
+        $viewBag.push({
           no: "NNNOOOOOOO!!!!!!"
         });
-        result = $viewBag.$pull().no;
+        result = $viewBag.pull().no;
       });
 
       spyOn( action, "findTemplates" ).andReturn( [ template ] );

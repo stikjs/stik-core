@@ -9,7 +9,7 @@ describe("ViewBag", function(){
     }).toThrow("Stik: ViewBag needs a template to be attached to");
   });
 
-  describe("#$push", function(){
+  describe("#push", function(){
     it("with a single binding", function(){
       var template, viewBag, data;
 
@@ -25,7 +25,7 @@ describe("ViewBag", function(){
 
       data = {userName: 'Luke Skywalker'};
 
-      viewBag.$push(data);
+      viewBag.push(data);
 
       expect(
         template.textContent
@@ -54,7 +54,7 @@ describe("ViewBag", function(){
         removal: 'kill Luke Skywalker'
       };
 
-      viewBag.$push(data);
+      viewBag.push(data);
 
       expect(
         template.getElementsByTagName("span")[0].textContent
@@ -81,7 +81,7 @@ describe("ViewBag", function(){
 
       data = {userName: 'Luke Skywalker'};
 
-      viewBag.$push(data);
+      viewBag.push(data);
 
       expect(
         template.textContent
@@ -110,7 +110,7 @@ describe("ViewBag", function(){
         catchPhrase: "I'm you father!!"
       };
 
-      viewBag.$push(data);
+      viewBag.push(data);
 
       expect(
         template.getElementsByTagName("input")[0].value
@@ -141,7 +141,7 @@ describe("ViewBag", function(){
 
       data = {userName: 'Luke Skywalker'};
 
-      viewBag.$push(data);
+      viewBag.push(data);
 
       expect(
         template.getElementsByTagName("span")[0].textContent
@@ -166,9 +166,9 @@ describe("ViewBag", function(){
         $template: template
       });
 
-      viewBag.$push({userName: ""});
+      viewBag.push({userName: ""});
 
-      expect(viewBag.$pull()).toEqual({userName: ""});
+      expect(viewBag.pull()).toEqual({userName: ""});
     });
   });
 
@@ -187,7 +187,7 @@ describe("ViewBag", function(){
         $template: template
       });
 
-      dataSet = viewBag.$pull();
+      dataSet = viewBag.pull();
 
       expect(dataSet.userName).toEqual("Luke Skywalker");
     });
@@ -209,7 +209,7 @@ describe("ViewBag", function(){
         $template: template
       });
 
-      dataSet = viewBag.$pull();
+      dataSet = viewBag.pull();
 
       expect(dataSet.userName).toEqual("Luke Skywalker");
       expect(dataSet.removal).toEqual("kill Luke Skywalker");
