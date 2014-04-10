@@ -99,7 +99,7 @@ stik.controller("MailCtrl", function(ctrl){
 
   ctrl.action("Receiver", function($courier, $viewBag){
     $courier.$receive("new-mail", function(message){
-      $viewBag.$push({newMsg: message});
+      $viewBag.push({newMsg: message});
     });
   });
 });
@@ -223,22 +223,22 @@ stik.controller("MessageCtrl", "OneTimeReceiver", function($courier){
 ```
 
 ###$viewBag
-Enables a controller to `$push` and `$pull` data in and out of its template. While pushing, `$viewBag` will only care about the values within the object passed.
+Enables a controller to `push` and `pull` data in and out of its template. While pushing, `$viewBag` will only care about the values within the object passed.
 
 ####Using it
 ```javascript
 stik.controller("MessageCtrl", "Revelation", function($viewBag){
-  // the $push method receives an object
+  // the push method receives an object
   // with the values that it will use
-  $viewBag.$push({
+  $viewBag.push({
     senderName: "Darth Vader",
     receiverName: "Luke Skywalker",
     message: "I'm your father!",
     customNOOO: "NOOOOOO!!!"
   });
 
-  // use $pull to get bound data out of the template
-  var dataset = $viewBag.$pull();
+  // use pull to get bound data out of the template
+  var dataset = $viewBag.pull();
   // this will return an object with the following structure
   // {
   //   senderName: "Darth Vader",
@@ -338,7 +338,7 @@ stik.boundary({
 stik.controller("AppCtrl", "List", function(GetTwitterFeed, $viewBag){
   var feed = GetTwitterFeed();
 
-  $viewBag.$push(feed);
+  $viewBag.push(feed);
 });
 
 stik.behavior("fade-input", function($template, fadeIn){
@@ -577,7 +577,7 @@ Labs are framework agnostic, which means that they can be written using [jasmine
 ```javascript
 // this controller might be defined in your star_wars_ctrl.js file
 stik.controller("StarWarsCtrl", "Dialog", function($viewBag){
-  $viewBag.$push({
+  $viewBag.push({
     luke: "You killed my father",
     vader: "Luke, I'm your father"
   });
@@ -704,7 +704,7 @@ For more information on Mocks and Stubs please read [Mocks Aren't Stubs](http://
 
 ```javascript
 // create your mock that will be injected
-var viewBagMock = jasmine.createObjSpy('viewBagMock', ['$push']);
+var viewBagMock = jasmine.createObjSpy('viewBagMock', ['push']);
 // this can be created with any mocking library
 
 lab = stik.labs.controller({
@@ -718,7 +718,7 @@ lab.run({
   $viewBag: viewBagMock
 });
 
-expect(viewBagMock.$push).toHaveBeenCalledWith({/* ... */})
+expect(viewBagMock.push).toHaveBeenCalledWith({/* ... */})
 ```
 
 ##Helping Stik.js

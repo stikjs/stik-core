@@ -1,3 +1,9 @@
+# 0.12.0 (2014-04-10)
+
+##Improvements
+- **$courier** Removing $ sign from $send and $pull signature ([a8cf7e1aa4](https://github.com/stikjs/stik.js/commit/a8cf7e1aa476b44c481a2da0f0d667d437880275))
+- **debugging** Naming functions to improve debugging ([771f0896a4](https://github.com/stikjs/stik.js/commit/771f0896a40f1567fe381d8b5bda34687bb0259d))
+
 # 0.11.0 (2014-04-06)
 
 ##Improvements
@@ -5,7 +11,7 @@
 - **utils_spec** Adding tests to some util methods ([2b619a197f](https://github.com/stikjs/stik.js/commit/2b619a197fd57f058afcd9bf3ca17093419c57ac))
 
 ##Bugs
-- **** Courier doesn't create two instances ([f332503389](https://github.com/stikjs/stik.js/commit/f332503389e8a44d55c2445262db389d69702659))
+- **Manager** Avoid creating two instances of $courier ([f332503389](https://github.com/stikjs/stik.js/commit/f332503389e8a44d55c2445262db389d69702659))
 
 ##Features
 - **Helper Lab** ([a6d66bf30d](https://github.com/stikjs/stik.js/commit/a6d66bf30db156a6fb614e34c146a54c883ff194))
