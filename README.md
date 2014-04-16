@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/stikjs/stik.js.png?branch=master)](https://travis-ci.org/stikjs/stik.js)
 [![Code Climate](https://codeclimate.com/github/lukelex/stik.js.png)](https://codeclimate.com/github/lukelex/stik.js)
-[![Coverage Status](https://coveralls.io/repos/lukelex/stik.js/badge.png)](https://coveralls.io/r/lukelex/stik.js)
 
 An opinionated JS framework that wires your JavaScript execution to your HTML templates by creating pseudo closures of execution and scoping. Allowing you to manage, in a more consistant way, your events `binding/unbind` and your DOM scope manipulation.
 
@@ -727,6 +726,11 @@ If you found a repeatable bug then file an issue on [issues page](https://github
 
 ###I have a new sugestion!
 For Feature requests or followup on current tasks and development status check our [Trello Board](https://trello.com/b/KKddbfdU/stik-js). Feel free to comment there or file issues.
+
+###Examples
+####Gists
+Some refactoring examples
+* [https://gist.github.com/lukelex/10364670](https://gist.github.com/lukelex/10364670)
 
 ##Development
 
