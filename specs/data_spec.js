@@ -49,8 +49,8 @@ describe("$data", function(){
     });
 
     expect(result).toEqual({
-      "db-id": "$081209j09urr123",
-      "is-more-active": "true"
+      "dbId": "$081209j09urr123",
+      "isMoreActive": "true"
     });
   });
 });

@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 0.12.0 | From: 10-04-2014
+// Version: 0.13.0 | From: 17-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -704,7 +704,13 @@ stik.boundary({
     }
 
     function parseName( name ){
-      return name.match(/(data-)(.+)/)[ 2 ];
+      return toCamelCase( name.match( /(data-)(.+)/ )[ 2 ] );
+    }
+
+    function toCamelCase(name){
+      return name.replace( /-([a-z])/g, function( match ){
+        return match[ 1 ].toUpperCase();
+      });
     }
 
     return attrs;

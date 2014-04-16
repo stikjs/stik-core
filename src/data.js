@@ -16,7 +16,13 @@ stik.boundary({
     }
 
     function parseName( name ){
-      return name.match(/(data-)(.+)/)[ 2 ];
+      return toCamelCase( name.match( /(data-)(.+)/ )[ 2 ] );
+    }
+
+    function toCamelCase(name){
+      return name.replace( /-([a-z])/g, function( match ){
+        return match[ 1 ].toUpperCase();
+      });
     }
 
     return attrs;
