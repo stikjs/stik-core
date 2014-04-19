@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 1.0.0 | From: 17-04-2014
+// Version: 1.0.0-alpha | From: 19-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -502,52 +502,6 @@ window.stik.boundary = function boundary( spec ){
   return window.stik.$$manager.addBoundary( spec );
 };
 
-(function(){
-  var helpers = {},
-      modules = {},
-      tmpDependencies = {};
-
-  window.stik.helper = function helper( as, func ){
-    if ( !as ) { throw "Stik: Helper needs a name"; }
-    if ( !func || typeof func !== "function" ) { throw "Stik: Helper needs a function"; }
-
-    modules[ as ] = window.stik.injectable({
-      module: func,
-      resolvable: true
-    });
-    helpers[ as ] = function(){
-      var func = modules[ as ].resolve( withDependencies() );
-      return func.apply( {}, arguments );
-    };
-
-    return helpers[ as ];
-  };
-
-  function withDependencies(){
-    for ( var name in modules ) {
-      if ( !tmpDependencies.hasOwnProperty( name ) ) {
-        tmpDependencies[ name ] = modules[ name ];
-      }
-    }
-
-    return tmpDependencies;
-  }
-
-  helpers.pushDoubles = function pushDoubles( doubles ){
-    for ( var name in doubles ) {
-      tmpDependencies[ name ] = window.stik.injectable({
-        module: doubles[ name ]
-      });
-    }
-  };
-
-  helpers.cleanDoubles = function cleanDoubles(){
-    tmpDependencies = {};
-  };
-
-  window.stik.boundary( { as: "$h", to: helpers } );
-}());
-
 window.stik.boundary({
   as: "$courier",
   resolvable: true,
@@ -686,7 +640,7 @@ window.stik.boundary({
   }
 });
 
-stik.boundary({
+window.stik.boundary({
   as: "$data",
   resolvable: true,
   to: function( $template ){
@@ -715,50 +669,6 @@ stik.boundary({
 
     return attrs;
   }
-});
-
-stik.boundary( { as: "$window", to: window } );
-
-stik.helper( "$window", function(){
-  return window;
-});
-
-stik.helper( "debounce", function(){
-  return function debounce( func, wait, immediate ){
-    // copied from underscore.js
-    var timeout;
-    return function(){
-      var context = this, args = arguments;
-      var later = function() {
-        timeout = null;
-        if ( !immediate ) func.apply( context, args );
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout( timeout );
-      timeout = setTimeout( later, wait );
-      if ( callNow ) func.apply( context, args );
-    };
-  };
-});
-
-stik.helper( "goTo", function( $window ){
-  return function goTo( url ){
-    $window.location = url;
-  };
-});
-
-stik.helper( "deepExtend", function(){
-  return function deepExtend( destination, source ){
-    for ( var property in source ) {
-      if ( Object.isObjectLiteral( destination[ property ] ) && Object.isObjectLiteral( source[ property ] ) ) {
-        destination[ property ] = destination[ property ] || {};
-        arguments.callee( destination[ property ], source[ property ]);
-      } else {
-        destination[ property ] = source[ property ];
-      }
-    }
-    return destination;
-  };
 });
 
 window.stik.labs.behavior = function behaviorLab( spec ){
