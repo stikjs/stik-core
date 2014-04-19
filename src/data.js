@@ -1,4 +1,4 @@
-stik.boundary({
+window.stik.boundary({
   as: "$data",
   resolvable: true,
   to: function( $template ){

@@ -1,10 +1,10 @@
-stik.boundary( { as: "$window", to: window } );
+window.stik.boundary( { as: "$window", to: window } );
 
-stik.helper( "$window", function(){
+window.stik.helper( "$window", function(){
   return window;
 });
 
-stik.helper( "debounce", function(){
+window.stik.helper( "debounce", function(){
   return function debounce( func, wait, immediate ){
     // copied from underscore.js
     var timeout;
@@ -22,13 +22,13 @@ stik.helper( "debounce", function(){
   };
 });
 
-stik.helper( "goTo", function( $window ){
+window.stik.helper( "goTo", function( $window ){
   return function goTo( url ){
     $window.location = url;
   };
 });
 
-stik.helper( "deepExtend", function(){
+window.stik.helper( "deepExtend", function(){
   return function deepExtend( destination, source ){
     for ( var property in source ) {
       if ( Object.isObjectLiteral( destination[ property ] ) && Object.isObjectLiteral( source[ property ] ) ) {
