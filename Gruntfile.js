@@ -13,10 +13,6 @@ module.exports = function(grunt){
     'src/courier.js',
     'src/view_bag.js',
     'src/data.js',
-    'src/behavior_lab.js',
-    'src/controller_lab.js',
-    'src/boundary_lab.js',
-    'src/helper_lab.js'
   ];
 
   grunt.initConfig({
@@ -32,7 +28,7 @@ module.exports = function(grunt){
               '// Version: <%= pkg.version %> | From: <%= grunt.template.today("dd-mm-yyyy") %>\n\n'
     },
     jasmine: {
-      src: srcFiles,
+      src: srcFiles.concat(['node_modules/stik-labs.js/stik-labs.js']),
       options: {
         specs: 'specs/*_spec.js',
         template: require('grunt-template-jasmine-istanbul'),
