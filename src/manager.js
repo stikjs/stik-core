@@ -115,19 +115,9 @@ window.stik.manager = function manager(){
     }
   };
 
-  function extractBoundaries( collection ){
-    var key,
-        modules = {};
-
-    for ( key in collection ) {
-      modules[ key ] = collection[ key ].to;
-    }
-    for ( key in boundaries.all ) {
-      modules[ key ] = boundaries.all[ key ].to;
-    }
-
-    return modules;
-  } obj.extractBoundaries = extractBoundaries;
+  obj.boundariesFor = function boundariesFor( which ){
+    return extractBoundaries( boundaries[ which ] );
+  };
 
   obj.$reset = function $reset(){
     controllers = {};
@@ -148,6 +138,20 @@ window.stik.manager = function manager(){
 
   function createBehavior( name, executionUnit ){
     return window.stik.createBehavior( name, executionUnit );
+  }
+
+  function extractBoundaries( collection ){
+    var key,
+        modules = {};
+
+    for ( key in collection ) {
+      modules[ key ] = collection[ key ].to;
+    }
+    for ( key in boundaries.all ) {
+      modules[ key ] = boundaries.all[ key ].to;
+    }
+
+    return modules;
   }
 
   function bindController( controller ){

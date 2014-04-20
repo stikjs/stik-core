@@ -1,6 +1,6 @@
 {
   "name": "stik.js",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-rc2",
   "description": "A JS framework to wire your JavaScript execution to your server-side rendered HTML templates",
   "main": "stik.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/stikjs/stik.js",
   "devDependencies": {
-    "stik-labs.js": "~1.1",
+    "stik-labs.js": "~1.x",
     "grunt": "~0.4.2",
     "grunt-cli": "~0.1.11",
     "grunt-contrib-uglify": "~0.2.7",
