@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 1.0.0-alpha | From: 20-04-2014
+// Version: 1.0.0-rc1 | From: 20-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -429,6 +429,20 @@ window.stik.manager = function manager(){
     }
   };
 
+  function extractBoundaries( collection ){
+    var key,
+        modules = {};
+
+    for ( key in collection ) {
+      modules[ key ] = collection[ key ].to;
+    }
+    for ( key in boundaries.all ) {
+      modules[ key ] = boundaries.all[ key ].to;
+    }
+
+    return modules;
+  } obj.extractBoundaries = extractBoundaries;
+
   obj.$reset = function $reset(){
     controllers = {};
     behaviors = {};
@@ -448,20 +462,6 @@ window.stik.manager = function manager(){
 
   function createBehavior( name, executionUnit ){
     return window.stik.createBehavior( name, executionUnit );
-  }
-
-  function extractBoundaries( collection ){
-    var key,
-        modules = {};
-
-    for ( key in collection ) {
-      modules[ key ] = collection[ key ].to;
-    }
-    for ( key in boundaries.all ) {
-      modules[ key ] = boundaries.all[ key ].to;
-    }
-
-    return modules;
   }
 
   function bindController( controller ){
