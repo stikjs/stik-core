@@ -2,6 +2,4 @@ if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
 }
 
-window.stik = {
-  labs: {}
-};
+window.stik = {};

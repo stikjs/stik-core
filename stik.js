@@ -5,15 +5,13 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 1.0.0-alpha | From: 19-04-2014
+// Version: 1.0.0-alpha | From: 20-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
 }
 
-window.stik = {
-  labs: {}
-};
+window.stik = {};
 
 window.stik.injectable = function injectable( spec ){
   spec.instantiable = spec.instantiable || false;
