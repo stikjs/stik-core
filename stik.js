@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 1.0.0-rc3 | From: 20-04-2014
+// Version: 1.0.0-rc3 | From: 21-04-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";

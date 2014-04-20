@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/stikjs/stik.js",
   "devDependencies": {
-    "stik-labs.js": "~1.x",
+    "stik-labs.js": "0.x",
     "grunt": "~0.4.2",
     "grunt-cli": "~0.1.11",
     "grunt-contrib-uglify": "~0.2.7",
