@@ -1,6 +1,6 @@
 {
   "name": "stik.js",
-  "version": "1.0.0-rc2",
+  "version": "1.0.0-rc3",
   "description": "A JS framework to wire your JavaScript execution to your server-side rendered HTML templates",
   "main": "stik.js",
   "scripts": {
