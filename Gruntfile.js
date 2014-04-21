@@ -65,7 +65,7 @@ module.exports = function(grunt){
       },
       stik: {
         files: {
-         'stik.min.js': ['stik.js']
+         'stik-core.min.js': ['stik-core.js']
         }
       }
     }
