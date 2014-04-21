@@ -1,16 +1,13 @@
 describe("Controller", function(){
   describe("#action", function(){
     it("single action controller", function(){
-      var template, ctrl, result;
+      var template, ctrl;
 
       template = document.createElement( "div" );
-      template.innerHTML = "<span data-key=\"iAmYour\"></span>";
+      template.innerHTML = "<span></span>";
 
-      ctrl = stik.controller( "StarWarsCtrl", "Revelation", function( $viewBag ){
-        $viewBag.push({
-          iAmYour: "Father!!!!!!"
-        });
-        result = $viewBag.pull().iAmYour;
+      ctrl = stik.controller( "StarWarsCtrl", "Revelation", function( $template ){
+        $template.textContent = "Father!!!!!!";
       });
 
       spyOn(
@@ -19,29 +16,26 @@ describe("Controller", function(){
 
       stik.$$manager.bindActions();
 
-      expect( result ).toEqual( "Father!!!!!!" );
+      expect( template.textContent ).toEqual( "Father!!!!!!" );
     });
 
     it("multiple action controller", function(){
-      var template, result, ctrl, action;
+      var template, result, ctrl;
 
       template = document.createElement( "div" );
-      template.innerHTML = "<span data-key=\"no\"></span>";
+      template.innerHTML = "<span></span>";
 
       ctrl = stik.controller( "StarWarsCtrl", function( ctrl ){} );
 
-      action = ctrl.action( "Response", function( $viewBag ){
-        $viewBag.push({
-          no: "NNNOOOOOOO!!!!!!"
-        });
-        result = $viewBag.pull().no;
+      action = ctrl.action( "Response", function( $template ){
+        $template.textContent = "NNNOOOOOOO!!!!!!";
       });
 
       spyOn( action, "findTemplates" ).andReturn( [ template ] );
 
       stik.$$manager.bindActions();
 
-      expect( result ).toEqual( "NNNOOOOOOO!!!!!!" );
+      expect( template.textContent ).toEqual( "NNNOOOOOOO!!!!!!" );
     });
   });
 });
