@@ -1,6 +1,6 @@
 ![Stik.js Logo](https://raw.github.com/lukelex/stik.js/master/stik.js.png)
 
-[![Build Status](https://travis-ci.org/stikjs/stik.js.png?branch=master)](https://travis-ci.org/stikjs/stik.js)
+[![Build Status](https://travis-ci.org/stikjs/stik-core.svg?branch=master)](https://travis-ci.org/stikjs/stik-core)
 [![Code Climate](https://codeclimate.com/github/lukelex/stik.js.png)](https://codeclimate.com/github/lukelex/stik.js)
 
 An opinionated JS framework that wires your JavaScript execution to your HTML templates by creating pseudo closures of execution and scoping. Allowing you to manage, in a more consistant way, your events `binding/unbind` and your DOM scope manipulation.
