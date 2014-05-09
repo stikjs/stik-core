@@ -1,6 +1,6 @@
 # 1.0.0 (2014-05-31)
 
-#Improvements
+##Improvements
 - **behavior** Removing behavior class after applying ([b4b3584e66](https://github.com/stikjs/stik-core/commit/b4b3584e66a5367abd252017d43809fc4bb2f491))
 
 # 0.12.0 (2014-04-10)
