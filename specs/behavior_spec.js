@@ -27,7 +27,7 @@ describe("Behavior", function(){
       template.className += "some-behavior";
 
       behavior = stik.createBehavior({
-        name: 'some-behavior',
+        name: "some-behavior",
         executionUnit: executionUnitMock
       });
 
@@ -58,6 +58,8 @@ describe("Behavior", function(){
       expect(
         template.getAttribute( "data-behaviors" )
       ).toEqual( "some-behavior" );
+
+      expect( template.className ).toEqual( "" );
     });
 
     it("with two behavior", function(){

@@ -49,7 +49,13 @@ window.stik.createBehavior = function behavior( spec ){
     var behaviors = template.getAttribute( behaviorKey );
     behaviors = ( ( behaviors || "" ) + " " + spec.name ).trim();
 
-    template.setAttribute( behaviorKey, behaviors );
+    template.setAttribute( behaviorKey, behaviors ) &
+             removeBehaviorClass( template );
+  }
+
+  function removeBehaviorClass( template ){
+    var regex = new RegExp( "(^|\\s)?" + spec.name + "(\\s|$)", "g" );
+    template.className = template.className.replace( regex, '' );
   }
 
   return spec;
