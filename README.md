@@ -29,7 +29,7 @@ stik.controller("CharactersCtrl", "List", function($template){
     alert("I'll support " + supported + "!!");
   };
 
-  for (var i = 0; i < character.length; i++) {
+  for (var i = 0; i < characters.length; i++) {
     characters[i].addEventListener('click', clickHandler);
   };
 });
