@@ -19,10 +19,10 @@ While declaring single controller actions you can pass in three arguments:
 * `ExecutionUnit` (Function) -> The script where your component data interactions shall live;
 
 ```javascript
-stik.controller("CharactesCtrl", "List", function($template){
-  var supported, character;
+stik.controller("CharactersCtrl", "List", function($template){
+  var supported, characters;
 
-  character = $template.getElementsByClassName('character');
+  characters = $template.getElementsByClassName('character');
 
   function clickHandler(event){
     supported = event.target.getAttribute('hero');
@@ -30,13 +30,13 @@ stik.controller("CharactesCtrl", "List", function($template){
   };
 
   for (var i = 0; i < character.length; i++) {
-    character[i].addEventListener('click', clickHandler);
+    characters[i].addEventListener('click', clickHandler);
   };
 });
 ```
 
 ```html
-<div id="characters-list" data-controller="CharactesCtrl" data-action="List">
+<div id="characters-list" data-controller="CharactersCtrl" data-action="List">
   <h3>Sub Characters</h3>
   <ul>
     <li class="character" hero="Mario">Luigi</li>
