@@ -5,7 +5,7 @@
 //            See https://github.com/stikjs/stik.js/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 1.0.0 | From: 09-05-2014
+// Version: 1.0.0 | From: 11-06-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";
@@ -241,8 +241,14 @@ window.stik.createBehavior = function behavior( spec ){
   }
 
   function removeBehaviorClass( template ){
-    var regex = new RegExp( "(^|\\s)?" + spec.name + "(\\s|$)", "g" );
-    template.className = template.className.replace( regex, '' );
+    if ( template.classList ) {
+      template.classList.remove( spec.name );
+    } else {
+      if ( hasClass( template, spec.name ) ){
+        var regex = new RegExp( "(^|\\s)?" + spec.name + "(\\s|$)", "g" );
+        template.className = template.className.replace( regex, " " ).trim();
+      }
+    }
   }
 
   return spec;
