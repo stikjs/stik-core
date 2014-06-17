@@ -51,24 +51,24 @@ You can even have multiple templates using the same controller and action.
 ```html
 <div id="heroes-list" data-controller="BattleCtrl" data-action="List">
   <ul>
-    <li>Mario</li>
-    <li>Samus</li>
-    <li>Link</li>
+    <li class="character">Mario</li>
+    <li class="character">Samus</li>
+    <li class="character">Link</li>
   </ul>
 </div>
 
 <div id="villains-list" data-controller="BattleCtrl" data-action="List">
   <ul>
-    <li>Bowser</li>
-    <li>Metroid</li>
-    <li>Ganondorf</li>
+    <li class="character">Bowser</li>
+    <li class="character">Metroid</li>
+    <li class="character">Ganondorf</li>
   </ul>
 </div>
 ```
 
 ```javascript
 stik.controller("BattleCtrl", "List", function($template){
-  var heroes = $template.getElementsByClassName('hero');
+  var heroes = $template.getElementsByClassName("character");
 
   function clickHandler(event){
     alert("It's me, " + event.target.textContent + "!! And I'm ready to fight!");
@@ -129,14 +129,14 @@ The bind of a behavior to its component is achieved using css classes.
   <input class="sparkle-input some-other-behavior" />
 ```
 
-After a template is bound to any behavior it will get a new attribute signalling behaviors were successfully applied, like so:
+After a template is bound to any behavior it will get a new attribute signalling behaviors were successfully applied, like so and the classes would be moved inside it, like so:
 
 ```html
-  <input class="sparkle-input some-other-behavior" data-behaviors="sparkle-input some-other-behavior" />
+  <input class="" data-behaviors="sparkle-input some-other-behavior" />
 ```
 
 ##Dependency Injection
-With Dependency Injection (DI), your dependencies are given to your object instead of your object creating or explicitly referencing them. This means the dependency injector can provide a different dependency based on the context of the situation. For example, in your tests it might pass a fake version of your services API that doesn't make requests but returns static objects instead, while in production it provides the actual services API.
+With Dependency Injection (DI), your dependencies are given to your object instead of your object creating or explicitly referencing them. This means the dependency injector can provide a different dependency based on the execution context. For example, in your tests it might pass a fake version of your services API that doesn't make requests but returns static objects instead, while in production it provides the actual services API.
 
 Stik.js comes with a built-in DI engine that allows you to specify which modules your code cares about. These modules can be required in any order you want:
 
@@ -171,10 +171,10 @@ stik.controller("BattleCtrl", "List", function(){
 ```
 
 ##Modules
-Stik.js comes with a couple modules to help you organize your code, by separating their responsibilities. These modules can be injected as needed.
+Stik.js comes with a few modules to help you organize your code, by separating their responsibilities. These modules can be injected as needed.
 
 ###$template
-Contains the HTML template (HTMLElement) that was bound to the current controller. This shall be used as the scope of **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller action needs to be inside it. Using any HTML that doesn't reside in it is a violation of the Law of Demeter.
+Contains the HTML template (HTMLElement) that was bound to the current controller/behavior. This shall be used as the scope of **ALL** your DOM manipulation. Everything you need to access in the DOM to fullfill the role of the current controller/behavior action needs to be inside it.
 
 ####Using it
 ```javascript
@@ -190,7 +190,7 @@ stik.controller("YourCtrl", "YourAction", function($template){
 ##Boundaries
 External libraries, objects and functions can be added as injectable modules to Stik.js. With that you will be able to avoid referencing global defined variables within controllers or behaviors. This will make your code more testable, since you will be able to inject mocks that quacks like the original libraries.
 
-Boundaries can be injectable in both controllers and behaviors. Unless, otherwise stated through the **from** parameter.
+Boundaries can be injected in both controllers and behaviors. Unless, otherwise stated through the **from** parameter.
 
 ###Object Boundaries:
 
