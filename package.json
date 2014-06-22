@@ -2,13 +2,13 @@
   "name": "stik-core.js",
   "version": "1.0.0",
   "description": "Stik.js core engine",
-  "main": "stik.js",
+  "main": "stik-core.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:stikjs/stik.js.git"
+    "url": "git@github.com:stikjs/stik-core.git"
   },
   "keywords": [
     "scope",
@@ -21,9 +21,9 @@
   "author": "Lukas Alexandre",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stikjs/stik.js/issues"
+    "url": "https://github.com/stikjs/stik-core/issues"
   },
-  "homepage": "https://github.com/stikjs/stik.js",
+  "homepage": "https://github.com/stikjs/stik-core",
   "devDependencies": {
     "stik-labs.js": "0.x",
     "grunt": "~0.4.2",
@@ -38,6 +38,6 @@
     "project": "// Project:   Stik.js - JavaScript Separation Of Concerns\n",
     "copyright": "// Copyright: Copyright 2013-2014 Lukas Alexandre\n",
     "license": "// License:   Licensed under MIT license\n",
-    "licenseLink": "//            See https://github.com/stikjs/stik.js/blob/master/LICENSE\n"
+    "licenseLink": "//            See https://github.com/stikjs/stik-core/blob/master/LICENSE\n"
   }
 }

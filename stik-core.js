@@ -2,10 +2,10 @@
 // Project:   Stik.js - JavaScript Separation Of Concerns
 // Copyright: Copyright 2013-2014 Lukas Alexandre
 // License:   Licensed under MIT license
-//            See https://github.com/stikjs/stik.js/blob/master/LICENSE
+//            See https://github.com/stikjs/stik-core/blob/master/LICENSE
 // ==========================================================================
 
-// Version: 1.0.0 | From: 11-06-2014
+// Version: 1.0.0 | From: 22-06-2014
 
 if ( window.stik ){
   throw "Stik is already loaded. Check your requires ;)";

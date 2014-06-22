@@ -56,7 +56,7 @@ module.exports = function(grunt){
       },
       src: {
         src: srcFiles,
-        dest: '<%= pkg.name %>'
+        dest: 'stik-core.js'
       }
     },
     uglify: {
