@@ -1,6 +1,6 @@
 {
   "name": "stik-core.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stik.js core engine",
   "main": "stik-core.js",
   "scripts": {
