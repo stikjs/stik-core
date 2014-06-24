@@ -131,7 +131,7 @@ describe("Manager", function(){
 
       expect(function(){
         behaviorLab.run();
-      }).toThrow("Stik could not find this module (customFuncForController)");
+      }).toThrow("Stik: could not find this module (customFuncForController)");
     });
 
     it("should be injectable into behaviors", function(){

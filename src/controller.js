@@ -1,30 +1,32 @@
-window.stik.createController = function controller( spec ){
-  if ( !spec.name ) { throw "Stik: Controller needs a name"; }
+(function( stik ){
+  stik.createController = function controller( spec ){
+    if ( !spec.name ) { throw "Stik: Controller needs a name"; }
 
-  spec.actions = {};
+    spec.actions = {};
 
-  spec.action = function action( actionName, executionUnit ){
-    var newAction = window.stik.action({
-      name: actionName,
-      controller: spec.name,
-      executionUnit: executionUnit
-    });
-    spec.actions[ actionName ] = newAction;
-    return newAction;
-  };
+    spec.action = function action( actionName, executionUnit ){
+      var newAction = stik.action({
+        name: actionName,
+        controller: spec.name,
+        executionUnit: executionUnit
+      });
+      spec.actions[ actionName ] = newAction;
+      return newAction;
+    };
 
-  spec.bind = function bind( modules ){
-    var name,
-        boundAny = false;
+    spec.bind = function bind( modules ){
+      var name,
+          boundAny = false;
 
-    for ( name in spec.actions ){
-      if ( spec.actions[ name ].bind( modules ) ) {
-        boundAny = true;
+      for ( name in spec.actions ){
+        if ( spec.actions[ name ].bind( modules ) ) {
+          boundAny = true;
+        }
       }
-    }
 
-    return boundAny;
+      return boundAny;
+    };
+
+    return spec;
   };
-
-  return spec;
-};
+})( window.stik );
