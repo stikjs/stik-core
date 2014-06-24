@@ -1,9 +1,6 @@
 language: node_js
 node_js:
   - "0.10"
-  - "0.8"
 
 before_script:
-  - npm install -g grunt grunt-cli
-
-script: grunt test --verbose --force
+  - npm install -g gulp
