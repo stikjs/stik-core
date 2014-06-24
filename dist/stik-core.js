@@ -1,4 +1,4 @@
-// Stik-core - Version: 1.0.2 | From: 25-6-2014
+// Stik-core - Version: 1.0.3 | From: 25-6-2014
 (function( window ){
   if ( window.stik ){
     throw "Stik is already loaded. Check your requires ;)";
