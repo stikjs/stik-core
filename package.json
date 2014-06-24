@@ -32,12 +32,5 @@
     "grunt-contrib-jasmine": "~0.5.2",
     "grunt-contrib-concat": "~0.4.0",
     "grunt-template-jasmine-istanbul": "~0.2.5"
-  },
-  "banner": {
-    "divider": "// ==========================================================================\n",
-    "project": "// Project:   Stik.js - JavaScript Separation Of Concerns\n",
-    "copyright": "// Copyright: Copyright 2013-2014 Lukas Alexandre\n",
-    "license": "// License:   Licensed under MIT license\n",
-    "licenseLink": "//            See https://github.com/stikjs/stik-core/blob/master/LICENSE\n"
   }
 }
