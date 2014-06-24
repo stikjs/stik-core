@@ -1,3 +1,7 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Injectable", function(){
   describe("#resolve", function(){
     it("an instantiable module", function(){

@@ -2,9 +2,9 @@
   "name": "stik-core.js",
   "version": "1.0.1",
   "description": "Stik.js core engine",
-  "main": "stik-core.js",
+  "main": "dist/stik-core.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,11 @@
   "homepage": "https://github.com/stikjs/stik-core",
   "devDependencies": {
     "stik-labs.js": "0.x",
-    "grunt": "~0.4.2",
-    "grunt-cli": "~0.1.11",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-contrib-concat": "~0.4.0",
-    "grunt-template-jasmine-istanbul": "~0.2.5"
+    "gulp-jasmine": "^0.2.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-header": "^1.0.2",
+    "gulp-uglify": "^0.3.1",
+    "gulp": "^3.8.2",
+    "jsdom": "^0.11.0"
   }
 }

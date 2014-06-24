@@ -1,3 +1,7 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Public", function(){
   describe(".controller", function(){
     it("with action", function(){

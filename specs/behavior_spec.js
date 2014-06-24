@@ -1,3 +1,7 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Behavior", function(){
   it("#initializing", function(){
     expect(function(){

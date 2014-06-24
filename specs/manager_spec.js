@@ -1,3 +1,7 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Manager", function(){
   function DOMDouble(){
     return {

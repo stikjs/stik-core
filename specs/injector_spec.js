@@ -1,9 +1,13 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Injector", function(){
   function modulesDouble(){
     return {
-      $template: window.stik.injectable(function(){}),
-      $messaging: window.stik.injectable(function(){}),
-      $viewBag: window.stik.injectable(function(){})
+      $template: stik.injectable(function(){}),
+      $messaging: stik.injectable(function(){}),
+      $viewBag: stik.injectable(function(){})
     };
   };
 

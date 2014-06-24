@@ -1,3 +1,7 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Controller", function(){
   describe("#action", function(){
     it("single action controller", function(){

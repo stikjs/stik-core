@@ -1,3 +1,7 @@
+require("./spec_helper");
+
+var stik = window.stik;
+
 describe("Context", function(){
   describe("#load", function(){
     it("should run the execution unit it is bound to", function(){
