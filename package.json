@@ -1,5 +1,5 @@
 {
-  "name": "stik-core.js",
+  "name": "stik-core",
   "version": "1.0.3",
   "description": "Stik.js core engine",
   "main": "dist/stik-core.js",
