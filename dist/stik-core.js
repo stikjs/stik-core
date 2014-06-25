@@ -330,7 +330,7 @@
   stik.manager = function manager(){
     var behaviors   = {},
         controllers = {},
-        boundaries  = { all: {}, controller:{}, behavior:{} },
+        boundaries  = { all: {}, controller: {}, behavior: {} },
         obj = {};
 
     obj.addControllerWithAction = function addControllerWithAction( controllerName, actionName, executionUnit ){
