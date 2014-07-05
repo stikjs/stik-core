@@ -14,9 +14,7 @@
     "scope",
     "management",
     "Dependency Injection",
-    "DI",
-    "Single Responsibility Principle",
-    "SRP"
+    "Single Responsibility Principle"
   ],
   "author": "Lukas Alexandre",
   "license": "MIT",

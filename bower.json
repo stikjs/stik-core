@@ -1,8 +1,8 @@
 {
-  "name": "stik.js",
-  "main": "stik.js",
-  "version": "1.0.0",
-  "homepage": "https://github.com/stikjs/stik.js",
+  "name": "stik-core",
+  "main": "dist/stik-core.js",
+  "version": "1.0.3",
+  "homepage": "https://github.com/stikjs/stik-core",
   "authors": [
     "Lukas Alexandre <lukas@codelogic.me>"
   ],
