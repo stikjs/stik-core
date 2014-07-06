@@ -289,7 +289,7 @@ stik.boundary({
   instantiable: true,
   to: function($template, $viewBag, GetTwitterFeed){
     // this should be the obj constructor
-    // that will receive whichever dependency you declare
+    // that will receive whichever dependency that you declare
 
     this.prototype.bindTo = function(myDataObj){
       // do your binding stuff
